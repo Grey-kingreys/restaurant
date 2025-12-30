@@ -1,0 +1,40 @@
+# Django Framework
+Django==5.1
+
+# Base de données
+pymysql==1.1.1  # Pour MySQL/MariaDB
+
+# Images
+Pillow==10.4.0
+
+# Tailwind CSS
+django-tailwind==3.8.0
+django-browser-reload==1.21.0
+
+# Variables d'environnement (optionnel mais recommandé)
+python-decouple==3.8
+
+# ============================================
+# BONUS - À installer plus tard si besoin
+# ============================================
+
+# Export Excel
+# openpyxl==3.1.5
+
+# Export PDF
+# reportlab==4.2.2
+# weasyprint==62.3
+
+# Tâches asynchrones (pour email automatique)
+# celery==5.4.0
+# django-celery-beat==2.7.0
+# redis==5.0.8  # Backend pour Celery
+
+# Tests
+# pytest==8.3.3
+# pytest-django==4.9.0
+# coverage==7.6.1
+
+# Qualité du code
+# flake8==7.1.1
+# black==24.8.0
