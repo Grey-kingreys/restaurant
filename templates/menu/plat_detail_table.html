@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ plat.nom }} - Menu{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 py-8">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Bouton retour -->
+        <div class="mb-6">
+            <a href="{% url 'menu:table_list' %}"
+                class="inline-flex items-center text-orange-600 hover:text-orange-800 font-medium">
+                ← Retour au menu
+            </a>
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
+
+                <!-- Image -->
+                <div class="relative h-96 lg:h-full bg-gradient-to-br from-orange-100 to-red-100">
+                    {% if plat.image %}
+                    <img src="{{ plat.image.url }}" alt="{{ plat.nom }}" class="w-full h-full object-cover">
+                    {% else %}
+                    <div class="w-full h-full flex items-center justify-center">
+                        <span class="text-9xl">🍽️</span>
+                    </div>
+                    {% endif %}
+
+                    <!-- Badge catégorie -->
+                    <div class="absolute top-6 right-6">
+                        <span
+                            class="bg-white/95 backdrop-blur-sm text-orange-600 px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                            {{ plat.get_categorie_display }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Informations -->
+                <div class="p-8 lg:p-12 flex flex-col justify-center">
+
+                    <!-- Nom du plat -->
+                    <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+                        {{ plat.nom }}
+                    </h1>
+
+                    <!-- Description -->
+                    {% if plat.description %}
+                    <div class="mb-8">
+                        <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                            Description
+                        </h2>
+                        <p class="text-gray-700 text-lg leading-relaxed">
+                            {{ plat.description }}
+                        </p>
+                    </div>
+                    {% endif %}
+
+                    <!-- Prix -->
+                    <div class="bg-orange-50 rounded-2xl p-6 mb-8">
+                        <p class="text-sm font-semibold text-gray-600 mb-2">Prix</p>
+                        <p class="text-5xl font-bold text-orange-600">
+                            {{ plat.prix_formate }}
+                            <span class="text-2xl text-gray-600">GNF</span>
+                        </p>
+                    </div>
+
+                    <!-- Informations supplémentaires -->
+                    <div class="grid grid-cols-2 gap-4 mb-8">
+                        <div class="bg-gray-50 rounded-xl p-4">
+                            <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">Catégorie</p>
+                            <p class="font-semibold text-gray-900">{{ plat.get_categorie_display }}</p>
+                        </div>
+                        <div class="bg-green-50 rounded-xl p-4">
+                            <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">Disponibilité</p>
+                            <p class="font-semibold text-green-600">✅ Disponible</p>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="space-y-4">
+                        <!-- Sélection de quantité -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-3">
+                                Quantité
+                            </label>
+                            <div class="flex items-center space-x-4">
+                                <button id="btn-decrease"
+                                    class="w-12 h-12 bg-gray-200 hover:bg-gray-300 rounded-xl font-bold text-xl transition-colors">
+                                    −
+                                </button>
+                                <input type="number" id="quantity" value="1" min="1" max="10"
+                                    class="w-20 h-12 text-center text-2xl font-bold border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent">
+                                <button id="btn-increase"
+                                    class="w-12 h-12 bg-gray-200 hover:bg-gray-300 rounded-xl font-bold text-xl transition-colors">
+                                    +
+                                </button>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">
+                                Maximum : 10 unités par commande
+                            </p>
+                        </div>
+
+                        <!-- Bouton ajouter au panier -->
+                        <button id="btn-add-cart"
+                            class="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white py-4 rounded-2xl font-bold text-lg shadow-xl transition-all transform hover:scale-105">
+                            🛒 Ajouter au panier
+                        </button>
+
+                        <!-- Total estimé -->
+                        <div class="bg-gray-50 rounded-xl p-4 text-center">
+                            <p class="text-sm text-gray-600 mb-1">Total estimé</p>
+                            <p id="total-price" class="text-2xl font-bold text-gray-900">
+                                {{ plat.prix_formate }} GNF
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Info supplémentaire -->
+        <div class="mt-8 bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-2xl">
+            <h3 class="font-semibold text-blue-900 mb-2">ℹ️ Information</h3>
+            <p class="text-blue-700">
+                Vous pouvez commander de 1 à 10 unités de ce plat. Le plat sera ajouté à votre panier et vous pourrez
+                valider votre commande ensuite.
+            </p>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // Gestion de la quantité et du calcul du prix
+    const btnDecrease = document.getElementById('btn-decrease');
+    const btnIncrease = document.getElementById('btn-increase');
+    const quantityInput = document.getElementById('quantity');
+    const totalPriceEl = document.getElementById('total-price');
+    const btnAddCart = document.getElementById('btn-add-cart');
+
+    const unitPrice = parseFloat('{{ plat.prix_unitaire|floatformat:2 }}');
+
+    function updateTotal() {
+        const qty = parseInt(quantityInput.value) || 1;
+        const total = unitPrice * qty;
+        totalPriceEl.textContent = total.toLocaleString('fr-FR') + ' GNF';
+    }
+
+    btnDecrease.addEventListener('click', () => {
+        let qty = parseInt(quantityInput.value) || 1;
+        if (qty > 1) {
+            quantityInput.value = qty - 1;
+            updateTotal();
+        }
+    });
+
+    btnIncrease.addEventListener('click', () => {
+        let qty = parseInt(quantityInput.value) || 1;
+        if (qty < 10) {
+            quantityInput.value = qty + 1;
+            updateTotal();
+        }
+    });
+
+    quantityInput.addEventListener('input', () => {
+        let qty = parseInt(quantityInput.value);
+        if (qty < 1) quantityInput.value = 1;
+        if (qty > 10) quantityInput.value = 10;
+        updateTotal();
+    });
+
+    btnAddCart.addEventListener('click', () => {
+        const qty = parseInt(quantityInput.value) || 1;
+        alert(`✅ ${qty} x {{ plat.nom }} ajouté(s) au panier!\n\n(Fonctionnalité panier à venir dans la Partie 3)`);
+    });
+</script>
+{% endblock %}

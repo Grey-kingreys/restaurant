@@ -153,6 +153,17 @@ DATABASES = {
     }
 }
 
+
+# Configuration de l'authentification
+LOGIN_URL = '/auth/login/'
+LOGIN_REDIRECT_URL = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/auth/login/'
+
+# Session
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_AGE = 86400  # 24 heures
+
+
 # # Configuration SQLite - Pour le développement
 # DATABASES = {
 #     'default': {

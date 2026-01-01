@@ -1,92 +1,68 @@
-# apps/accounts/models.py
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
-from django.core.validators import MinLengthValidator, RegexValidator
+from django.utils import timezone
 
-class UserRole(models.TextChoices):
-    """Énumération des rôles utilisateurs"""
-    TABLE = 'RTABLE', 'Table'
-    SERVEUR = 'RSERVEUR', 'Serveur'
-    CUISINIER = 'RCUISINIER', 'Cuisinier'
-    COMPTABLE = 'RCOMPTABLE', 'Comptable'
-    ADMIN = 'RADMIN', 'Administrateur'
-
-
-class CustomUserManager(BaseUserManager):
-    """Manager personnalisé pour le modèle User"""
-    
-    def create_user(self, login, password=None, role=UserRole.TABLE, **extra_fields):
-        """Crée et sauvegarde un utilisateur"""
+class UserManager(BaseUserManager):
+    def create_user(self, login, password=None, **extra_fields):
         if not login:
-            raise ValueError('Le login est obligatoire')
+            raise ValueError("Le login est obligatoire")
         
-        user = self.model(login=login, role=role, **extra_fields)
+        user = self.model(login=login, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
     
     def create_superuser(self, login, password=None, **extra_fields):
-        """Crée un super utilisateur (admin)"""
+        extra_fields.setdefault('role', 'Radmin')
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         
-        return self.create_user(login, password, role=UserRole.ADMIN, **extra_fields)
+        return self.create_user(login, password, **extra_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    """
-    Modèle utilisateur personnalisé
-    Tous les acteurs du système (tables, serveurs, etc.) sont des utilisateurs
-    """
-    login = models.CharField(
-        max_length=50,
-        unique=True,
-        validators=[
-            MinLengthValidator(6, "Le login doit contenir au moins 6 caractères"),
-            RegexValidator(
-                regex=r'^[a-zA-Z0-9]+$',
-                message='Le login doit être alphanumérique'
-            )
-        ],
-        verbose_name="Identifiant"
-    )
+    ROLE_CHOICES = [
+        ('Rtable', 'Table'),
+        ('Rserveur', 'Serveur/Servante'),
+        ('Rcuisinier', 'Cuisinier'),
+        ('Rcomptable', 'Comptable'),
+        ('Radmin', 'Administrateur'),
+    ]
     
-    role = models.CharField(
-        max_length=20,
-        choices=UserRole.choices,
-        default=UserRole.TABLE,
-        verbose_name="Rôle"
-    )
+    login = models.CharField(max_length=50, unique=True)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+    actif = models.BooleanField(default=True)
+    date_creation = models.DateTimeField(default=timezone.now)
     
-    is_active = models.BooleanField(default=True, verbose_name="Actif")
-    is_staff = models.BooleanField(default=False, verbose_name="Staff")
-    date_creation = models.DateTimeField(auto_now_add=True, verbose_name="Date de création")
-    date_modification = models.DateTimeField(auto_now=True, verbose_name="Date de modification")
+    # Champs requis par Django
+    is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     
-    objects = CustomUserManager()
+    objects = UserManager()
     
     USERNAME_FIELD = 'login'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['role']
     
     class Meta:
-        verbose_name = "Utilisateur"
-        verbose_name_plural = "Utilisateurs"
-        ordering = ['-date_creation']
+        db_table = 'user'
+        verbose_name = 'Utilisateur'
+        verbose_name_plural = 'Utilisateurs'
     
     def __str__(self):
         return f"{self.login} ({self.get_role_display()})"
     
+    # Méthodes helper pour vérifier les rôles
     def is_table(self):
-        return self.role == UserRole.TABLE
+        return self.role == 'Rtable'
     
     def is_serveur(self):
-        return self.role == UserRole.SERVEUR
+        return self.role == 'Rserveur'
     
     def is_cuisinier(self):
-        return self.role == UserRole.CUISINIER
+        return self.role == 'Rcuisinier'
     
     def is_comptable(self):
-        return self.role == UserRole.COMPTABLE
+        return self.role == 'Rcomptable'
     
     def is_admin(self):
-        return self.role == UserRole.ADMIN
+        return self.role == 'Radmin'

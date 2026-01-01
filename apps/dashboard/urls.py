@@ -1,7 +1,8 @@
 from django.urls import path
+from . import views
 
 app_name = 'dashboard'
 
 urlpatterns = [
-    # Les routes seront ajoutées plus tard
+    path('', views.index, name='index'),
 ]

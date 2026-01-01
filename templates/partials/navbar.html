@@ -1,0 +1,68 @@
+<nav class="bg-white shadow-lg">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center py-4">
+
+            <!-- Logo -->
+            <div class="flex items-center space-x-2">
+                <a href="{% url 'dashboard:index' %}" class="flex items-center space-x-2">
+                    <span class="text-2xl">🍽️</span>
+                    <span class="text-xl font-bold text-gray-800">Restaurant Manager</span>
+                </a>
+            </div>
+
+            <!-- Navigation selon le rôle -->
+            <div class="flex items-center space-x-6">
+
+                {% if user.is_table %}
+                <a href="{% url 'dashboard:index' %}" class="text-gray-700 hover:text-blue-600">
+                    📋 Menu
+                </a>
+                <a href="#" class="text-gray-400 cursor-not-allowed" title="Bientôt disponible">
+                    🛒 Panier
+                </a>
+
+                {% elif user.is_serveur %}
+                <a href="#" class="text-gray-400 cursor-not-allowed" title="Bientôt disponible">
+                    🪑 Tables
+                </a>
+                <a href="#" class="text-gray-400 cursor-not-allowed" title="Bientôt disponible">
+                    📦 Commandes
+                </a>
+
+                {% elif user.is_cuisinier %}
+                <a href="#" class="text-gray-400 cursor-not-allowed" title="Bientôt disponible">
+                    🍳 Gérer les plats
+                </a>
+
+                {% elif user.is_comptable %}
+                <a href="#" class="text-gray-400 cursor-not-allowed" title="Bientôt disponible">
+                    💰 Caisse
+                </a>
+                <a href="#" class="text-gray-400 cursor-not-allowed" title="Bientôt disponible">
+                    📊 Dépenses
+                </a>
+
+                {% elif user.is_admin %}
+                <a href="{% url 'dashboard:index' %}" class="text-gray-700 hover:text-blue-600">
+                    📊 Dashboard
+                </a>
+                <a href="/admin/" class="text-gray-700 hover:text-blue-600" target="_blank">
+                    ⚙️ Admin Django
+                </a>
+                {% endif %}
+
+                <!-- User info + Logout -->
+                <div class="flex items-center space-x-4 border-l pl-4">
+                    <span class="text-sm text-gray-600">
+                        <span class="font-medium">{{ user.login }}</span>
+                        <span class="text-xs text-gray-500">({{ user.get_role_display }})</span>
+                    </span>
+                    <a href="{% url 'accounts:logout' %}"
+                        class="text-red-600 hover:text-red-800 text-sm font-medium transition">
+                        Déconnexion
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

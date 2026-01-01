@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ plat.nom }} - Détails{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Header avec actions -->
+        <div class="mb-8 flex items-center justify-between">
+            <a href="{% url 'menu:cuisinier_list' %}"
+                class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium">
+                ← Retour à la liste
+            </a>
+            <div class="flex gap-3">
+                <a href="{% url 'menu:plat_update' plat.pk %}"
+                    class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-medium shadow-md transition-colors">
+                    ✏️ Modifier
+                </a>
+                <a href="{% url 'menu:plat_toggle' plat.pk %}"
+                    onclick="return confirm('Voulez-vous {% if plat.disponible %}désactiver{% else %}activer{% endif %} ce plat ?')"
+                    class="{% if plat.disponible %}bg-red-500 hover:bg-red-600{% else %}bg-green-500 hover:bg-green-600{% endif %} text-white px-6 py-3 rounded-xl font-medium shadow-md transition-colors">
+                    {% if plat.disponible %}🔴 Désactiver{% else %}🟢 Activer{% endif %}
+                </a>
+            </div>
+        </div>
+
+        <!-- Contenu principal -->
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden">
+
+            <!-- Image et statut -->
+            <div class="relative h-96 bg-gradient-to-br from-gray-100 to-gray-200">
+                {% if plat.image %}
+                <img src="{{ plat.image.url }}" alt="{{ plat.nom }}" class="w-full h-full object-cover">
+                {% else %}
+                <div class="w-full h-full flex items-center justify-center">
+                    <div class="text-center">
+                        <span class="text-9xl block mb-4">🍽️</span>
+                        <p class="text-gray-500 font-medium">Aucune image</p>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Badge de statut -->
+                <div class="absolute top-6 right-6">
+                    {% if plat.disponible %}
+                    <span
+                        class="bg-green-500 text-white px-6 py-3 rounded-full text-sm font-bold shadow-lg flex items-center">
+                        ✅ Disponible
+                    </span>
+                    {% else %}
+                    <span
+                        class="bg-red-500 text-white px-6 py-3 rounded-full text-sm font-bold shadow-lg flex items-center">
+                        ❌ Non disponible
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Informations détaillées -->
+            <div class="p-8 lg:p-12">
+
+                <!-- Titre et catégorie -->
+                <div class="mb-8">
+                    <div class="flex items-center gap-4 mb-4">
+                        <h1 class="text-4xl font-bold text-gray-900">{{ plat.nom }}</h1>
+                        <span class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-semibold">
+                            {{ plat.get_categorie_display }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                {% if plat.description %}
+                <div class="mb-8 bg-gray-50 rounded-2xl p-6">
+                    <h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                        Description
+                    </h2>
+                    <p class="text-gray-700 text-lg leading-relaxed">
+                        {{ plat.description }}
+                    </p>
+                </div>
+                {% endif %}
+
+                <!-- Informations en grille -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+
+                    <!-- Prix -->
+                    <div class="bg-orange-50 rounded-2xl p-6">
+                        <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                            Prix unitaire
+                        </h3>
+                        <p class="text-4xl font-bold text-orange-600">
+                            {{ plat.prix_formate }} <span class="text-xl">GNF</span>
+                        </p>
+                    </div>
+
+                    <!-- Catégorie détaillée -->
+                    <div class="bg-blue-50 rounded-2xl p-6">
+                        <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                            Catégorie
+                        </h3>
+                        <p class="text-2xl font-bold text-blue-600">
+                            {{ plat.get_categorie_display }}
+                        </p>
+                    </div>
+
+                    <!-- Date de création -->
+                    <div class="bg-gray-50 rounded-2xl p-6">
+                        <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                            Créé le
+                        </h3>
+                        <p class="text-lg font-semibold text-gray-900">
+                            {{ plat.date_creation|date:"d/m/Y à H:i" }}
+                        </p>
+                    </div>
+
+                    <!-- Date de modification -->
+                    <div class="bg-gray-50 rounded-2xl p-6">
+                        <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                            Dernière modification
+                        </h3>
+                        <p class="text-lg font-semibold text-gray-900">
+                            {{ plat.date_modification|date:"d/m/Y à H:i" }}
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Disponibilité -->
+                <div
+                    class="{% if plat.disponible %}bg-green-50 border-green-200{% else %}bg-red-50 border-red-200{% endif %} border-2 rounded-2xl p-6">
+                    <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                        Disponibilité
+                    </h3>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p
+                                class="text-lg font-semibold {% if plat.disponible %}text-green-900{% else %}text-red-900{% endif %}">
+                                {% if plat.disponible %}
+                                ✅ Ce plat est actuellement disponible pour les clients
+                                {% else %}
+                                ❌ Ce plat est actuellement indisponible
+                                {% endif %}
+                            </p>
+                            <p
+                                class="text-sm {% if plat.disponible %}text-green-600{% else %}text-red-600{% endif %} mt-2">
+                                {% if plat.disponible %}
+                                Les clients peuvent le commander depuis leur tablette
+                                {% else %}
+                                Les clients ne peuvent pas le voir dans le menu
+                                {% endif %}
+                            </p>
+                        </div>
+                        <a href="{% url 'menu:plat_toggle' plat.pk %}"
+                            onclick="return confirm('Voulez-vous {% if plat.disponible %}désactiver{% else %}activer{% endif %} ce plat ?')"
+                            class="{% if plat.disponible %}bg-red-500 hover:bg-red-600{% else %}bg-green-500 hover:bg-green-600{% endif %} text-white px-6 py-3 rounded-xl font-medium shadow-md transition-colors whitespace-nowrap">
+                            {% if plat.disponible %}🔴 Désactiver{% else %}🟢 Activer{% endif %}
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Actions rapides -->
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <!-- Modifier -->
+            <a href="{% url 'menu:plat_update' plat.pk %}"
+                class="bg-white hover:bg-gray-50 border-2 border-gray-200 rounded-2xl p-6 transition-all transform hover:scale-105 hover:shadow-lg">
+                <div class="flex items-center">
+                    <div class="text-4xl mr-4">✏️</div>
+                    <div>
+                        <h3 class="font-bold text-gray-900 text-lg mb-1">Modifier le plat</h3>
+                        <p class="text-gray-600 text-sm">Changer le nom, le prix, l'image ou la description</p>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Retour -->
+            <a href="{% url 'menu:cuisinier_list' %}"
+                class="bg-white hover:bg-gray-50 border-2 border-gray-200 rounded-2xl p-6 transition-all transform hover:scale-105 hover:shadow-lg">
+                <div class="flex items-center">
+                    <div class="text-4xl mr-4">📋</div>
+                    <div>
+                        <h3 class="font-bold text-gray-900 text-lg mb-1">Liste des plats</h3>
+                        <p class="text-gray-600 text-sm">Retourner à la gestion complète du menu</p>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Menu - Table {{ user.login }}{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h1 class="text-4xl font-bold text-gray-900">🍽️ Notre Menu</h1>
+                    <p class="text-gray-600 mt-2">Découvrez nos délicieux plats</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm text-gray-500">Table</p>
+                    <p class="text-xl font-bold text-orange-600">{{ user.login }}</p>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
+                <p class="text-blue-700">
+                    <span class="font-semibold">{{ total_plats }}</span> plat(s) disponible(s)
+                </p>
+            </div>
+        </div>
+
+        <!-- Barre de recherche et filtres -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+            <form method="get" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Recherche -->
+                    <div class="md:col-span-2">
+                        {{ search_form.recherche }}
+                    </div>
+
+                    <!-- Catégorie -->
+                    <div>
+                        {{ search_form.categorie }}
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <button type="submit"
+                        class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                        🔍 Rechercher
+                    </button>
+                    <a href="{% url 'menu:table_list' %}"
+                        class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors">
+                        ↻ Réinitialiser
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Filtres rapides par catégorie -->
+        <div class="flex flex-wrap gap-3 mb-8">
+            <a href="{% url 'menu:table_list' %}"
+                class="px-6 py-2 rounded-full font-medium transition-all {% if not categorie_active %}bg-orange-500 text-white{% else %}bg-white text-gray-700 hover:bg-gray-50{% endif %} shadow-md">
+                Tous
+            </a>
+            {% for code, label in categories %}
+            <a href="?categorie={{ code }}"
+                class="px-6 py-2 rounded-full font-medium transition-all {% if categorie_active == code %}bg-orange-500 text-white{% else %}bg-white text-gray-700 hover:bg-gray-50{% endif %} shadow-md">
+                {{ label }}
+            </a>
+            {% endfor %}
+        </div>
+
+        <!-- Liste des plats -->
+        {% if plats %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for plat in plats %}
+            <div
+                class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-2 duration-300">
+                <!-- Image -->
+                <div class="relative h-56 bg-gradient-to-br from-orange-100 to-red-100">
+                    {% if plat.image %}
+                    <img src="{{ plat.image.url }}" alt="{{ plat.nom }}" class="w-full h-full object-cover">
+                    {% else %}
+                    <div class="w-full h-full flex items-center justify-center">
+                        <span class="text-6xl">🍽️</span>
+                    </div>
+                    {% endif %}
+
+                    <!-- Badge catégorie -->
+                    <div class="absolute top-4 right-4">
+                        <span
+                            class="bg-white/90 backdrop-blur-sm text-orange-600 px-3 py-1 rounded-full text-sm font-semibold shadow-md">
+                            {{ plat.get_categorie_display }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Contenu -->
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">{{ plat.nom }}</h3>
+
+                    {% if plat.description %}
+                    <p class="text-gray-600 text-sm mb-4 line-clamp-2">{{ plat.description }}</p>
+                    {% endif %}
+
+                    <!-- Prix -->
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-3xl font-bold text-orange-600">
+                            {{ plat.prix_formate }} <span class="text-lg">GNF</span>
+                        </span>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex gap-3">
+                        <a href="{% url 'menu:table_detail' plat.pk %}"
+                            class="flex-1 bg-orange-500 hover:bg-orange-600 text-white px-4 py-3 rounded-xl font-medium text-center transition-colors shadow-md">
+                            👁️ Voir détails
+                        </a>
+                        <button
+                            class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-medium transition-colors shadow-md">
+                            🛒
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Message si aucun plat -->
+        <div class="bg-white rounded-2xl shadow-lg p-12 text-center">
+            <div class="text-6xl mb-4">😔</div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">Aucun plat disponible</h3>
+            <p class="text-gray-600">Il n'y a actuellement aucun plat correspondant à votre recherche.</p>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
