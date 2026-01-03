@@ -43,20 +43,20 @@
                 </div>
                 <div class="ml-4 flex-1">
                     <h3 class="text-lg font-bold text-green-900 mb-2">
-                        ✅ Partie 2 terminée : Gestion du Menu
+                        ✅ Partie 3 terminée : Gestion des commandes
                     </h3>
                     <p class="text-sm text-green-800 mb-3">
-                        Le système de gestion des plats est maintenant opérationnel ! Les cuisiniers peuvent gérer le
-                        menu et les tables peuvent consulter les plats disponibles.
+                        Le système de gestion des plats est maintenant opérationnel ! Les tables peuvent consulter les plats disponibles, 
+                        ajouter des plats au panier et valider leurs commandes.
                     </p>
                     <div class="flex flex-wrap gap-2">
                         <span
                             class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            ✓ CRUD Plats
+                            ✓ CRUD Commandes
                         </span>
                         <span
                             class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            ✓ Upload Images
+                            ✓ Gestion des images
                         </span>
                         <span
                             class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
@@ -82,7 +82,7 @@
                 </div>
                 <div class="ml-4">
                     <h3 class="text-lg font-bold text-yellow-900 mb-2">
-                        🔄 Prochaine étape : Partie 3 - Commandes & Panier
+                        🔄 Prochaine étape : Partie 4 - Serveur
                     </h3>
                     <p class="text-sm text-yellow-800">
                         Les fonctionnalités suivantes seront développées : système de panier en session, validation de
@@ -196,7 +196,7 @@
                         <div class="h-3 rounded-full transition-all duration-500 shadow-sm
                             {% if stat.status == 'completed' %}bg-gradient-to-r from-green-400 to-green-600
                             {% elif stat.status == 'in_progress' %}bg-gradient-to-r from-yellow-400 to-yellow-600
-                            {% else %}bg-gray-400{% endif %}" style="width: {{ statprogress }}%">
+                            {% else %}bg-gray-400{% endif %}" style="width: {{ stat.progress }}%">
                         </div>
                     </div>
                 </div>
@@ -212,13 +212,13 @@
                             Progression globale du projet
                         </p>
                         <p class="text-xs text-gray-600">
-                            2 parties complétées sur 6 parties principales
+                            3 parties complétées sur 6 parties principales
                         </p>
                     </div>
                     <div class="text-right">
                         <p
                             class="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                            33%
+                            50%
                         </p>
                         <p class="text-xs text-gray-600 font-medium mt-1">du projet terminé</p>
                     </div>
@@ -227,7 +227,7 @@
                 <!-- Barre de progression globale -->
                 <div class="mt-4 w-full bg-gray-200 rounded-full h-4 shadow-inner">
                     <div class="h-4 rounded-full bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 transition-all duration-1000 shadow-md"
-                        style="width: 33%">
+                        style="width: 50%">
                     </div>
                 </div>
             </div>
@@ -239,14 +239,6 @@
                         <span class="text-2xl mr-2">🔄</span>
                         <span class="font-bold text-gray-900">En cours</span>
                     </div>
-                    <p class="text-sm text-gray-600">Partie 3 : Commandes & Panier</p>
-                </div>
-
-                <div class="bg-white border-2 border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow">
-                    <div class="flex items-center mb-2">
-                        <span class="text-2xl mr-2">⏳</span>
-                        <span class="font-bold text-gray-900">À venir</span>
-                    </div>
                     <p class="text-sm text-gray-600">Partie 4 : Interface Serveur</p>
                 </div>
 
@@ -256,6 +248,14 @@
                         <span class="font-bold text-gray-900">À venir</span>
                     </div>
                     <p class="text-sm text-gray-600">Partie 5 : Paiements & Caisse</p>
+                </div>
+
+                <div class="bg-white border-2 border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow">
+                    <div class="flex items-center mb-2">
+                        <span class="text-2xl mr-2">⏳</span>
+                        <span class="font-bold text-gray-900">À venir</span>
+                    </div>
+                    <p class="text-sm text-gray-600">Partie 6 : Admin & Dashboard</p>
                 </div>
             </div>
         </div>

@@ -22,24 +22,24 @@ def index(request):
                 'title': 'Consulter le menu',
                 'description': 'Voir tous les plats disponibles',
                 'status': 'Disponible',
-                'url': '/menu/plats/',
+                'url': '/menu/plats/',  # Correspond à menu:table_list
                 'badge': 'Actif'
             },
             {
                 'icon': '🛒',
                 'title': 'Mon panier',
                 'description': 'Gérer mes commandes',
-                'status': 'À venir',
-                'url': '#',
-                'badge': 'Partie 3'
+                'status': 'Disponible',  # ✅ CHANGÉ
+                'url': '/commandes/panier/',  # ✅ CHANGÉ
+                'badge': 'Actif'  # ✅ CHANGÉ
             },
             {
                 'icon': '📦',
                 'title': 'Mes commandes',
                 'description': 'Historique des commandes',
-                'status': 'À venir',
-                'url': '#',
-                'badge': 'Partie 3'
+                'status': 'Disponible',  # ✅ CHANGÉ
+                'url': '/commandes/mes-commandes/',  # ✅ CHANGÉ
+                'badge': 'Actif'  # ✅ CHANGÉ
             },
         ]
     
@@ -74,7 +74,7 @@ def index(request):
     elif user.is_cuisinier():
         context['features'] = [
             {
-                'icon': '🍳',
+                'icon': '🳳',
                 'title': 'Gérer les plats',
                 'description': 'Liste de tous les plats',
                 'status': 'Disponible',
@@ -195,14 +195,14 @@ def index(request):
         },
         {
             'name': 'Commandes & Panier',
-            'progress': 0,
-            'status': 'in_progress',
+            'progress': 100,  # ✅ CHANGÉ
+            'status': 'completed',  # ✅ CHANGÉ
             'part': 'Partie 3'
         },
         {
             'name': 'Serveur',
             'progress': 0,
-            'status': 'pending',
+            'status': 'in_progress',  # ✅ CHANGÉ
             'part': 'Partie 4'
         },
         {

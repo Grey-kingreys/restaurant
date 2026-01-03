@@ -39,9 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tailwind',
     'theme',
-    'django_browser_reload',  # Si vous l'utilisez
+    'django_browser_reload',
     
-    # Vos applications
+    # mes applications
     'apps.accounts',
     'apps.restaurant',
     'apps.menu',

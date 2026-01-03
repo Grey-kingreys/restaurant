@@ -17,28 +17,28 @@
                 <a href="{% url 'dashboard:index' %}" class="text-gray-700 hover:text-blue-600">
                     📋 Menu
                 </a>
-                <a href="#" class="text-gray-400 cursor-not-allowed" title="Bientôt disponible">
+                <a href="{% url 'commandes:cart_detail' %}" class="text-gray-700 hover:text-blue-600">
                     🛒 Panier
                 </a>
 
                 {% elif user.is_serveur %}
-                <a href="#" class="text-gray-400 cursor-not-allowed" title="Bientôt disponible">
+                <a href="{% url 'commandes:cart_detail' %}" class="text-gray-700 hover:text-blue-600">
                     🪑 Tables
                 </a>
-                <a href="#" class="text-gray-400 cursor-not-allowed" title="Bientôt disponible">
+                <a href="{% url 'commandes:cart_detail' %}" class="text-gray-700 hover:text-blue-600">
                     📦 Commandes
                 </a>
 
                 {% elif user.is_cuisinier %}
-                <a href="#" class="text-gray-400 cursor-not-allowed" title="Bientôt disponible">
+                <a href="{% url 'menu:cuisinier_list' %}" class="text-gray-700 hover:text-blue-600">
                     🍳 Gérer les plats
                 </a>
 
                 {% elif user.is_comptable %}
-                <a href="#" class="text-gray-400 cursor-not-allowed" title="Bientôt disponible">
+                <a href="{% url 'commandes:cart_detail' %}" class="text-gray-700 hover:text-blue-600">
                     💰 Caisse
                 </a>
-                <a href="#" class="text-gray-400 cursor-not-allowed" title="Bientôt disponible">
+                <a href="{% url 'commandes:cart_detail' %}" class="text-gray-700 hover:text-blue-600">
                     📊 Dépenses
                 </a>
 
@@ -46,7 +46,7 @@
                 <a href="{% url 'dashboard:index' %}" class="text-gray-700 hover:text-blue-600">
                     📊 Dashboard
                 </a>
-                <a href="/admin/" class="text-gray-700 hover:text-blue-600" target="_blank">
+                <a href="{% url 'admin:index' %}" class="text-gray-700 hover:text-blue-600" target="_blank">
                     ⚙️ Admin Django
                 </a>
                 {% endif %}

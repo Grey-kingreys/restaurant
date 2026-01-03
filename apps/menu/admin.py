@@ -53,7 +53,7 @@ class PlatAdmin(admin.ModelAdmin):
     )
     
     list_per_page = 25
-    date_hierarchy = 'date_creation'
+    date_hierarchy = None
     
     actions = ['activer_plats', 'desactiver_plats']
     

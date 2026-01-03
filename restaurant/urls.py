@@ -13,6 +13,9 @@ urlpatterns = [
     # Apps
     path('auth/', include('apps.accounts.urls')),
     path('dashboard/', include('apps.dashboard.urls')),
+    path('menu/', include('apps.menu.urls')),
+    path('commandes/', include('apps.commandes.urls')),
+    
     
     # Browser reload (dev)
     path('__reload__/', include('django_browser_reload.urls')),

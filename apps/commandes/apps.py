@@ -4,4 +4,4 @@ from django.apps import AppConfig
 class CommandesConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'apps.commandes'
-    verbose_name = 'Gestion des commandes'
+    verbose_name = 'Gestion des Commandes'
