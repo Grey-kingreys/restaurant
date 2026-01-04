@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Caisse - Comptable{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 py-8 px-4">
+    <div class="max-w-7xl mx-auto">
+
+        <!-- En-tête -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 mb-6 border-t-4 border-green-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2">💰 Dashboard Caisse</h1>
+                    <p class="text-gray-600">Comptable : {{ user.login }}</p>
+                </div>
+                <a href="{% url 'dashboard:index' %}"
+                    class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors">
+                    ← Dashboard
+                </a>
+            </div>
+        </div>
+
+        <!-- Solde de la caisse -->
+        <div class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl shadow-2xl p-8 mb-8 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-green-100 text-lg mb-2">💵 Solde Actuel de la Caisse</p>
+                    <p class="text-6xl font-bold mb-4">{{ caisse.solde_actuel|floatformat:0 }} GNF</p>
+                    <p class="text-green-100 text-sm">
+                        Dernière mise à jour : {{ caisse.date_modification|date:"d/m/Y à H:i" }}
+                    </p>
+                </div>
+                <div class="text-9xl opacity-20">💰</div>
+            </div>
+        </div>
+
+        <!-- Filtres par période -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold text-gray-900">📊 Période : {{ titre_periode }}</h2>
+                <div class="flex gap-3">
+                    <a href="?periode=aujourd_hui"
+                        class="px-4 py-2 rounded-lg font-medium transition-all {% if periode == 'aujourd_hui' %}bg-green-500 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}">
+                        Aujourd'hui
+                    </a>
+                    <a href="?periode=semaine"
+                        class="px-4 py-2 rounded-lg font-medium transition-all {% if periode == 'semaine' %}bg-green-500 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}">
+                        Cette semaine
+                    </a>
+                    <a href="?periode=mois"
+                        class="px-4 py-2 rounded-lg font-medium transition-all {% if periode == 'mois' %}bg-green-500 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}">
+                        Ce mois
+                    </a>
+                    <a href="?periode=tout"
+                        class="px-4 py-2 rounded-lg font-medium transition-all {% if periode == 'tout' %}bg-green-500 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}">
+                        Tout
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistiques de la période -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <!-- Total Paiements -->
+            <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-gray-600 text-sm font-semibold">Paiements Reçus</p>
+                    <span class="text-3xl">💳</span>
+                </div>
+                <p class="text-3xl font-bold text-blue-600 mb-1">{{ total_paiements|floatformat:0 }} GNF</p>
+                <p class="text-sm text-gray-500">{{ nombre_paiements }} paiement(s)</p>
+            </div>
+
+            <!-- Total Dépenses -->
+            <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-red-500">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-gray-600 text-sm font-semibold">Dépenses</p>
+                    <span class="text-3xl">💸</span>
+                </div>
+                <p class="text-3xl font-bold text-red-600 mb-1">{{ total_depenses|floatformat:0 }} GNF</p>
+                <p class="text-sm text-gray-500">{{ nombre_depenses }} dépense(s)</p>
+            </div>
+
+            <!-- Bénéfice Net -->
+            <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-gray-600 text-sm font-semibold">Bénéfice Net</p>
+                    <span class="text-3xl">📈</span>
+                </div>
+                <p
+                    class="text-3xl font-bold {% if benefice_net >= 0 %}text-green-600{% else %}text-red-600{% endif %} mb-1">
+                    {{ benefice_net|floatformat:0 }} GNF
+                </p>
+                <p class="text-sm text-gray-500">Paiements - Dépenses</p>
+            </div>
+
+            <!-- Taux de marge -->
+            <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-gray-600 text-sm font-semibold">Taux de Marge</p>
+                    <span class="text-3xl">📊</span>
+                </div>
+                {% if total_paiements > 0 %}
+                <p class="text-3xl font-bold text-purple-600 mb-1">
+                    {{ benefice_net|floatformat:0|add:total_paiements|floatformat:2 }}%
+                </p>
+                {% else %}
+                <p class="text-3xl font-bold text-gray-400 mb-1">N/A</p>
+                {% endif %}
+                <p class="text-sm text-gray-500">Rentabilité</p>
+            </div>
+        </div>
+
+        <!-- Actions rapides -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <a href="{% url 'paiements:depense_create' %}"
+                class="bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-green-500 rounded-2xl p-6 transition-all transform hover:scale-105 hover:shadow-xl">
+                <div class="flex items-center">
+                    <div class="text-5xl mr-4">➕</div>
+                    <div>
+                        <h3 class="font-bold text-gray-900 text-lg mb-1">Enregistrer une dépense</h3>
+                        <p class="text-gray-600 text-sm">Ajouter une nouvelle dépense</p>
+                    </div>
+                </div>
+            </a>
+
+            <a href="{% url 'paiements:paiement_list' %}"
+                class="bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-blue-500 rounded-2xl p-6 transition-all transform hover:scale-105 hover:shadow-xl">
+                <div class="flex items-center">
+                    <div class="text-5xl mr-4">💳</div>
+                    <div>
+                        <h3 class="font-bold text-gray-900 text-lg mb-1">Voir tous les paiements</h3>
+                        <p class="text-gray-600 text-sm">Historique complet</p>
+                    </div>
+                </div>
+            </a>
+
+            <a href="{% url 'paiements:depense_list' %}"
+                class="bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-red-500 rounded-2xl p-6 transition-all transform hover:scale-105 hover:shadow-xl">
+                <div class="flex items-center">
+                    <div class="text-5xl mr-4">💸</div>
+                    <div>
+                        <h3 class="font-bold text-gray-900 text-lg mb-1">Voir toutes les dépenses</h3>
+                        <p class="text-gray-600 text-sm">Historique complet</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Derniers paiements et dépenses -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Derniers paiements -->
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold text-gray-900">💳 Derniers Paiements</h2>
+                    <a href="{% url 'paiements:paiement_list' %}"
+                        class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                        Voir tout →
+                    </a>
+                </div>
+
+                {% if derniers_paiements %}
+                <div class="space-y-3">
+                    {% for paiement in derniers_paiements %}
+                    <div
+                        class="flex items-center justify-between bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors">
+                        <div>
+                            <p class="font-semibold text-gray-900">Commande #{{ paiement.commande.id }}</p>
+                            <p class="text-sm text-gray-600">
+                                Table {{ paiement.commande.table.login }} • {{ paiement.date_paiement|date:"d/m/Y H:i"
+                                }}
+                            </p>
+                        </div>
+                        <p class="text-lg font-bold text-green-600">+{{ paiement.montant|floatformat:0 }} GNF</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-gray-500 text-center py-8">Aucun paiement pour cette période</p>
+                {% endif %}
+            </div>
+
+            <!-- Dernières dépenses -->
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-xl font-bold text-gray-900">💸 Dernières Dépenses</h2>
+                    <a href="{% url 'paiements:depense_list' %}"
+                        class="text-red-600 hover:text-red-800 text-sm font-medium">
+                        Voir tout →
+                    </a>
+                </div>
+
+                {% if dernieres_depenses %}
+                <div class="space-y-3">
+                    {% for depense in dernieres_depenses %}
+                    <div
+                        class="flex items-center justify-between bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors">
+                        <div>
+                            <p class="font-semibold text-gray-900">{{ depense.motif|truncatewords:5 }}</p>
+                            <p class="text-sm text-gray-600">
+                                {{ depense.date_depense|date:"d/m/Y" }} • Par {{ depense.enregistree_par.login }}
+                            </p>
+                        </div>
+                        <p class="text-lg font-bold text-red-600">-{{ depense.montant|floatformat:0 }} GNF</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-gray-500 text-center py-8">Aucune dépense pour cette période</p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

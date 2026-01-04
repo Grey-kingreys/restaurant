@@ -103,29 +103,37 @@ def index(request):
         context['features'] = [
             {
                 'icon': '💰',
-                'title': 'Caisse',
-                'description': 'Solde et transactions',
-                'status': 'À venir',
-                'url': '#',
-                'badge': 'Partie 5'
-            },
-            {
-                'icon': '📊',
-                'title': 'Gestion dépenses',
-                'description': 'Enregistrer les dépenses',
-                'status': 'À venir',
-                'url': '#',
-                'badge': 'Partie 5'
-            },
-            {
-                'icon': '💳',
-                'title': 'Historique paiements',
-                'description': 'Voir tous les paiements',
-                'status': 'À venir',
-                'url': '#',
-                'badge': 'Partie 5'
-            },
-        ]
+                'title': 'Dashboard Caisse',
+                    'description': 'Solde et statistiques',
+                    'status': 'Disponible',
+                    'url': '/paiements/caisse/',
+                    'badge': 'Actif'
+                },
+                {
+                    'icon': '💳',
+                    'title': 'Historique paiements',
+                    'description': 'Voir tous les paiements',
+                    'status': 'Disponible',
+                    'url': '/paiements/paiements/',
+                    'badge': 'Actif'
+                },
+                {
+                    'icon': '💸',
+                    'title': 'Gestion dépenses',
+                    'description': 'Consulter les dépenses',
+                    'status': 'Disponible',
+                    'url': '/paiements/depenses/',
+                    'badge': 'Actif'
+                },
+                {
+                    'icon': '➕',
+                    'title': 'Ajouter une dépense',
+                    'description': 'Enregistrer une nouvelle dépense',
+                    'status': 'Disponible',
+                    'url': '/paiements/depenses/ajouter/',
+                    'badge': 'Actif'
+                },
+            ]
     
     elif user.is_admin():
         context['features'] = [
@@ -207,8 +215,8 @@ def index(request):
         },
         {
             'name': 'Paiements & Caisse',
-            'progress': 0,
-            'status': 'pending',
+            'progress': 100,
+            'status': 'completed',
             'part': 'Partie 5'
         },
         {

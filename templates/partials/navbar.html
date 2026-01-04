@@ -1,12 +1,17 @@
-<nav class="bg-white shadow-lg">
+<nav class="bg-white shadow-lg border-b-2 border-gray-100">
     <div class="container mx-auto px-4">
         <div class="flex justify-between items-center py-4">
 
             <!-- Logo -->
-            <div class="flex items-center space-x-2">
-                <a href="{% url 'dashboard:index' %}" class="flex items-center space-x-2">
-                    <span class="text-2xl">🍽️</span>
-                    <span class="text-xl font-bold text-gray-800">Restaurant Manager</span>
+            <div class="flex items-center space-x-3">
+                <a href="{% url 'dashboard:index' %}" class="flex items-center space-x-3 group">
+                    <span class="text-3xl group-hover:scale-110 transition-transform">🍽️</span>
+                    <div>
+                        <span class="text-xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors">
+                            Restaurant Manager
+                        </span>
+                        <p class="text-xs text-gray-500">Système de gestion intégré</p>
+                    </div>
                 </a>
             </div>
 
@@ -14,11 +19,14 @@
             <div class="flex items-center space-x-6">
 
                 {% if user.is_table %}
-                <a href="{% url 'dashboard:index' %}" class="text-gray-700 hover:text-blue-600">
+                <a href="{% url 'menu:table_list' %}" class="text-gray-700 hover:text-orange-600 font-medium transition-colors">
                     📋 Menu
                 </a>
-                <a href="{% url 'commandes:cart_detail' %}" class="text-gray-700 hover:text-blue-600">
+                <a href="{% url 'commandes:cart_detail' %}" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">
                     🛒 Panier
+                </a>
+                <a href="{% url 'commandes:commande_list' %}" class="text-gray-700 hover:text-purple-600 font-medium transition-colors">
+                    📦 Mes Commandes
                 </a>
 
                 {% elif user.is_serveur %}
@@ -35,30 +43,55 @@
                 </a>
 
                 {% elif user.is_comptable %}
-                <a href="{% url 'commandes:cart_detail' %}" class="text-gray-700 hover:text-blue-600">
-                    💰 Caisse
+                <a href="{% url 'paiements:caisse_dashboard' %}"
+                    class="text-gray-700 hover:text-green-600 font-medium transition-colors">
+                    💰 Dashboard Caisse
                 </a>
-                <a href="{% url 'commandes:cart_detail' %}" class="text-gray-700 hover:text-blue-600">
-                    📊 Dépenses
+                <a href="{% url 'paiements:paiement_list' %}" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+                    💳 Paiements
+                </a>
+                <a href="{% url 'paiements:depense_list' %}" class="text-gray-700 hover:text-red-600 font-medium transition-colors">
+                    💸 Dépenses
+                </a>
+                <a href="{% url 'paiements:depense_create' %}"
+                    class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-md">
+                    ➕ Nouvelle Dépense
                 </a>
 
                 {% elif user.is_admin %}
-                <a href="{% url 'dashboard:index' %}" class="text-gray-700 hover:text-blue-600">
+                <a href="{% url 'dashboard:index' %}" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">
                     📊 Dashboard
                 </a>
-                <a href="{% url 'admin:index' %}" class="text-gray-700 hover:text-blue-600" target="_blank">
+                <a href="{% url 'paiements:caisse_dashboard' %}"
+                    class="text-gray-700 hover:text-green-600 font-medium transition-colors">
+                    💰 Caisse
+                </a>
+                <a href="{% url 'menu:cuisinier_list' %}" class="text-gray-700 hover:text-orange-600 font-medium transition-colors">
+                    🍳 Menu
+                </a>
+                <a href="{% url 'restaurant:table_list_serveur' %}"
+                    class="text-gray-700 hover:text-purple-600 font-medium transition-colors">
+                    🪑 Tables
+                </a>
+                <a href="{% url 'admin:index' %}"
+                    class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-md"
+                    target="_blank">
                     ⚙️ Admin Django
                 </a>
                 {% endif %}
 
                 <!-- User info + Logout -->
-                <div class="flex items-center space-x-4 border-l pl-4">
-                    <span class="text-sm text-gray-600">
-                        <span class="font-medium">{{ user.login }}</span>
-                        <span class="text-xs text-gray-500">({{ user.get_role_display }})</span>
-                    </span>
+                <div class="flex items-center space-x-4 border-l-2 border-gray-200 pl-6">
+                    <div class="text-right">
+                        <p class="text-sm font-semibold text-gray-900">{{ user.login }}</p>
+                        <p class="text-xs text-gray-500">{{ user.get_role_display }}</p>
+                    </div>
                     <a href="{% url 'accounts:logout' %}"
-                        class="text-red-600 hover:text-red-800 text-sm font-medium transition">
+                        class="inline-flex items-center px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-lg transition-all shadow-md hover:shadow-lg">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
                         Déconnexion
                     </a>
                 </div>

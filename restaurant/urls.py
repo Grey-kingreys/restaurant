@@ -16,6 +16,7 @@ urlpatterns = [
     path('menu/', include('apps.menu.urls')),
     path('commandes/', include('apps.commandes.urls')),
     path('restaurant/', include('apps.restaurant.urls')),
+    path('paiements/', include('apps.paiements.urls')),
     
     
     # Browser reload (dev)
