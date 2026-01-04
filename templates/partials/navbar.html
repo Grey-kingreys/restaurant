@@ -22,10 +22,10 @@
                 </a>
 
                 {% elif user.is_serveur %}
-                <a href="{% url 'commandes:cart_detail' %}" class="text-gray-700 hover:text-blue-600">
+                <a href="{% url 'restaurant:table_list_serveur' %}" class="text-gray-700 hover:text-blue-600">
                     🪑 Tables
                 </a>
-                <a href="{% url 'commandes:cart_detail' %}" class="text-gray-700 hover:text-blue-600">
+                <a href="{% url 'restaurant:commande_list_serveur' %}" class="text-gray-700 hover:text-blue-600">
                     📦 Commandes
                 </a>
 

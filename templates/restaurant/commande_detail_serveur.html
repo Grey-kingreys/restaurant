@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+
+{% block title %}Commande #{{ commande.id }} - Serveur{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 py-8 px-4">
+    <div class="max-w-4xl mx-auto">
+
+        <!-- En-tête -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 mb-6 border-t-4 border-purple-500">
+            <div class="flex items-center justify-between mb-4">
+                <h1 class="text-3xl font-bold text-gray-900">📦 Commande #{{ commande.id }}</h1>
+                <div class="flex gap-3">
+                    <a href="{% url 'restaurant:table_detail_serveur' commande.table.id %}"
+                        class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors">
+                        ← Table {{ commande.table.login }}
+                    </a>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-600 mb-2">
+                        📅 Commandé le {{ commande.date_commande|date:"d/m/Y à H:i" }}
+                    </p>
+                    <p class="text-gray-600">
+                        🪑 Table : <span class="font-semibold">{{ commande.table.login }}</span>
+                    </p>
+                </div>
+                <span class="px-6 py-3 rounded-xl text-lg font-bold
+                    {% if commande.statut == 'en_attente' %}bg-yellow-100 text-yellow-800 border-2 border-yellow-300
+                    {% elif commande.statut == 'servie' %}bg-blue-100 text-blue-800 border-2 border-blue-300
+                    {% else %}bg-green-100 text-green-800 border-2 border-green-300{% endif %}">
+                    {% if commande.statut == 'en_attente' %}⏳ En attente
+                    {% elif commande.statut == 'servie' %}🍽️ Servie
+                    {% else %}✅ Payée{% endif %}
+                </span>
+            </div>
+        </div>
+
+        <!-- Timeline de statut -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-6">📊 Progression de la commande</h2>
+            <div class="flex items-center justify-between">
+                <div class="flex-1 text-center">
+                    <div
+                        class="w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-3 bg-green-500 text-white">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <p class="font-semibold text-gray-900">Commandé</p>
+                    <p class="text-xs text-gray-500 mt-1">{{ commande.date_commande|date:"H:i" }}</p>
+                </div>
+
+                <div
+                    class="flex-1 border-t-4 {% if commande.statut == 'servie' or commande.statut == 'payee' %}border-green-500{% else %}border-gray-200{% endif %} mx-4">
+                </div>
+
+                <div class="flex-1 text-center">
+                    <div class="w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-3
+                        {% if commande.statut == 'servie' or commande.statut == 'payee' %}bg-green-500 text-white
+                        {% elif commande.statut == 'en_attente' %}bg-yellow-300 text-yellow-800
+                        {% else %}bg-gray-200 text-gray-400{% endif %}">
+                        <span class="text-3xl">🍽️</span>
+                    </div>
+                    <p class="font-semibold text-gray-900">Servie</p>
+                    {% if commande.statut == 'servie' or commande.statut == 'payee' %}
+                    <p class="text-xs text-gray-500 mt-1">{{ commande.date_modification|date:"H:i" }}</p>
+                    {% endif %}
+                </div>
+
+                <div
+                    class="flex-1 border-t-4 {% if commande.statut == 'payee' %}border-green-500{% else %}border-gray-200{% endif %} mx-4">
+                </div>
+
+                <div class="flex-1 text-center">
+                    <div
+                        class="w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-3
+                        {% if commande.statut == 'payee' %}bg-green-500 text-white{% else %}bg-gray-200 text-gray-400{% endif %}">
+                        <span class="text-3xl">💳</span>
+                    </div>
+                    <p class="font-semibold text-gray-900">Payée</p>
+                    {% if commande.statut == 'payee' %}
+                    <p class="text-xs text-gray-500 mt-1">{{ commande.date_modification|date:"H:i" }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Détails de la commande -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-900 mb-6">🍽️ Plats commandés</h2>
+            <div class="space-y-4">
+                {% for item in commande.items.all %}
+                <div class="flex items-center gap-6 bg-gray-50 rounded-xl p-4 hover:bg-gray-100 transition-colors">
+                    {% if item.plat.image %}
+                    <img src="{{ item.plat.image.url }}" alt="{{ item.plat.nom }}"
+                        class="w-20 h-20 object-cover rounded-xl shadow-md">
+                    {% else %}
+                    <div
+                        class="w-20 h-20 bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl flex items-center justify-center">
+                        <span class="text-4xl">🍽️</span>
+                    </div>
+                    {% endif %}
+
+                    <div class="flex-1">
+                        <h3 class="text-lg font-bold text-gray-900 mb-1">{{ item.plat.nom }}</h3>
+                        <p class="text-gray-600">{{ item.prix_unitaire }} GNF × {{ item.quantite }}</p>
+                    </div>
+
+                    <div class="text-right">
+                        <p class="text-sm text-gray-600 mb-1">Sous-total</p>
+                        <p class="text-2xl font-bold text-purple-600">{{ item.sous_total }} GNF</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Récapitulatif -->
+        <div class="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl shadow-xl p-6 text-white mb-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-purple-100 mb-2">Montant total</p>
+                    <p class="text-5xl font-bold">{{ commande.montant_total }} GNF</p>
+                </div>
+                <div class="text-7xl opacity-20">💰</div>
+            </div>
+
+            {% if commande.statut == 'en_attente' %}
+            <div class="mt-6 bg-yellow-400 text-yellow-900 rounded-xl p-4">
+                <p class="font-semibold flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Cette commande est en attente de service
+                </p>
+            </div>
+            {% elif commande.statut == 'servie' %}
+            <div class="mt-6 bg-blue-400 text-blue-900 rounded-xl p-4">
+                <p class="font-semibold flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Cette commande a été servie, en attente de paiement
+                </p>
+            </div>
+            {% else %}
+            <div class="mt-6 bg-green-400 text-green-900 rounded-xl p-4">
+                <p class="font-semibold flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Cette commande a été payée, merci !
+                </p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Actions -->
+        <div class="flex gap-4">
+            {% if commande.statut == 'en_attente' %}
+            <a href="{% url 'restaurant:commande_marquer_servie' commande.id %}?next={{ request.path }}"
+                onclick="return confirm('Marquer cette commande comme servie ?')"
+                class="flex-1 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-center transition-all transform hover:scale-105 shadow-lg">
+                🍽️ Marquer comme servie
+            </a>
+            {% elif commande.statut == 'servie' %}
+            <a href="{% url 'restaurant:commande_marquer_payee' commande.id %}?next={{ request.path }}"
+                onclick="return confirm('Confirmer le paiement de cette commande ?\n\nMontant : {{ commande.montant_total }} GNF')"
+                class="flex-1 py-4 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold text-center transition-all transform hover:scale-105 shadow-lg">
+                💳 Marquer comme payée
+            </a>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

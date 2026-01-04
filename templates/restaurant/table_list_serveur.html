@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+
+{% block title %}Gestion des Tables - Serveur{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 py-8 px-4">
+    <div class="max-w-7xl mx-auto">
+
+        <!-- En-tête -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 mb-6 border-t-4 border-purple-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2">🪑 Gestion des Tables</h1>
+                    <p class="text-gray-600">Serveur : {{ user.login }}</p>
+                </div>
+                <a href="{% url 'dashboard:index' %}"
+                    class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors">
+                    ← Dashboard
+                </a>
+            </div>
+        </div>
+
+        <!-- Statistiques -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm mb-1">Total Tables</p>
+                        <p class="text-3xl font-bold text-gray-900">{{ stats.total_tables }}</p>
+                    </div>
+                    <div class="text-4xl">🪑</div>
+                </div>
+            </div>
+
+            <div class="bg-green-50 rounded-xl shadow-lg p-6 border-2 border-green-200">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-green-700 text-sm mb-1">Libres</p>
+                        <p class="text-3xl font-bold text-green-600">{{ stats.libres }}</p>
+                    </div>
+                    <div class="text-4xl">✅</div>
+                </div>
+            </div>
+
+            <div class="bg-yellow-50 rounded-xl shadow-lg p-6 border-2 border-yellow-200">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-yellow-700 text-sm mb-1">En attente</p>
+                        <p class="text-3xl font-bold text-yellow-600">{{ stats.en_attente }}</p>
+                    </div>
+                    <div class="text-4xl">⏳</div>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 rounded-xl shadow-lg p-6 border-2 border-blue-200">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-blue-700 text-sm mb-1">Servies</p>
+                        <p class="text-3xl font-bold text-blue-600">{{ stats.servies }}</p>
+                    </div>
+                    <div class="text-4xl">🍽️</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtres rapides -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+            <div class="flex flex-wrap gap-3">
+                <a href="{% url 'restaurant:table_list_serveur' %}"
+                    class="px-6 py-2 rounded-full font-medium transition-all {% if not statut_filter %}bg-purple-500 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %} shadow-md">
+                    Toutes
+                </a>
+                <a href="?statut=libre"
+                    class="px-6 py-2 rounded-full font-medium transition-all {% if statut_filter == 'libre' %}bg-green-500 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %} shadow-md">
+                    ✅ Libres
+                </a>
+                <a href="?statut=en_attente"
+                    class="px-6 py-2 rounded-full font-medium transition-all {% if statut_filter == 'en_attente' %}bg-yellow-500 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %} shadow-md">
+                    ⏳ En attente
+                </a>
+                <a href="?statut=servie"
+                    class="px-6 py-2 rounded-full font-medium transition-all {% if statut_filter == 'servie' %}bg-blue-500 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %} shadow-md">
+                    🍽️ Servies
+                </a>
+            </div>
+        </div>
+
+        <!-- Liste des tables -->
+        {% if tables_data %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for table_info in tables_data %}
+            <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
+                <div class="p-6">
+                    <!-- En-tête de la carte -->
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900">{{ table_info.table.login }}</h3>
+                            <p class="text-sm text-gray-500">Table Restaurant</p>
+                        </div>
+                        <div class="text-4xl">🪑</div>
+                    </div>
+
+                    <!-- Statut -->
+                    <div class="mb-4">
+                        {% if table_info.statut == 'libre' %}
+                        <span
+                            class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-green-100 text-green-800 border-2 border-green-300">
+                            ✅ Libre
+                        </span>
+                        {% elif table_info.statut == 'en_attente' %}
+                        <span
+                            class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-yellow-100 text-yellow-800 border-2 border-yellow-300 animate-pulse">
+                            ⏳ Commande en attente
+                        </span>
+                        {% elif table_info.statut == 'servie' %}
+                        <span
+                            class="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-blue-100 text-blue-800 border-2 border-blue-300">
+                            🍽️ Servie (attente paiement)
+                        </span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Dernière commande -->
+                    {% if table_info.derniere_commande %}
+                    <div class="bg-gray-50 rounded-xl p-4 mb-4">
+                        <p class="text-xs font-semibold text-gray-500 uppercase mb-2">Dernière commande</p>
+                        <div class="space-y-1">
+                            <p class="text-sm text-gray-700">
+                                <span class="font-semibold">ID:</span> #{{ table_info.derniere_commande.id }}
+                            </p>
+                            <p class="text-sm text-gray-700">
+                                <span class="font-semibold">Montant:</span> {{
+                                table_info.derniere_commande.montant_total }} GNF
+                            </p>
+                            <p class="text-sm text-gray-700">
+                                <span class="font-semibold">Heure:</span> {{
+                                table_info.derniere_commande.date_commande|date:"H:i" }}
+                            </p>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Statistiques -->
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <div class="bg-purple-50 rounded-lg p-3 text-center">
+                            <p class="text-2xl font-bold text-purple-600">{{ table_info.total_commandes }}</p>
+                            <p class="text-xs text-gray-600">Commandes total</p>
+                        </div>
+                        <div class="bg-orange-50 rounded-lg p-3 text-center">
+                            <p class="text-2xl font-bold text-orange-600">{{ table_info.commandes_en_attente }}</p>
+                            <p class="text-xs text-gray-600">En attente</p>
+                        </div>
+                    </div>
+
+                    <!-- Bouton d'action -->
+                    <a href="{% url 'restaurant:table_detail_serveur' table_info.table.id %}"
+                        class="block w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-xl font-bold text-center transition-all transform hover:scale-105 shadow-lg">
+                        Voir les commandes
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Aucune table -->
+        <div class="bg-white rounded-2xl shadow-lg p-12 text-center">
+            <div class="text-8xl mb-6">🪑</div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Aucune table trouvée</h2>
+            <p class="text-gray-600">Aucune table ne correspond aux filtres sélectionnés</p>
+        </div>
+        {% endif %}
+
+        <!-- Accès rapide aux commandes -->
+        <div class="mt-8 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl shadow-xl p-6 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h3 class="text-xl font-bold mb-2">📦 Voir toutes les commandes</h3>
+                    <p class="text-purple-100">Consultez l'historique complet des commandes</p>
+                </div>
+                <a href="{% url 'restaurant:commande_list_serveur' %}"
+                    class="px-8 py-4 bg-white text-purple-600 rounded-xl font-bold hover:bg-gray-100 transition-colors shadow-lg">
+                    Voir les commandes
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

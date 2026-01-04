@@ -49,25 +49,25 @@ def index(request):
                 'icon': '🪑',
                 'title': 'Gestion des tables',
                 'description': 'Voir l\'état des tables',
-                'status': 'À venir',
-                'url': '#',
-                'badge': 'Partie 4'
+                'status': 'Disponible',  # ✅ CHANGÉ
+                'url': '/restaurant/tables/',  # ✅ CHANGÉ
+                'badge': 'Actif'  # ✅ CHANGÉ
             },
             {
                 'icon': '📦',
-                'title': 'Commandes en cours',
-                'description': 'Valider les commandes',
-                'status': 'À venir',
-                'url': '#',
-                'badge': 'Partie 4'
+                'title': 'Toutes les commandes',
+                'description': 'Voir toutes les commandes',
+                'status': 'Disponible',  # ✅ CHANGÉ
+                'url': '/restaurant/commandes/',  # ✅ CHANGÉ
+                'badge': 'Actif'  # ✅ CHANGÉ
             },
             {
                 'icon': '✅',
                 'title': 'Valider paiements',
                 'description': 'Confirmer les paiements',
-                'status': 'À venir',
-                'url': '#',
-                'badge': 'Partie 4'
+                'status': 'Disponible',  # ✅ CHANGÉ
+                'url': '/restaurant/commandes/',  # ✅ CHANGÉ
+                'badge': 'Actif'  # ✅ CHANGÉ
             },
         ]
     
@@ -201,8 +201,8 @@ def index(request):
         },
         {
             'name': 'Serveur',
-            'progress': 0,
-            'status': 'in_progress',  # ✅ CHANGÉ
+            'progress': 100,  # ✅ CHANGÉ
+            'status': 'completed',  # ✅ CHANGÉ
             'part': 'Partie 4'
         },
         {
