@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - Admin{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 py-8 px-4">
+    <div class="max-w-3xl mx-auto">
+
+        <!-- En-tête -->
+        <div class="mb-8">
+            <a href="{% url 'accounts:user_list' %}"
+                class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium mb-4">
+                ← Retour à la liste
+            </a>
+            <h1 class="text-4xl font-bold text-gray-900">{{ title }}</h1>
+        </div>
+
+        <!-- Formulaire -->
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+
+                <!-- Messages d'erreur globaux -->
+                {% if form.non_field_errors %}
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
+                    <div class="flex">
+                        <div class="text-red-700">
+                            {{ form.non_field_errors }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Login -->
+                <div>
+                    <label for="{{ form.login.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                        {{ form.login.label }} <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.login }}
+                    {% if form.login.help_text %}
+                    <p class="text-sm text-gray-500 mt-1">{{ form.login.help_text }}</p>
+                    {% endif %}
+                    {% if form.login.errors %}
+                    <p class="text-sm text-red-600 mt-1">{{ form.login.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Rôle -->
+                <div>
+                    <label for="{{ form.role.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                        {{ form.role.label }} <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.role }}
+                    {% if form.role.help_text %}
+                    <p class="text-sm text-gray-500 mt-1">{{ form.role.help_text }}</p>
+                    {% endif %}
+                    {% if form.role.errors %}
+                    <p class="text-sm text-red-600 mt-1">{{ form.role.errors.0 }}</p>
+                    {% endif %}
+
+                    <!-- Descriptions des rôles -->
+                    <div class="mt-4 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
+                        <h4 class="font-semibold text-blue-900 mb-2">ℹ️ Description des rôles :</h4>
+                        <ul class="text-sm text-blue-800 space-y-1">
+                            <li>• <strong>Table (Rtable)</strong> : Consulter le menu et commander depuis une tablette
+                            </li>
+                            <li>• <strong>Serveur (Rserveur)</strong> : Gérer les tables, valider commandes et
+                                paiements</li>
+                            <li>• <strong>Cuisinier (Rcuisinier)</strong> : Gérer le menu (CRUD plats)</li>
+                            <li>• <strong>Comptable (Rcomptable)</strong> : Gérer la caisse, paiements et dépenses</li>
+                            <li>• <strong>Admin (Radmin)</strong> : Accès complet à toutes les fonctionnalités</li>
+                        </ul>
+                    </div>
+                </div>
+
+                {% if action == 'create' %}
+                <!-- Mots de passe (uniquement pour création) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Mot de passe -->
+                    <div>
+                        <label for="{{ form.password1.id_for_label }}"
+                            class="block text-sm font-semibold text-gray-700 mb-2">
+                            {{ form.password1.label }} <span class="text-red-500">*</span>
+                        </label>
+                        {{ form.password1 }}
+                        {% if form.password1.help_text %}
+                        <p class="text-sm text-gray-500 mt-1">{{ form.password1.help_text }}</p>
+                        {% endif %}
+                        {% if form.password1.errors %}
+                        <p class="text-sm text-red-600 mt-1">{{ form.password1.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Confirmation mot de passe -->
+                    <div>
+                        <label for="{{ form.password2.id_for_label }}"
+                            class="block text-sm font-semibold text-gray-700 mb-2">
+                            {{ form.password2.label }} <span class="text-red-500">*</span>
+                        </label>
+                        {{ form.password2 }}
+                        {% if form.password2.help_text %}
+                        <p class="text-sm text-gray-500 mt-1">{{ form.password2.help_text }}</p>
+                        {% endif %}
+                        {% if form.password2.errors %}
+                        <p class="text-sm text-red-600 mt-1">{{ form.password2.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Exigences du mot de passe -->
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg">
+                    <h4 class="font-semibold text-yellow-900 mb-2">⚠️ Exigences du mot de passe :</h4>
+                    <ul class="text-sm text-yellow-800 space-y-1">
+                        <li>• Minimum 8 caractères</li>
+                        <li>• Au moins une lettre (a-z, A-Z)</li>
+                        <li>• Au moins un chiffre (0-9)</li>
+                        <li>• Au moins un caractère spécial (!@#$%...)</li>
+                    </ul>
+                </div>
+                {% else %}
+                <!-- Message pour modification -->
+                <div class="bg-gray-50 border-l-4 border-gray-400 p-4 rounded-r-lg">
+                    <p class="text-sm text-gray-700">
+                        💡 <strong>Note :</strong> Le mot de passe ne peut pas être modifié via ce formulaire.
+                        Utilisez le bouton "Réinitialiser le mot de passe" sur la page de détails.
+                    </p>
+                </div>
+                {% endif %}
+
+                <!-- Compte actif -->
+                <div class="bg-gray-50 rounded-xl p-4">
+                    <label class="flex items-center cursor-pointer">
+                        {{ form.actif }}
+                        <span class="ml-3 text-sm font-semibold text-gray-700">{{ form.actif.label }}</span>
+                    </label>
+                    {% if form.actif.help_text %}
+                    <p class="text-sm text-gray-500 mt-2 ml-8">{{ form.actif.help_text }}</p>
+                    {% endif %}
+                    {% if form.actif.errors %}
+                    <p class="text-sm text-red-600 mt-1 ml-8">{{ form.actif.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Boutons d'action -->
+                <div class="flex gap-4 pt-6 border-t">
+                    <button type="submit"
+                        class="flex-1 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-medium shadow-lg transition-all transform hover:scale-105">
+                        💾 {{ button_text }}
+                    </button>
+                    <a href="{% url 'accounts:user_list' %}"
+                        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-3 rounded-xl font-medium text-center transition-colors">
+                        ❌ Annuler
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Informations supplémentaires -->
+        <div class="mt-6 bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-2xl">
+            <h3 class="font-semibold text-blue-900 mb-2">💡 Conseils</h3>
+            <ul class="text-sm text-blue-700 space-y-1">
+                <li>• Le login doit être unique dans le système</li>
+                <li>• Utilisez un format cohérent (ex: TABLE001, SERV001, COOK001)</li>
+                <li>• Un compte inactif ne pourra pas se connecter</li>
+                <li>• Le rôle détermine les permissions et fonctionnalités accessibles</li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

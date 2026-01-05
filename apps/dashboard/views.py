@@ -1,3 +1,5 @@
+# apps/dashboard/views.py
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
@@ -22,24 +24,24 @@ def index(request):
                 'title': 'Consulter le menu',
                 'description': 'Voir tous les plats disponibles',
                 'status': 'Disponible',
-                'url': '/menu/plats/',  # Correspond à menu:table_list
+                'url': '/menu/plats/',
                 'badge': 'Actif'
             },
             {
                 'icon': '🛒',
                 'title': 'Mon panier',
                 'description': 'Gérer mes commandes',
-                'status': 'Disponible',  # ✅ CHANGÉ
-                'url': '/commandes/panier/',  # ✅ CHANGÉ
-                'badge': 'Actif'  # ✅ CHANGÉ
+                'status': 'Disponible',
+                'url': '/commandes/panier/',
+                'badge': 'Actif'
             },
             {
                 'icon': '📦',
                 'title': 'Mes commandes',
                 'description': 'Historique des commandes',
-                'status': 'Disponible',  # ✅ CHANGÉ
-                'url': '/commandes/mes-commandes/',  # ✅ CHANGÉ
-                'badge': 'Actif'  # ✅ CHANGÉ
+                'status': 'Disponible',
+                'url': '/commandes/mes-commandes/',
+                'badge': 'Actif'
             },
         ]
     
@@ -49,32 +51,32 @@ def index(request):
                 'icon': '🪑',
                 'title': 'Gestion des tables',
                 'description': 'Voir l\'état des tables',
-                'status': 'Disponible',  # ✅ CHANGÉ
-                'url': '/restaurant/tables/',  # ✅ CHANGÉ
-                'badge': 'Actif'  # ✅ CHANGÉ
+                'status': 'Disponible',
+                'url': '/restaurant/tables/',
+                'badge': 'Actif'
             },
             {
                 'icon': '📦',
                 'title': 'Toutes les commandes',
                 'description': 'Voir toutes les commandes',
-                'status': 'Disponible',  # ✅ CHANGÉ
-                'url': '/restaurant/commandes/',  # ✅ CHANGÉ
-                'badge': 'Actif'  # ✅ CHANGÉ
+                'status': 'Disponible',
+                'url': '/restaurant/commandes/',
+                'badge': 'Actif'
             },
             {
                 'icon': '✅',
                 'title': 'Valider paiements',
                 'description': 'Confirmer les paiements',
-                'status': 'Disponible',  # ✅ CHANGÉ
-                'url': '/restaurant/commandes/',  # ✅ CHANGÉ
-                'badge': 'Actif'  # ✅ CHANGÉ
+                'status': 'Disponible',
+                'url': '/restaurant/commandes/',
+                'badge': 'Actif'
             },
         ]
     
     elif user.is_cuisinier():
         context['features'] = [
             {
-                'icon': '🳳',
+                'icon': '🍳',
                 'title': 'Gérer les plats',
                 'description': 'Liste de tous les plats',
                 'status': 'Disponible',
@@ -104,51 +106,59 @@ def index(request):
             {
                 'icon': '💰',
                 'title': 'Dashboard Caisse',
-                    'description': 'Solde et statistiques',
-                    'status': 'Disponible',
-                    'url': '/paiements/caisse/',
-                    'badge': 'Actif'
-                },
-                {
-                    'icon': '💳',
-                    'title': 'Historique paiements',
-                    'description': 'Voir tous les paiements',
-                    'status': 'Disponible',
-                    'url': '/paiements/paiements/',
-                    'badge': 'Actif'
-                },
-                {
-                    'icon': '💸',
-                    'title': 'Gestion dépenses',
-                    'description': 'Consulter les dépenses',
-                    'status': 'Disponible',
-                    'url': '/paiements/depenses/',
-                    'badge': 'Actif'
-                },
-                {
-                    'icon': '➕',
-                    'title': 'Ajouter une dépense',
-                    'description': 'Enregistrer une nouvelle dépense',
-                    'status': 'Disponible',
-                    'url': '/paiements/depenses/ajouter/',
-                    'badge': 'Actif'
-                },
-            ]
+                'description': 'Solde et statistiques',
+                'status': 'Disponible',
+                'url': '/paiements/caisse/',
+                'badge': 'Actif'
+            },
+            {
+                'icon': '💳',
+                'title': 'Historique paiements',
+                'description': 'Voir tous les paiements',
+                'status': 'Disponible',
+                'url': '/paiements/paiements/',
+                'badge': 'Actif'
+            },
+            {
+                'icon': '💸',
+                'title': 'Gestion dépenses',
+                'description': 'Consulter les dépenses',
+                'status': 'Disponible',
+                'url': '/paiements/depenses/',
+                'badge': 'Actif'
+            },
+            {
+                'icon': '➕',
+                'title': 'Ajouter une dépense',
+                'description': 'Enregistrer une nouvelle dépense',
+                'status': 'Disponible',
+                'url': '/paiements/depenses/ajouter/',
+                'badge': 'Actif'
+            },
+        ]
     
     elif user.is_admin():
         context['features'] = [
+            {
+                'icon': '👥',
+                'title': 'Gestion des utilisateurs',
+                'description': 'Créer/modifier/supprimer utilisateurs',
+                'status': 'Disponible',  # ✅ CHANGÉ
+                'url': '/auth/users/',    # ✅ CHANGÉ
+                'badge': 'Actif'          # ✅ CHANGÉ
+            },
             {
                 'icon': '📊',
                 'title': 'Dashboard Analytics',
                 'description': 'Statistiques complètes',
                 'status': 'À venir',
                 'url': '#',
-                'badge': 'Bonus'
+                'badge': 'Partie 6'
             },
             {
-                'icon': '👥',
-                'title': 'Gestion utilisateurs',
-                'description': 'Créer/modifier utilisateurs',
+                'icon': '🪑',
+                'title': 'Gestion des tables',
+                'description': 'CRUD Tables physiques',
                 'status': 'À venir',
                 'url': '#',
                 'badge': 'Partie 6'
@@ -203,14 +213,14 @@ def index(request):
         },
         {
             'name': 'Commandes & Panier',
-            'progress': 100,  # ✅ CHANGÉ
-            'status': 'completed',  # ✅ CHANGÉ
+            'progress': 100,
+            'status': 'completed',
             'part': 'Partie 3'
         },
         {
             'name': 'Serveur',
-            'progress': 100,  # ✅ CHANGÉ
-            'status': 'completed',  # ✅ CHANGÉ
+            'progress': 100,
+            'status': 'completed',
             'part': 'Partie 4'
         },
         {
@@ -221,8 +231,8 @@ def index(request):
         },
         {
             'name': 'Admin & Dashboard',
-            'progress': 0,
-            'status': 'pending',
+            'progress': 35,
+            'status': 'in_progress',
             'part': 'Partie 6'
         },
     ]

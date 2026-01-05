@@ -1,0 +1,258 @@
+{% extends 'base.html' %}
+
+{% block title %}Gestion des Utilisateurs - Admin{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 py-8 px-4">
+    <div class="max-w-7xl mx-auto">
+
+        <!-- En-tête -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 mb-6 border-t-4 border-indigo-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2">👥 Gestion des Utilisateurs</h1>
+                    <p class="text-gray-600">Administration : {{ user.login }}</p>
+                </div>
+                <div class="flex gap-3">
+                    <a href="{% url 'accounts:user_create' %}"
+                        class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium transition-colors shadow-lg">
+                        ➕ Nouvel utilisateur
+                    </a>
+                    <a href="{% url 'dashboard:index' %}"
+                        class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors">
+                        ← Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistiques -->
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-8">
+            <!-- Total -->
+            <div class="bg-white rounded-xl shadow-lg p-4 border-l-4 border-gray-500">
+                <p class="text-xs text-gray-600 uppercase mb-1">Total</p>
+                <p class="text-2xl font-bold text-gray-900">{{ stats.total }}</p>
+            </div>
+
+            <!-- Actifs -->
+            <div class="bg-white rounded-xl shadow-lg p-4 border-l-4 border-green-500">
+                <p class="text-xs text-gray-600 uppercase mb-1">Actifs</p>
+                <p class="text-2xl font-bold text-green-600">{{ stats.actifs }}</p>
+            </div>
+
+            <!-- Inactifs -->
+            <div class="bg-white rounded-xl shadow-lg p-4 border-l-4 border-red-500">
+                <p class="text-xs text-gray-600 uppercase mb-1">Inactifs</p>
+                <p class="text-2xl font-bold text-red-600">{{ stats.inactifs }}</p>
+            </div>
+
+            <!-- Tables -->
+            <div class="bg-white rounded-xl shadow-lg p-4 border-l-4 border-orange-500">
+                <p class="text-xs text-gray-600 uppercase mb-1">Tables</p>
+                <p class="text-2xl font-bold text-orange-600">{{ stats.tables }}</p>
+            </div>
+
+            <!-- Serveurs -->
+            <div class="bg-white rounded-xl shadow-lg p-4 border-l-4 border-purple-500">
+                <p class="text-xs text-gray-600 uppercase mb-1">Serveurs</p>
+                <p class="text-2xl font-bold text-purple-600">{{ stats.serveurs }}</p>
+            </div>
+
+            <!-- Cuisiniers -->
+            <div class="bg-white rounded-xl shadow-lg p-4 border-l-4 border-yellow-500">
+                <p class="text-xs text-gray-600 uppercase mb-1">Cuisiniers</p>
+                <p class="text-2xl font-bold text-yellow-600">{{ stats.cuisiniers }}</p>
+            </div>
+
+            <!-- Admins -->
+            <div class="bg-white rounded-xl shadow-lg p-4 border-l-4 border-indigo-500">
+                <p class="text-xs text-gray-600 uppercase mb-1">Admins</p>
+                <p class="text-2xl font-bold text-indigo-600">{{ stats.admins }}</p>
+            </div>
+        </div>
+
+        <!-- Filtres et recherche -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+            <form method="get" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <!-- Recherche -->
+                    <div class="md:col-span-2">
+                        <input type="text" name="search" value="{{ search_query }}"
+                            placeholder="🔍 Rechercher par login..."
+                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all">
+                    </div>
+
+                    <!-- Filtre par rôle -->
+                    <div>
+                        <select name="role"
+                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all">
+                            <option value="">Tous les rôles</option>
+                            {% for code, label in role_choices %}
+                            <option value="{{ code }}" {% if role_filter == code %}selected{% endif %}>{{ label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Filtre par statut -->
+                    <div>
+                        <select name="statut"
+                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all">
+                            <option value="">Tous les statuts</option>
+                            <option value="actif" {% if statut_filter == 'actif' %}selected{% endif %}>✅ Actifs
+                            </option>
+                            <option value="inactif" {% if statut_filter == 'inactif' %}selected{% endif %}>❌ Inactifs
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <button type="submit"
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                        🔍 Filtrer
+                    </button>
+                    <a href="{% url 'accounts:user_list' %}"
+                        class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors">
+                        ↻ Réinitialiser
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Liste des utilisateurs -->
+        {% if users %}
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50 border-b-2 border-gray-200">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Login</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Rôle</th>
+                            <th class="px-6 py-4 text-center text-sm font-semibold text-gray-900">Statut</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Créé le</th>
+                            <th class="px-6 py-4 text-center text-sm font-semibold text-gray-900">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for user_obj in users %}
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <!-- Login -->
+                            <td class="px-6 py-4">
+                                <div class="flex items-center">
+                                    <div class="text-2xl mr-3">
+                                        {% if user_obj.is_table %}🪑
+                                        {% elif user_obj.is_serveur %}👨‍🍳
+                                        {% elif user_obj.is_cuisinier %}🍳
+                                        {% elif user_obj.is_comptable %}💰
+                                        {% elif user_obj.is_admin %}👑
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        <p class="font-bold text-gray-900">{{ user_obj.login }}</p>
+                                        {% if user_obj == user %}
+                                        <span
+                                            class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-semibold">
+                                            Vous
+                                        </span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </td>
+
+                            <!-- Rôle -->
+                            <td class="px-6 py-4">
+                                <span class="px-3 py-1 rounded-full text-sm font-medium
+                                    {% if user_obj.is_table %}bg-orange-100 text-orange-800
+                                    {% elif user_obj.is_serveur %}bg-purple-100 text-purple-800
+                                    {% elif user_obj.is_cuisinier %}bg-yellow-100 text-yellow-800
+                                    {% elif user_obj.is_comptable %}bg-green-100 text-green-800
+                                    {% elif user_obj.is_admin %}bg-indigo-100 text-indigo-800
+                                    {% endif %}">
+                                    {{ user_obj.get_role_display }}
+                                </span>
+                            </td>
+
+                            <!-- Statut -->
+                            <td class="px-6 py-4 text-center">
+                                {% if user_obj.actif %}
+                                <span
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                    ✅ Actif
+                                </span>
+                                {% else %}
+                                <span
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                                    ❌ Inactif
+                                </span>
+                                {% endif %}
+                            </td>
+
+                            <!-- Date création -->
+                            <td class="px-6 py-4">
+                                <p class="text-sm font-semibold text-gray-900">{{ user_obj.date_creation|date:"d/m/Y" }}
+                                </p>
+                                <p class="text-xs text-gray-500">{{ user_obj.date_creation|date:"H:i" }}</p>
+                            </td>
+
+                            <!-- Actions -->
+                            <td class="px-6 py-4">
+                                <div class="flex items-center justify-center gap-2">
+                                    <!-- Voir -->
+                                    <a href="{% url 'accounts:user_detail' user_obj.id %}"
+                                        class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                        title="Voir détails">
+                                        👁️
+                                    </a>
+
+                                    <!-- Modifier -->
+                                    {% if user_obj != user %}
+                                    <a href="{% url 'accounts:user_update' user_obj.id %}"
+                                        class="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
+                                        title="Modifier">
+                                        ✏️
+                                    </a>
+                                    {% endif %}
+
+                                    <!-- Activer/Désactiver -->
+                                    {% if user_obj != user %}
+                                    <a href="{% url 'accounts:user_toggle_status' user_obj.id %}"
+                                        class="p-2 {% if user_obj.actif %}text-red-600 hover:bg-red-50{% else %}text-green-600 hover:bg-green-50{% endif %} rounded-lg transition-colors"
+                                        onclick="return confirm('Voulez-vous {% if user_obj.actif %}désactiver{% else %}activer{% endif %} ce compte ?')"
+                                        title="{% if user_obj.actif %}Désactiver{% else %}Activer{% endif %}">
+                                        {% if user_obj.actif %}🔴{% else %}🟢{% endif %}
+                                    </a>
+                                    {% endif %}
+
+                                    <!-- Supprimer -->
+                                    {% if user_obj != user %}
+                                    <a href="{% url 'accounts:user_delete' user_obj.id %}"
+                                        class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                        title="Supprimer">
+                                        🗑️
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% else %}
+        <!-- Aucun utilisateur -->
+        <div class="bg-white rounded-2xl shadow-lg p-12 text-center">
+            <div class="text-8xl mb-6">👥</div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Aucun utilisateur trouvé</h2>
+            <p class="text-gray-600 mb-8">Aucun utilisateur ne correspond aux filtres sélectionnés</p>
+            <a href="{% url 'accounts:user_create' %}"
+                class="inline-block px-8 py-4 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold transition-colors shadow-lg">
+                ➕ Créer un utilisateur
+            </a>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
