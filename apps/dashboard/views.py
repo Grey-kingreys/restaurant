@@ -143,22 +143,22 @@ def index(request):
                 'icon': '👥',
                 'title': 'Gestion des utilisateurs',
                 'description': 'Créer/modifier/supprimer utilisateurs',
-                'status': 'Disponible',  # ✅ CHANGÉ
-                'url': '/auth/users/',    # ✅ CHANGÉ
-                'badge': 'Actif'          # ✅ CHANGÉ
-            },
-            {
-                'icon': '📊',
-                'title': 'Dashboard Analytics',
-                'description': 'Statistiques complètes',
-                'status': 'À venir',
-                'url': '#',
-                'badge': 'Partie 6'
+                'status': 'Disponible',
+                'url': '/auth/users/',
+                'badge': 'Actif'
             },
             {
                 'icon': '🪑',
                 'title': 'Gestion des tables',
                 'description': 'CRUD Tables physiques',
+                'status': 'Disponible',  # ✅ CHANGÉ
+                'url': '/restaurant/admin/tables/',  # ✅ CHANGÉ
+                'badge': 'Actif'  # ✅ CHANGÉ
+            },
+            {
+                'icon': '📊',
+                'title': 'Dashboard Analytics',
+                'description': 'Statistiques complètes',
                 'status': 'À venir',
                 'url': '#',
                 'badge': 'Partie 6'
@@ -196,7 +196,6 @@ def index(request):
                 'badge': 'Avancé'
             },
         ]
-    
     # Stats de progression du projet
     context['project_stats'] = [
         {

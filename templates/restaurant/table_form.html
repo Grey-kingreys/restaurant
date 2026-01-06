@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - Admin{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 py-8 px-4">
+    <div class="max-w-3xl mx-auto">
+
+        <!-- En-tête -->
+        <div class="mb-8">
+            <a href="{% url 'restaurant:table_list_admin' %}"
+                class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium mb-4">
+                ← Retour à la liste
+            </a>
+            <h1 class="text-4xl font-bold text-gray-900">{{ title }}</h1>
+        </div>
+
+        <!-- Formulaire -->
+        <div class="bg-white rounded-2xl shadow-xl p-8">
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+
+                <!-- Messages d'erreur globaux -->
+                {% if form.non_field_errors %}
+                <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
+                    <div class="flex">
+                        <div class="text-red-700">
+                            {{ form.non_field_errors }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Numéro de table -->
+                <div>
+                    <label for="{{ form.numero_table.id_for_label }}"
+                        class="block text-sm font-semibold text-gray-700 mb-2">
+                        {{ form.numero_table.label }} <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.numero_table }}
+                    {% if form.numero_table.help_text %}
+                    <p class="text-sm text-gray-500 mt-1">{{ form.numero_table.help_text }}</p>
+                    {% endif %}
+                    {% if form.numero_table.errors %}
+                    <p class="text-sm text-red-600 mt-1">{{ form.numero_table.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Nombre de places -->
+                <div>
+                    <label for="{{ form.nombre_places.id_for_label }}"
+                        class="block text-sm font-semibold text-gray-700 mb-2">
+                        {{ form.nombre_places.label }} <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.nombre_places }}
+                    {% if form.nombre_places.help_text %}
+                    <p class="text-sm text-gray-500 mt-1">{{ form.nombre_places.help_text }}</p>
+                    {% endif %}
+                    {% if form.nombre_places.errors %}
+                    <p class="text-sm text-red-600 mt-1">{{ form.nombre_places.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Utilisateur associé -->
+                <div>
+                    <label for="{{ form.utilisateur.id_for_label }}"
+                        class="block text-sm font-semibold text-gray-700 mb-2">
+                        {{ form.utilisateur.label }} <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.utilisateur }}
+                    {% if form.utilisateur.help_text %}
+                    <p class="text-sm text-gray-500 mt-1">{{ form.utilisateur.help_text }}</p>
+                    {% endif %}
+                    {% if form.utilisateur.errors %}
+                    <p class="text-sm text-red-600 mt-1">{{ form.utilisateur.errors.0 }}</p>
+                    {% endif %}
+
+                    <!-- Info sur les utilisateurs -->
+                    <div class="mt-4 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
+                        <h4 class="font-semibold text-blue-900 mb-2">ℹ️ À propos des comptes "Table"</h4>
+                        <p class="text-sm text-blue-700 mb-2">
+                            Seuls les comptes avec le rôle "Table" (Rtable) apparaissent dans cette liste.
+                        </p>
+                        <p class="text-sm text-blue-700">
+                            Si aucun compte n'est disponible, créez d'abord un utilisateur avec le rôle "Table" dans
+                            <a href="{% url 'accounts:user_list' %}"
+                                class="underline font-semibold hover:text-blue-900">
+                                la gestion des utilisateurs
+                            </a>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Boutons d'action -->
+                <div class="flex gap-4 pt-6 border-t">
+                    <button type="submit"
+                        class="flex-1 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-medium shadow-lg transition-all transform hover:scale-105">
+                        💾 {{ button_text }}
+                    </button>
+                    <a href="{% url 'restaurant:table_list_admin' %}"
+                        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-3 rounded-xl font-medium text-center transition-colors">
+                        ❌ Annuler
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Informations supplémentaires -->
+        <div class="mt-6 bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded-r-2xl">
+            <h3 class="font-semibold text-yellow-900 mb-2">💡 Conseils</h3>
+            <ul class="text-sm text-yellow-700 space-y-1">
+                <li>• Utilisez une numérotation cohérente (ex: T001, T002... ou TABLE01, TABLE02...)</li>
+                <li>• Le numéro de table doit être unique dans tout le système</li>
+                <li>• Le nombre de places correspond à la capacité d'accueil de la table</li>
+                <li>• Un compte utilisateur ne peut être associé qu'à une seule table</li>
+            </ul>
+        </div>
+
+        {% if action == 'update' and table %}
+        <!-- Informations sur la table actuelle -->
+        <div class="mt-6 bg-green-50 border-l-4 border-green-500 p-6 rounded-r-2xl">
+            <h3 class="font-semibold text-green-900 mb-2">📋 Informations actuelles</h3>
+            <div class="grid grid-cols-2 gap-4 text-sm text-green-700">
+                <div>
+                    <p class="font-semibold">Numéro actuel :</p>
+                    <p>{{ table.numero_table }}</p>
+                </div>
+                <div>
+                    <p class="font-semibold">Places actuelles :</p>
+                    <p>{{ table.nombre_places }}</p>
+                </div>
+                <div>
+                    <p class="font-semibold">Utilisateur actuel :</p>
+                    <p>{{ table.utilisateur.login }}</p>
+                </div>
+                <div>
+                    <p class="font-semibold">Créée le :</p>
+                    <p>{{ table.date_creation|date:"d/m/Y" }}</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

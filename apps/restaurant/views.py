@@ -6,12 +6,193 @@ from django.contrib import messages
 from django.db.models import Q, Count, Sum
 from apps.accounts.models import User
 from apps.commandes.models import Commande
+from apps.accounts.decorators import admin_required
+from .models import TableRestaurant
+from .forms import TableRestaurantForm, TableSearchForm
 from decimal import Decimal
+
+
+# ==========================================
+# CRUD TABLES PHYSIQUES (Admin uniquement)
+# ==========================================
+
+@login_required
+@admin_required
+def table_list_admin(request):
+    """
+    Liste de toutes les tables physiques (Admin)
+    """
+    tables = TableRestaurant.objects.select_related('utilisateur').order_by('numero_table')
+    
+    # Recherche
+    search_query = request.GET.get('recherche', '')
+    if search_query:
+        tables = tables.filter(
+            Q(numero_table__icontains=search_query) |
+            Q(utilisateur__login__icontains=search_query)
+        )
+    
+    # Formulaire de recherche
+    search_form = TableSearchForm(request.GET)
+    
+    # Statistiques
+    stats = {
+        'total': TableRestaurant.objects.count(),
+        'utilisateurs_disponibles': User.objects.filter(
+            role='Rtable'
+        ).exclude(
+            id__in=TableRestaurant.objects.values_list('utilisateur_id', flat=True)
+        ).count(),
+    }
+    
+    context = {
+        'tables': tables,
+        'search_form': search_form,
+        'stats': stats,
+        'search_query': search_query,
+    }
+    
+    return render(request, 'restaurant/table_list_admin.html', context)
+
+
+@login_required
+@admin_required
+def table_create(request):
+    """
+    Créer une nouvelle table physique
+    """
+    if request.method == 'POST':
+        form = TableRestaurantForm(request.POST)
+        if form.is_valid():
+            table = form.save()
+            messages.success(
+                request, 
+                f"✅ Table '{table.numero_table}' créée avec succès ! "
+                f"Associée à {table.utilisateur.login}"
+            )
+            return redirect('restaurant:table_list_admin')
+    else:
+        form = TableRestaurantForm()
+    
+    context = {
+        'form': form,
+        'title': 'Créer une nouvelle table',
+        'button_text': 'Créer la table',
+        'action': 'create',
+    }
+    
+    return render(request, 'restaurant/table_form.html', context)
+
+
+@login_required
+@admin_required
+def table_detail_admin(request, pk):
+    """
+    Détails d'une table physique (Admin)
+    """
+    table = get_object_or_404(
+        TableRestaurant.objects.select_related('utilisateur'),
+        pk=pk
+    )
+    
+    # Statistiques de la table
+    commandes = Commande.objects.filter(table=table.utilisateur)
+    
+    stats = {
+        'total_commandes': commandes.count(),
+        'commandes_en_attente': commandes.filter(statut='en_attente').count(),
+        'commandes_servies': commandes.filter(statut='servie').count(),
+        'commandes_payees': commandes.filter(statut='payee').count(),
+        'montant_total': commandes.filter(statut='payee').aggregate(
+            total=Sum('montant_total')
+        )['total'] or Decimal('0.00'),
+    }
+    
+    # Dernières commandes
+    dernieres_commandes = commandes.order_by('-date_commande')[:10]
+    
+    context = {
+        'table': table,
+        'stats': stats,
+        'dernieres_commandes': dernieres_commandes,
+    }
+    
+    return render(request, 'restaurant/table_detail_admin.html', context)
+
+
+@login_required
+@admin_required
+def table_update(request, pk):
+    """
+    Modifier une table existante
+    """
+    table = get_object_or_404(TableRestaurant, pk=pk)
+    
+    if request.method == 'POST':
+        form = TableRestaurantForm(request.POST, instance=table)
+        if form.is_valid():
+            table = form.save()
+            messages.success(
+                request, 
+                f"✅ Table '{table.numero_table}' modifiée avec succès !"
+            )
+            return redirect('restaurant:table_detail_admin', pk=table.pk)
+    else:
+        form = TableRestaurantForm(instance=table)
+    
+    context = {
+        'form': form,
+        'table': table,
+        'title': f'Modifier : {table.numero_table}',
+        'button_text': 'Enregistrer les modifications',
+        'action': 'update',
+    }
+    
+    return render(request, 'restaurant/table_form.html', context)
+
+
+@login_required
+@admin_required
+def table_delete(request, pk):
+    """
+    Supprimer une table physique
+    Confirmation requise
+    """
+    table = get_object_or_404(
+        TableRestaurant.objects.select_related('utilisateur'),
+        pk=pk
+    )
+    
+    if request.method == 'POST':
+        numero = table.numero_table
+        utilisateur_login = table.utilisateur.login
+        
+        # Supprimer la table
+        table.delete()
+        
+        messages.success(
+            request, 
+            f"✅ Table '{numero}' supprimée avec succès ! "
+            f"L'utilisateur {utilisateur_login} peut maintenant être réassocié."
+        )
+        return redirect('restaurant:table_list_admin')
+    
+    # Vérifier les dépendances (commandes)
+    commandes_count = Commande.objects.filter(table=table.utilisateur).count()
+    
+    context = {
+        'table': table,
+        'commandes_count': commandes_count,
+    }
+    
+    return render(request, 'restaurant/table_delete_confirm.html', context)
 
 
 # ==========================================
 # VUES POUR LES SERVEURS (Rserveur)
 # ==========================================
+
+
 
 @login_required
 def table_list_serveur(request):

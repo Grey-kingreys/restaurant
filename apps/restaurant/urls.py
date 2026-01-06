@@ -4,6 +4,19 @@ from . import views
 app_name = 'restaurant'
 
 urlpatterns = [
+
+        # ==========================================
+    # URLs ADMIN - CRUD Tables Physiques
+    # ==========================================
+    path('admin/tables/', views.table_list_admin, name='table_list_admin'),
+    path('admin/tables/create/', views.table_create, name='table_create'),
+    path('admin/tables/<int:pk>/', views.table_detail_admin, name='table_detail_admin'),
+    path('admin/tables/<int:pk>/update/', views.table_update, name='table_update'),
+    path('admin/tables/<int:pk>/delete/', views.table_delete, name='table_delete'),
+    
+    # ==========================================
+    # URLs pour les SERVEURS (Rserveur)
+    # ==========================================
     # ==========================================
     # URLs pour les SERVEURS (Rserveur)
     # ==========================================

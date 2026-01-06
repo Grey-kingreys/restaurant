@@ -62,6 +62,13 @@
                 <a href="{% url 'dashboard:index' %}" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">
                     📊 Dashboard
                 </a>
+                <a href="{% url 'accounts:user_list' %}" class="text-gray-700 hover:text-indigo-600 font-medium transition-colors">
+                    👥 Utilisateurs
+                </a>
+                <a href="{% url 'restaurant:table_list_admin' %}"
+                    class="text-gray-700 hover:text-purple-600 font-medium transition-colors">
+                    🪑 Tables
+                </a>
                 <a href="{% url 'paiements:caisse_dashboard' %}"
                     class="text-gray-700 hover:text-green-600 font-medium transition-colors">
                     💰 Caisse
@@ -71,7 +78,7 @@
                 </a>
                 <a href="{% url 'restaurant:table_list_serveur' %}"
                     class="text-gray-700 hover:text-purple-600 font-medium transition-colors">
-                    🪑 Tables
+                    📋 Service
                 </a>
                 <a href="{% url 'admin:index' %}"
                     class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-md"
