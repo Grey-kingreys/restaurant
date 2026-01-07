@@ -2,7 +2,7 @@
 Django==5.1
 
 # Base de données - PostgreSQL (remplace pymysql pour MySQL)
-psycopg2-binary==2.9.9  # Driver PostgreSQL pour Django
+psycopg==3.1.18  # Driver PostgreSQL pour Django
 
 # Images
 Pillow==10.4.0
