@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'apps.commandes',
     'apps.paiements',
     'apps.dashboard',
+    'whitenoise.runserver_nostatic',
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -80,10 +81,15 @@ INTERNAL_IPS = [
 ]
 
 # chemin vers npm pour Windows
-NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
+if os.name == 'nt':
+    NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
+else:
+    NPM_BIN_PATH = 'npm'
+
 
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -197,3 +203,5 @@ if 'RENDER' in os.environ:
     import sys
     if 'runserver' in sys.argv:
         sys.argv.append(f'0.0.0.0:{PORT}')
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

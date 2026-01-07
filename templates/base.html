@@ -7,8 +7,12 @@
     <title>{% block title %}Restaurant Manager{% endblock %}</title>
 
     {% load static %}
-    {% load tailwind_tags %}
-    {% tailwind_css %}
+
+    <!-- Tailwind compilé -->
+    <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}">
+
+    <!-- CSS personnalisé -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body class="bg-gray-50 flex flex-col min-h-screen">
