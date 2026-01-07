@@ -1,8 +1,8 @@
 # Django Framework
 Django==5.1
 
-# Base de données
-pymysql==1.1.1  # Pour MySQL/MariaDB
+# Base de données - PostgreSQL (remplace pymysql pour MySQL)
+psycopg2-binary==2.9.9  # Driver PostgreSQL pour Django
 
 # Images
 Pillow==10.4.0
@@ -13,6 +13,7 @@ django-browser-reload==1.21.0
 
 # Variables d'environnement (optionnel mais recommandé)
 python-decouple==3.8
+python-dotenv==1.0.0
 
 # ============================================
 # BONUS - À installer plus tard si besoin
@@ -35,6 +36,12 @@ pytest==8.3.3
 pytest-django==4.9.0
 coverage==7.6.1
 
-Qualité du code
+# Qualité du code
 flake8==7.1.1
 black==24.8.0
+
+# Sécurité & Performance
+django-cors-headers==4.4.0  # Pour les requêtes cross-origin
+django-debug-toolbar==4.4.5  # Debug en développement
+whitenoise==6.7.0  # Pour servir les fichiers statiques en production
+gunicorn==21.2.0  # Serveur WSGI pour production
