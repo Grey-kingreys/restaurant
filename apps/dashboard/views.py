@@ -5,6 +5,10 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Count, Avg, Q, F
 from django.utils import timezone
 from django.http import HttpResponse
+from django.core.mail import EmailMessage
+from django.conf import settings
+from django.contrib import messages
+
 from datetime import timedelta, datetime
 from decimal import Decimal
 import csv
@@ -12,6 +16,9 @@ from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.enums import TA_LEFT
 
 from apps.accounts.models import User
 from apps.menu.models import Plat
@@ -208,8 +215,8 @@ def index(request):
                 'icon': '📧',
                 'title': 'Email automatique',
                 'description': 'Rapport quotidien caisse',
-                'status': 'Configuré',
-                'url': '#',
+                'status': 'Disponible',
+                'url': '/dashboard/rapport/email/',
                 'badge': 'Avancé'
             },
         ]
@@ -457,82 +464,171 @@ def export_excel(request):
 @login_required
 @admin_required
 def export_pdf(request):
-    """Génère un vrai PDF de synthèse des statistiques du dashboard."""
-    aujourd_hui = timezone.now().date()
+    """Génère un rapport PDF structuré des ventes et le renvoie en téléchargement."""
 
-    # Données principales (alignées avec le dashboard)
-    total_commandes = Commande.objects.count()
-    commandes_payees = Commande.objects.filter(statut='payee').count()
-    revenus_total = Paiement.objects.aggregate(total=Sum('montant'))['total'] or Decimal('0.00')
-    depenses_total = Depense.objects.aggregate(total=Sum('montant'))['total'] or Decimal('0.00')
-    benefice_total = revenus_total - depenses_total
+    maintenant = timezone.now()
+    aujourd_hui = maintenant.date()
+    debut_periode = aujourd_hui - timedelta(days=30)
 
-    # Préparation du buffer mémoire
+    pdf = _build_sales_report_pdf(debut_periode, aujourd_hui, maintenant)
+
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="rapport_ventes.pdf"'
+    return response
+
+
+def _build_sales_report_pdf(debut_periode, aujourd_hui, maintenant):
+    """Construit le PDF de rapport de ventes pour une période donnée et renvoie les bytes."""
+
+    # Paiements et dépenses sur la période
+    paiements_qs = Paiement.objects.filter(date_paiement__date__gte=debut_periode)
+    total_ventes = paiements_qs.aggregate(total=Sum('montant'))['total'] or Decimal('0.00')
+    nombre_commandes = paiements_qs.count()
+
+    depenses_qs = Depense.objects.filter(date_depense__gte=debut_periode)
+    total_depenses = depenses_qs.aggregate(total=Sum('montant'))['total'] or Decimal('0.00')
+
+    panier_moyen = Decimal('0.00')
+    if nombre_commandes > 0:
+        panier_moyen = total_ventes / nombre_commandes
+
+    benefice_net = total_ventes - total_depenses
+
+    # Préparation du buffer et du document
     buffer = BytesIO()
-    p = canvas.Canvas(buffer, pagesize=A4)
-    width, height = A4
+    doc = SimpleDocTemplate(
+        buffer,
+        pagesize=A4,
+        leftMargin=40,
+        rightMargin=40,
+        topMargin=40,
+        bottomMargin=40,
+    )
 
-    # Marges
-    margin_x = 40
-    margin_top = height - 50
+    styles = getSampleStyleSheet()
+    title_style = styles['Title']
+    title_style.alignment = TA_LEFT
+    normal = styles['Normal']
+    heading = styles['Heading2']
 
-    # En-tête
-    p.setTitle("Dashboard Analytics - Rapport")
-    p.setFont("Helvetica-Bold", 20)
-    p.setFillColor(colors.HexColor("#1f2937"))  # gris foncé proche du site
-    p.drawString(margin_x, margin_top, "Dashboard Analytics")
+    elements = []
 
-    p.setFont("Helvetica", 11)
-    p.setFillColor(colors.gray)
-    p.drawString(margin_x, margin_top - 20, "Vue d'ensemble complète du restaurant")
+    # Titre principal
+    elements.append(Paragraph('<font color="#2563eb">RAPPORT DES VENTES</font>', title_style))
+    elements.append(Spacer(1, 12))
 
-    # Date à droite
-    p.setFont("Helvetica", 10)
-    p.setFillColor(colors.HexColor("#4b5563"))
-    date_str = f"Rapport du {aujourd_hui.strftime('%d/%m/%Y')}"
-    p.drawRightString(width - margin_x, margin_top - 5, date_str)
+    # Infos de période et date de génération
+    periode_txt = f"Période: {debut_periode.strftime('%d/%m/%Y')} - {aujourd_hui.strftime('%d/%m/%Y')}"
+    genere_txt = f"Généré le: {maintenant.strftime('%d/%m/%Y à %H:%M')}"
+    elements.append(Paragraph(periode_txt, normal))
+    elements.append(Paragraph(genere_txt, normal))
+    elements.append(Spacer(1, 24))
 
-    y = margin_top - 60
+    # Section RÉSUMÉ
+    elements.append(Paragraph('<b>RÉSUMÉ</b>', heading))
+    elements.append(Spacer(1, 8))
 
-    # Section Commandes
-    p.setFont("Helvetica-Bold", 14)
-    p.setFillColor(colors.HexColor("#2563eb"))  # bleu type Tailwind
-    p.drawString(margin_x, y, "Commandes")
-    y -= 18
+    resume_data = [
+        ['Indicateur', 'Valeur'],
+        ['Total des ventes', f"{total_ventes:.2f} GNF"],
+        ['Nombre de commandes', str(nombre_commandes)],
+        ['Panier moyen', f"{panier_moyen:.2f} GNF"],
+        ['Total des dépenses', f"{total_depenses:.2f} GNF"],
+        ['Bénéfice net', f"{benefice_net:.2f} GNF"],
+    ]
 
-    p.setFont("Helvetica", 11)
-    p.setFillColor(colors.black)
-    p.drawString(margin_x, y, f"Total commandes : {total_commandes}")
-    y -= 16
-    p.drawString(margin_x, y, f"Commandes payées : {commandes_payees}")
-    y -= 24
+    resume_table = Table(resume_data, colWidths=[220, 220])
+    resume_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#2563eb')),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+        ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 11),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.whitesmoke),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+        ('ALIGN', (1, 1), (1, -1), 'RIGHT'),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('LEFTPADDING', (0, 0), (-1, -1), 6),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+    ]))
 
-    # Section Finances
-    p.setFont("Helvetica-Bold", 14)
-    p.setFillColor(colors.HexColor("#16a34a"))  # vert Revenus
-    p.drawString(margin_x, y, "Finances")
-    y -= 18
+    elements.append(resume_table)
+    elements.append(Spacer(1, 24))
 
-    p.setFont("Helvetica", 11)
-    p.setFillColor(colors.black)
-    p.drawString(margin_x, y, f"Revenus totaux : {int(revenus_total)} GNF")
-    y -= 16
-    p.drawString(margin_x, y, f"Dépenses totales : {int(depenses_total)} GNF")
-    y -= 16
-    p.drawString(margin_x, y, f"Bénéfice total : {int(benefice_total)} GNF")
-    y -= 28
+    # Section DÉTAIL DES PAIEMENTS
+    elements.append(Paragraph('<b>DÉTAIL DES PAIEMENTS</b>', heading))
+    elements.append(Spacer(1, 8))
 
-    # Petite note de bas de page
-    p.setFont("Helvetica-Oblique", 9)
-    p.setFillColor(colors.HexColor("#9ca3af"))
-    p.drawString(margin_x, 40, "Rapport généré automatiquement depuis le Dashboard Analytics du restaurant")
+    paiements_liste = paiements_qs.select_related('commande__table').order_by('-date_paiement')
 
-    p.showPage()
-    p.save()
+    detail_data = [['Date', 'Commande', 'Table', 'Montant', 'Mode']]
+    for p in paiements_liste:
+        code_commande = f"CMD-{p.date_paiement.strftime('%Y%m%d')}-{p.commande.id:04d}"
+        table_nom = getattr(p.commande.table, 'login', str(p.commande.table_id))
+        montant_str = f"{float(p.montant):.2f} GNF"
+        mode = 'Espèces'
+        detail_data.append([
+            p.date_paiement.strftime('%d/%m/%Y'),
+            code_commande,
+            table_nom,
+            montant_str,
+            mode,
+        ])
+
+    if len(detail_data) == 1:
+        elements.append(Paragraph("Aucun paiement sur la période.", normal))
+    else:
+        detail_table = Table(detail_data, colWidths=[70, 130, 100, 90, 70])
+        detail_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#16a34a')),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, 0), 10),
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.whitesmoke),
+            ('ALIGN', (3, 1), (3, -1), 'RIGHT'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('LEFTPADDING', (0, 0), (-1, -1), 6),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+        ]))
+        elements.append(detail_table)
+
+    # Construction du PDF
+    doc.build(elements)
 
     pdf = buffer.getvalue()
     buffer.close()
+    return pdf
 
-    response = HttpResponse(pdf, content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="dashboard_analytics.pdf"'
-    return response
+
+@login_required
+@admin_required
+def send_sales_report_email(request):
+    """Génère le rapport de ventes et l'envoie par email à l'adresse configurée."""
+
+    maintenant = timezone.now()
+    aujourd_hui = maintenant.date()
+    debut_periode = aujourd_hui - timedelta(days=30)
+
+    pdf = _build_sales_report_pdf(debut_periode, aujourd_hui, maintenant)
+
+    subject = "Rapport des ventes - Dashboard Restaurant"
+    body = (
+        "Bonjour,\n\n"
+        "Vous trouverez ci-joint le rapport des ventes du restaurant pour la période "
+        f"du {debut_periode.strftime('%d/%m/%Y')} au {aujourd_hui.strftime('%d/%m/%Y')}.\n\n"
+        "Ceci est un envoi automatique depuis le Dashboard Analytics.\n"
+    )
+
+    to_email = getattr(settings, 'REPORT_EMAIL_TO', None)
+    if not to_email:
+        messages.error(request, "Aucune adresse email de destination n'est configurée (REPORT_EMAIL_TO).")
+        return redirect('dashboard:index')
+
+    email = EmailMessage(subject, body, settings.DEFAULT_FROM_EMAIL, [to_email])
+    email.attach('rapport_ventes.pdf', pdf, 'application/pdf')
+    email.send(fail_silently=False)
+
+    messages.success(request, f"Rapport envoyé avec succès à {to_email}.")
+    return redirect('dashboard:index')

@@ -8,4 +8,5 @@ urlpatterns = [
     path('analytics/', views.analytics_dashboard, name='analytics'),
     path('export/excel/', views.export_excel, name='export_excel'),
     path('export/pdf/', views.export_pdf, name='export_pdf'),
+    path('rapport/email/', views.send_sales_report_email, name='send_sales_report_email'),
 ]
