@@ -36,7 +36,37 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
 
+load_dotenv()
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
+
+# Configuration ALLOWED_HOSTS dynamique
 ALLOWED_HOSTS = []
+
+# En développement, autoriser localhost
+if DEBUG:
+    ALLOWED_HOSTS.extend([
+        'localhost',
+        '127.0.0.1',
+        '0.0.0.0',
+        'restaurant-7fd6.onrender.com',  # Votre domaine Render
+    ])
+else:
+    # En production, n'autoriser que les domaines spécifiés
+    allowed_hosts_env = os.getenv('ALLOWED_HOSTS', '')
+    if allowed_hosts_env:
+        ALLOWED_HOSTS.extend(allowed_hosts_env.split(','))
+    else:
+        # Fallback pour Render
+        render_external_hostname = os.getenv('RENDER_EXTERNAL_HOSTNAME')
+        if render_external_hostname:
+            ALLOWED_HOSTS.append(render_external_hostname)
+        # Ajoutez votre domaine Render manuellement
+        ALLOWED_HOSTS.append('restaurant-7fd6.onrender.com')
+
+# Option alternative plus simple :
+# ALLOWED_HOSTS = ['restaurant-7fd6.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
