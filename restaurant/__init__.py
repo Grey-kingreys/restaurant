@@ -6,6 +6,9 @@ Ce fichier est exécuté au démarrage de Django.
 
 import os
 import sys
+from dotenv import load_dotenv
+load_dotenv()
+
 
 # Ajouter des vérifications ou configurations globales ici
 def check_environment():
