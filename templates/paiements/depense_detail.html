@@ -161,7 +161,7 @@
     const montantInput = document.querySelector('input[name="montant"]');
     const montantPreview = document.getElementById('montant-preview');
     const nouveauSolde = document.getElementById('nouveau-solde');
-    const soldeActuel = {{ caisse.solde_actuel| floatformat: 2 }};
+    const soldeActuel = {{ caisse.solde_actuel|floatformat:2 }};
 
     montantInput.addEventListener('input', function () {
         const montant = parseFloat(this.value) || 0;
