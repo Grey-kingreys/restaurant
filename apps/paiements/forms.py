@@ -15,17 +15,17 @@ class DepenseForm(forms.ModelForm):
         
         widgets = {
             'motif': forms.TextInput(attrs={
-                'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all',
+                'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all text-gray-900',
                 'placeholder': 'Ex: Achat de matières premières',
             }),
             'montant': forms.NumberInput(attrs={
-                'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all',
+                'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all text-gray-900',
                 'placeholder': 'Ex: 150000',
                 'step': '0.01',
                 'min': '0.01',
             }),
             'date_depense': forms.DateInput(attrs={
-                'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all',
+                'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all text-gray-900',
                 'type': 'date',
             }),
         }

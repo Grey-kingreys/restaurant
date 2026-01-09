@@ -89,7 +89,7 @@ class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(
         label='Mot de passe',
         widget=forms.PasswordInput(attrs={
-            'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all',
+            'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-gray-900',
             'placeholder': 'Minimum 8 caractères',
         }),
         help_text='Minimum 8 caractères avec lettres, chiffres et caractères spéciaux',
@@ -98,7 +98,7 @@ class UserCreationForm(forms.ModelForm):
     password2 = forms.CharField(
         label='Confirmer le mot de passe',
         widget=forms.PasswordInput(attrs={
-            'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all',
+            'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-gray-900',
             'placeholder': 'Confirmer le mot de passe',
         }),
         help_text='Entrez le même mot de passe pour vérification',
@@ -110,12 +110,12 @@ class UserCreationForm(forms.ModelForm):
         
         widgets = {
             'login': forms.TextInput(attrs={
-                'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all',
+                'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-gray-900',
                 'placeholder': 'Ex: TABLE005, SERV002',
                 'autofocus': True,
             }),
             'role': forms.Select(attrs={
-                'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all',
+                'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-gray-900',
             }),
             'actif': forms.CheckboxInput(attrs={
                 'class': 'w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-2 focus:ring-indigo-500',
@@ -219,11 +219,11 @@ class UserUpdateForm(forms.ModelForm):
         
         widgets = {
             'login': forms.TextInput(attrs={
-                'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all',
+                'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-gray-900',
                 'placeholder': 'Ex: TABLE005, SERV002',
             }),
             'role': forms.Select(attrs={
-                'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all',
+                'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-gray-900',
             }),
             'actif': forms.CheckboxInput(attrs={
                 'class': 'w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-2 focus:ring-indigo-500',

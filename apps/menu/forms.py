@@ -13,25 +13,25 @@ class PlatForm(forms.ModelForm):
         
         widgets = {
             'nom': forms.TextInput(attrs={
-                'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900',
                 'placeholder': 'Ex: Poulet Yassa',
             }),
             'description': forms.Textarea(attrs={
-                'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900',
                 'placeholder': 'Décrivez le plat...',
                 'rows': 4,
             }),
             'prix_unitaire': forms.NumberInput(attrs={
-                'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900',
                 'placeholder': 'Ex: 50000',
                 'step': '0.01',
                 'min': '0.01',
             }),
             'categorie': forms.Select(attrs={
-                'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900',
             }),
             'image': forms.FileInput(attrs={
-                'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+                'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900',
                 'accept': 'image/jpeg,image/png,image/jpg',
             }),
             'disponible': forms.CheckboxInput(attrs={
@@ -98,7 +98,7 @@ class PlatSearchForm(forms.Form):
     recherche = forms.CharField(
         required=False,
         widget=forms.TextInput(attrs={
-            'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+            'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900',
             'placeholder': '🔍 Rechercher un plat...',
         }),
         label=''
@@ -108,7 +108,7 @@ class PlatSearchForm(forms.Form):
         required=False,
         choices=[('', 'Toutes les catégories')] + Plat.CATEGORIE_CHOICES,
         widget=forms.Select(attrs={
-            'class': 'px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+            'class': 'px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900',
         }),
         label=''
     )
@@ -121,7 +121,7 @@ class PlatSearchForm(forms.Form):
             ('0', 'Non disponibles uniquement'),
         ],
         widget=forms.Select(attrs={
-            'class': 'px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
+            'class': 'px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900',
         }),
         label=''
     )

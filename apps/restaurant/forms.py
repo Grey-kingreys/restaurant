@@ -17,18 +17,18 @@ class TableRestaurantForm(forms.ModelForm):
         
         widgets = {
             'numero_table': forms.TextInput(attrs={
-                'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all',
+                'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-gray-900',
                 'placeholder': 'Ex: T001, TABLE01',
                 'autofocus': True,
             }),
             'nombre_places': forms.NumberInput(attrs={
-                'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all',
+                'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-gray-900',
                 'placeholder': 'Ex: 4',
                 'min': '1',
                 'max': '20',
             }),
             'utilisateur': forms.Select(attrs={
-                'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all',
+                'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-gray-900',
             }),
         }
         
@@ -142,7 +142,7 @@ class TableSearchForm(forms.Form):
     recherche = forms.CharField(
         required=False,
         widget=forms.TextInput(attrs={
-            'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all',
+            'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-gray-900',
             'placeholder': '🔍 Rechercher par numéro ou utilisateur...',
         }),
         label=''
