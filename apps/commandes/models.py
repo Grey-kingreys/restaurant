@@ -30,6 +30,15 @@ class Commande(models.Model):
         choices=STATUS_CHOICES, 
         default='en_attente'
     )
+    serveur_ayant_servi = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={'role': 'Rserveur'},
+        related_name='commandes_servies',
+        verbose_name='Serveur ayant servi'
+    )
     date_commande = models.DateTimeField(auto_now_add=True)
     date_modification = models.DateTimeField(auto_now=True)
     

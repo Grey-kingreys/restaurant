@@ -171,19 +171,21 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # ================ CONFIGURATION POSTGRESQL ================
+DB_SSL = os.getenv("DB_SSL", "false").lower() == "true"
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', 'neondb'),
-        'USER': os.getenv('DB_USER', 'neondb_owner'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'npg_6qUY9RdEoVtN'),
-        'HOST': os.getenv('DB_HOST', 'ep-aged-dawn-a8ylx9he-pooler.eastus2.azure.neon.tech'),
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
         'PORT': os.getenv('DB_PORT', '5432'),
         'OPTIONS': {
-            'sslmode': 'require',
+            'sslmode': 'require' if DB_SSL else 'disable',
             'connect_timeout': 10,
         },
-        'CONN_MAX_AGE': 300,  # Connection pooling
+        'CONN_MAX_AGE': 300,
     }
 }
 

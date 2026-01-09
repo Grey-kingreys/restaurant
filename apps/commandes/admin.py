@@ -17,15 +17,15 @@ class CommandeItemInline(admin.TabularInline):
 
 @admin.register(Commande)
 class CommandeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'table', 'montant_total', 'statut', 'date_commande')
-    list_filter = ('statut', 'date_commande')
-    search_fields = ('table__login', 'id')
+    list_display = ('id', 'table', 'montant_total', 'statut','serveur_ayant_servi', 'date_commande')
+    list_filter = ('statut', 'date_commande', 'serveur_ayant_servi')
+    search_fields = ('table__login', 'id', 'serveur_ayant_servi__login')
     readonly_fields = ('date_commande', 'date_modification')
     inlines = [CommandeItemInline]
     
     fieldsets = (
         ('Informations', {
-            'fields': ('table', 'montant_total', 'statut')
+            'fields': ('table', 'montant_total', 'statut', 'serveur_ayant_servi')
         }),
         ('Dates', {
             'fields': ('date_commande', 'date_modification'),

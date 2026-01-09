@@ -120,6 +120,15 @@
             </div>
         </div>
 
+        {% if commande.serveur_ayant_servi %}
+        <div class="bg-purple-50 rounded-lg p-4 mb-4">
+            <p class="text-xs text-purple-500 uppercase mb-1">Serveur ayant servi</p>
+            <p class="text-lg font-bold text-purple-600">
+                👨‍🍳 {{ commande.serveur_ayant_servi.login }}
+            </p>
+        </div>
+        {% endif %}
+
         <!-- Récapitulatif -->
         <div class="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl shadow-xl p-6 text-white mb-6">
             <div class="flex items-center justify-between">

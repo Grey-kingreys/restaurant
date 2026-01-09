@@ -353,11 +353,11 @@ def commande_detail_serveur(request, commande_id):
     
     return render(request, 'restaurant/commande_detail_serveur.html', context)
 
-
 @login_required
 def commande_marquer_servie(request, commande_id):
     """
     Marque une commande comme servie
+    ✅ TRACE LE SERVEUR QUI A SERVI
     """
     if not (request.user.is_serveur() or request.user.is_admin()):
         messages.error(request, "Accès refusé")
@@ -369,11 +369,15 @@ def commande_marquer_servie(request, commande_id):
         messages.warning(request, f"⚠️ La commande #{commande.id} n'est pas en attente")
         return redirect('restaurant:commande_detail_serveur', commande_id=commande.id)
     
-    # Marquer comme servie
+    # ✅ AJOUT : Tracer le serveur qui a servi
+    commande.serveur_ayant_servi = request.user
     commande.statut = 'servie'
     commande.save()
     
-    messages.success(request, f"✅ Commande #{commande.id} marquée comme servie")
+    messages.success(
+        request, 
+        f"✅ Commande #{commande.id} marquée comme servie par {request.user.login}"
+    )
     
     # Rediriger selon le paramètre 'next'
     next_url = request.GET.get('next')
@@ -388,6 +392,7 @@ def commande_marquer_payee(request, commande_id):
     """
     Marque une commande comme payée
     Crée un paiement et met à jour la caisse
+    ✅ SI LE SERVEUR N'ÉTAIT PAS TRACÉ, ON LE TRACE ICI AUSSI
     """
     if not (request.user.is_serveur() or request.user.is_admin()):
         messages.error(request, "Accès refusé")
@@ -413,6 +418,10 @@ def commande_marquer_payee(request, commande_id):
     
     try:
         with transaction.atomic():
+            # ✅ AJOUT : Si le serveur n'a pas été tracé lors du service, on le trace maintenant
+            if not commande.serveur_ayant_servi:
+                commande.serveur_ayant_servi = request.user
+            
             # Créer le paiement
             paiement = Paiement.objects.create(
                 commande=commande,
