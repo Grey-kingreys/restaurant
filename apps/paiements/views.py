@@ -3,7 +3,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.db.models import Sum, Count
+from django.db.models import Sum
 from django.db import transaction
 from django.utils import timezone
 from datetime import datetime, timedelta
@@ -13,25 +13,17 @@ from .models import Paiement, Caisse, Depense
 from apps.commandes.models import Commande
 from .forms import DepenseForm
 
-
 # ==========================================
 # DASHBOARD CAISSE (Comptable/Admin)
 # ==========================================
-
 @login_required
 def caisse_dashboard(request):
-    """
-    Tableau de bord de la caisse
-    Accessible par Rcomptable et Radmin
-    """
     if not (request.user.is_comptable() or request.user.is_admin()):
         messages.error(request, "Accès refusé : fonctionnalité réservée aux comptables")
         return redirect('dashboard:index')
     
-    # Récupérer la caisse
     caisse = Caisse.get_instance()
     
-    # Filtres par période
     periode = request.GET.get('periode', 'aujourd_hui')
     date_debut = None
     date_fin = timezone.now()
@@ -52,40 +44,24 @@ def caisse_dashboard(request):
         date_debut = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
         titre_periode = "Aujourd'hui"
     
-    # Statistiques des paiements
     paiements_query = Paiement.objects.all()
     if date_debut:
         paiements_query = paiements_query.filter(date_paiement__gte=date_debut)
     
-    total_paiements = paiements_query.aggregate(
-        total=Sum('montant')
-    )['total'] or Decimal('0.00')
-    
+    total_paiements = paiements_query.aggregate(total=Sum('montant'))['total'] or Decimal('0.00')
     nombre_paiements = paiements_query.count()
     
-    # Statistiques des dépenses
     depenses_query = Depense.objects.all()
     if date_debut:
         depenses_query = depenses_query.filter(date_depense__gte=date_debut.date())
     
-    total_depenses = depenses_query.aggregate(
-        total=Sum('montant')
-    )['total'] or Decimal('0.00')
-    
+    total_depenses = depenses_query.aggregate(total=Sum('montant'))['total'] or Decimal('0.00')
     nombre_depenses = depenses_query.count()
     
-    # Bénéfice net
     benefice_net = total_paiements - total_depenses
     
-    # Derniers paiements
-    derniers_paiements = Paiement.objects.select_related(
-        'commande__table'
-    ).order_by('-date_paiement')[:10]
-    
-    # Dernières dépenses
-    dernieres_depenses = Depense.objects.select_related(
-        'enregistree_par'
-    ).order_by('-date_depense')[:10]
+    derniers_paiements = Paiement.objects.select_related('commande__table').order_by('-date_paiement')[:10]
+    dernieres_depenses = Depense.objects.select_related('enregistree_par').order_by('-date_depense')[:10]
     
     context = {
         'caisse': caisse,
@@ -106,21 +82,14 @@ def caisse_dashboard(request):
 # ==========================================
 # LISTE DES PAIEMENTS
 # ==========================================
-
 @login_required
 def paiement_list(request):
-    """
-    Liste complète des paiements
-    """
     if not (request.user.is_comptable() or request.user.is_admin()):
         messages.error(request, "Accès refusé")
         return redirect('dashboard:index')
     
-    paiements = Paiement.objects.select_related(
-        'commande__table'
-    ).order_by('-date_paiement')
+    paiements = Paiement.objects.select_related('commande__table').order_by('-date_paiement')
     
-    # Filtres
     date_debut = request.GET.get('date_debut')
     date_fin = request.GET.get('date_fin')
     table_filter = request.GET.get('table')
@@ -131,7 +100,6 @@ def paiement_list(request):
             paiements = paiements.filter(date_paiement__gte=date_debut)
         except ValueError:
             pass
-    
     if date_fin:
         try:
             date_fin = datetime.strptime(date_fin, '%Y-%m-%d')
@@ -139,11 +107,9 @@ def paiement_list(request):
             paiements = paiements.filter(date_paiement__lte=date_fin)
         except ValueError:
             pass
-    
     if table_filter:
         paiements = paiements.filter(commande__table__login__icontains=table_filter)
     
-    # Statistiques
     stats = {
         'total': paiements.count(),
         'montant_total': paiements.aggregate(Sum('montant'))['montant__sum'] or Decimal('0.00'),
@@ -161,21 +127,16 @@ def paiement_list(request):
 
 
 # ==========================================
-# GESTION DES DÉPENSES
+# LISTE DES DÉPENSES
 # ==========================================
-
 @login_required
 def depense_list(request):
-    """
-    Liste des dépenses
-    """
     if not (request.user.is_comptable() or request.user.is_admin()):
         messages.error(request, "Accès refusé")
         return redirect('dashboard:index')
     
     depenses = Depense.objects.select_related('enregistree_par').order_by('-date_depense')
     
-    # Filtres
     date_debut = request.GET.get('date_debut')
     date_fin = request.GET.get('date_fin')
     
@@ -185,7 +146,6 @@ def depense_list(request):
             depenses = depenses.filter(date_depense__gte=date_debut)
         except ValueError:
             pass
-    
     if date_fin:
         try:
             date_fin = datetime.strptime(date_fin, '%Y-%m-%d').date()
@@ -193,7 +153,6 @@ def depense_list(request):
         except ValueError:
             pass
     
-    # Statistiques
     stats = {
         'total': depenses.count(),
         'montant_total': depenses.aggregate(Sum('montant'))['montant__sum'] or Decimal('0.00'),
@@ -209,11 +168,11 @@ def depense_list(request):
     return render(request, 'paiements/depense_list.html', context)
 
 
+# ==========================================
+# CRÉER UNE DÉPENSE
+# ==========================================
 @login_required
 def depense_create(request):
-    """
-    Créer une nouvelle dépense
-    """
     if not (request.user.is_comptable() or request.user.is_admin()):
         messages.error(request, "Accès refusé")
         return redirect('dashboard:index')
@@ -224,66 +183,50 @@ def depense_create(request):
         form = DepenseForm(request.POST)
         if form.is_valid():
             montant = form.cleaned_data['montant']
-            
-            # Vérifier si le solde est suffisant
             if not caisse.peut_effectuer_depense(montant):
                 messages.error(
-                    request, 
-                    f"❌ Solde insuffisant ! Solde actuel : {caisse.solde_actuel} GNF, "
-                    f"Montant demandé : {montant} GNF"
+                    request,
+                    f"❌ Solde insuffisant ! Solde actuel : {caisse.solde_actuel} GNF, Montant demandé : {montant} GNF"
                 )
-                return render(request, 'paiements/depense_form.html', {
-                    'form': form,
-                    'caisse': caisse,
-                })
-            
-            # Enregistrer la dépense
+                return render(request, 'paiements/depense_form.html', {'form': form, 'caisse': caisse})
             try:
                 with transaction.atomic():
                     depense = form.save(commit=False)
                     depense.enregistree_par = request.user
                     depense.save()
                     
-                    # Mettre à jour la caisse
                     caisse.solde_actuel -= montant
                     caisse.save()
                     
                     messages.success(
-                        request, 
-                        f"✅ Dépense enregistrée avec succès ! "
-                        f"Nouveau solde : {caisse.solde_actuel} GNF"
+                        request,
+                        f"✅ Dépense enregistrée avec succès ! Nouveau solde : {caisse.solde_actuel} GNF"
                     )
                     return redirect('paiements:depense_list')
-            
             except Exception as e:
                 messages.error(request, f"❌ Erreur lors de l'enregistrement : {str(e)}")
     else:
         form = DepenseForm()
     
-    context = {
-        'form': form,
-        'caisse': caisse,
-    }
-    
-    return render(request, 'paiements/depense_form.html', context)
+    return render(request, 'paiements/depense_form.html', {'form': form, 'caisse': caisse})
 
 
+# ==========================================
+# DÉTAIL D'UNE DÉPENSE
+# ==========================================
 @login_required
 def depense_detail(request, depense_id):
-    """
-    Détail d'une dépense
-    """
     if not (request.user.is_comptable() or request.user.is_admin()):
         messages.error(request, "Accès refusé")
         return redirect('dashboard:index')
     
-    depense = get_object_or_404(
-        Depense.objects.select_related('enregistree_par'),
-        id=depense_id
-    )
+    depense = get_object_or_404(Depense.objects.select_related('enregistree_par'), id=depense_id)
+    caisse = Caisse.objects.first()
+
     
     context = {
         'depense': depense,
+        'caisse': caisse,
     }
     
     return render(request, 'paiements/depense_detail.html', context)

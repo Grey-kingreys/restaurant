@@ -25,8 +25,15 @@ def check_environment():
             print("❌ Impossible de démarrer en production sans ces variables.")
             sys.exit(1)
 
+from .celery import app as celery_app
+
+__all__ = ('celery_app',)
+
+
 # Exécuter la vérification au chargement
 if __name__ != "__main__":
     check_environment()
+
     
 print("✅ Configuration PostgreSQL chargée avec succès")
+

@@ -66,20 +66,6 @@ AUTH_USER_MODEL = 'accounts.User'
 
 TAILWIND_APP_NAME = 'theme'
 
-
-# Configuration email (utilisée pour l'envoi des rapports)
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
-EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True').lower() == 'true'
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
-REPORT_EMAIL_TO = os.getenv('REPORT_EMAIL_TO', DEFAULT_FROM_EMAIL)
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
-
 # chemin vers npm pour Windows
 if os.name == 'nt':
     NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
@@ -211,3 +197,42 @@ if 'RENDER' in os.environ:
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# CONFIGURATION CELERY
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Broker URL - Redis (pour les tâches en file d'attente)
+CELERY_BROKER_URL = os.getenv('REDIS_URL', 'redis://localhost:6380/0')
+
+# Backend pour stocker les résultats des tâches
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+
+# Formats acceptés pour la sérialisation
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+# Timezone
+CELERY_TIMEZONE = 'Africa/Conakry'
+
+# Scheduler pour les tâches périodiques
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+# Logs
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes max par tâche
+
+# Configuration email (utilisée pour l'envoi des rapports)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True').lower() == 'true'
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+# ✅ Email de destination pour les rapports
+REPORT_EMAIL_TO = os.getenv('REPORT_EMAIL_TO', DEFAULT_FROM_EMAIL)

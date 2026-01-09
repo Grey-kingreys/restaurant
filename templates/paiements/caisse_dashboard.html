@@ -167,8 +167,7 @@
                         <div>
                             <p class="font-semibold text-gray-900">Commande #{{ paiement.commande.id }}</p>
                             <p class="text-sm text-gray-600">
-                                Table {{ paiement.commande.table.login }} • {{ paiement.date_paiement|date:"d/m/Y H:i"
-                                }}
+                                Table {{ paiement.commande.table.login }} • {{ paiement.date_paiement|date:"d/m/Y H:i" }}
                             </p>
                         </div>
                         <p class="text-lg font-bold text-green-600">+{{ paiement.montant|floatformat:0 }} GNF</p>

@@ -31,6 +31,9 @@ celery==5.4.0
 django-celery-beat==2.7.0
 redis==5.0.8  # Backend pour Celery
 
+# Pour le monitoring (optionnel)
+flower==2.0.1
+
 # Tests
 pytest==8.3.3
 pytest-django==4.9.0
@@ -45,3 +48,5 @@ django-cors-headers==4.4.0  # Pour les requêtes cross-origin
 django-debug-toolbar==4.4.5  # Debug en développement
 whitenoise==6.7.0  # Pour servir les fichiers statiques en production
 gunicorn==21.2.0  # Serveur WSGI pour production
+
+
