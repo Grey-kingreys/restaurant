@@ -18,7 +18,7 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'envoi-rapport-quotidien': {
         'task': 'apps.dashboard.tasks.envoyer_rapport_quotidien',
-        'schedule': crontab(minute='*/1'),  # Tous les jours à 18h00
+        'schedule': crontab(hour=18, minute=0),  # Tous les jours à 18h00
         # Pour tester, utilisez : crontab(minute='*/1')  # Toutes les minutes
     },
 }
