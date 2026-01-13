@@ -24,7 +24,7 @@
 
     <!-- Messages Flash -->
     {% if messages %}
-    <div class="px-4 pt-20 lg:pt-4 lg:ml-64">
+    <div class="px-4 pt-20 lg:pt-4 {% if user.is_authenticated %}lg:ml-64{% endif %}">
         {% for message in messages %}
         <div
             class="mb-4 rounded-lg {% if message.tags == 'error' %}bg-red-100 text-red-800{% elif message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-blue-100 text-blue-800{% endif %} px-4 py-3">
@@ -35,9 +35,11 @@
     {% endif %}
 
     <!-- Contenu principal -->
-    <main class="p-6 pt-20 lg:pt-6 lg:ml-64">
+    <main class="p-6 pt-20 lg:pt-6 {% if user.is_authenticated %}lg:ml-64{% endif %}">
         {% block content %}{% endblock %}
     </main>
+
+    {% include 'partials/footer.html' %}
 
     <!-- Avec un paramètre de version pour forcer le rechargement -->
     <script src="{% static 'js/navbar-mobile.js' %}?v=2.0"></script>
