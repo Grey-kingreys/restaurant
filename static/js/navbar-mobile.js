@@ -1,74 +1,47 @@
-// static/js/navbar-mobile.js
+// static/js/navbar-mobile.js - VERSION SIMPLE
 
-/**
- * Gestion du menu mobile responsive
- * Contrôle l'ouverture/fermeture du menu hamburger
- */
+// Attendre que tout soit prêt
+function initMobileMenu() {
 
-document.addEventListener('DOMContentLoaded', function () {
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const btn = document.getElementById('mobile-menu-button');
+    const sidebar = document.getElementById('sidebar');
     const mobileMenu = document.getElementById('mobile-menu');
 
-    // Vérifier que les éléments existent
-    if (!mobileMenuButton || !mobileMenu) {
+
+    if (!btn) {
+        console.error('Button not found!');
         return;
     }
 
-    // SVG icons
-    const hamburgerIcon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>';
-    const closeIcon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>';
+    btn.addEventListener('click', function () {
 
-    /**
-     * Toggle le menu mobile et change l'icône
-     */
-    function toggleMobileMenu() {
-        mobileMenu.classList.toggle('hidden');
-        const icon = mobileMenuButton.querySelector('svg');
-
-        if (mobileMenu.classList.contains('hidden')) {
-            icon.innerHTML = hamburgerIcon;
-        } else {
-            icon.innerHTML = closeIcon;
+        // Afficher/masquer la sidebar
+        if (sidebar) {
+            sidebar.classList.toggle('hidden');
         }
-    }
 
-    /**
-     * Ferme le menu mobile
-     */
-    function closeMobileMenu() {
-        mobileMenu.classList.add('hidden');
-        const icon = mobileMenuButton.querySelector('svg');
-        icon.innerHTML = hamburgerIcon;
-    }
+        // Afficher/masquer le menu mobile
+        if (mobileMenu) {
+            mobileMenu.classList.toggle('hidden');
+        }
 
-    // Toggle du menu mobile au clic sur le bouton
-    mobileMenuButton.addEventListener('click', toggleMobileMenu);
+        // Changer l'icône
+        const icon = btn.querySelector('svg');
+        if (icon) {
+            const isOpen = sidebar && !sidebar.classList.contains('hidden');
 
-    // Fermer le menu mobile quand on clique sur un lien
-    const mobileLinks = mobileMenu.querySelectorAll('a');
-    mobileLinks.forEach(link => {
-        link.addEventListener('click', closeMobileMenu);
-    });
-
-    // Fermer le menu mobile si on redimensionne vers desktop
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-        // Debounce pour éviter trop d'appels
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => {
-            if (window.innerWidth >= 1024) { // lg breakpoint de Tailwind
-                closeMobileMenu();
+            if (isOpen) {
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>';
+            } else {
+                icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>';
             }
-        }, 250);
-    });
-
-    // Fermer le menu si on clique en dehors (optionnel mais recommandé)
-    document.addEventListener('click', (event) => {
-        const isClickInside = mobileMenu.contains(event.target) ||
-            mobileMenuButton.contains(event.target);
-
-        if (!isClickInside && !mobileMenu.classList.contains('hidden')) {
-            closeMobileMenu();
         }
     });
-});
+}
+
+// Différentes façons d'attendre que le DOM soit prêt
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMobileMenu);
+} else {
+    initMobileMenu();
+}

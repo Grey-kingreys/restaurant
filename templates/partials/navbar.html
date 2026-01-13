@@ -1,6 +1,8 @@
-<nav class="bg-white shadow-lg border-b-2 border-gray-100">
+<!-- navbar.html -->
+<nav id="sidebar"
+    class="hidden lg:block bg-white shadow-lg border-r border-gray-200 fixed top-0 left-0 h-screen w-64 z-40">
     <div class="container mx-auto px-4">
-        <div class="flex justify-between items-center py-4">
+        <div class="hidden lg:flex flex-col h-full py-6">
 
             <!-- Logo -->
             <div class="flex items-center space-x-3">
@@ -15,15 +17,8 @@
                 </a>
             </div>
 
-            <!-- Bouton hamburger (mobile uniquement) -->
-            <button id="mobile-menu-button" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
-                <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
-
             <!-- Navigation Desktop (caché sur mobile) -->
-            <div class="hidden lg:flex items-center space-x-6">
+            <div class="flex flex-col space-y-3 mt-8">
 
                 {% if user.is_table %}
                 <a href="{% url 'menu:table_list' %}"
@@ -106,25 +101,32 @@
                 {% endif %}
 
                 <!-- User info + Logout (Desktop) -->
-                <div class="flex items-center space-x-4 border-l-2 border-gray-200 pl-6">
-                    <div class="text-right">
-                        <p class="text-sm font-semibold text-gray-900">{{ user.login }}</p>
-                        <p class="text-xs text-gray-500">{{ user.get_role_display }}</p>
+                <div class="mt-auto pt-4 border-t border-gray-200">
+                    <div class="flex items-center justify-between gap-4">
+                        <!-- Info utilisateur -->
+                        <div class="flex-1">
+                            <p class="text-sm font-semibold text-gray-900 truncate">{{ user.login }}</p>
+                            <p class="text-xs text-gray-500 truncate">{{ user.get_role_display }}</p>
+                        </div>
+                
+                        <!-- Bouton déconnexion -->
+                        <div class="flex-shrink-0">
+                            <a href="{% url 'accounts:logout' %}"
+                                class="inline-flex items-center px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-lg transition-all shadow-md hover:shadow-lg whitespace-nowrap">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                </svg>
+                                Déconnexion
+                            </a>
+                        </div>
                     </div>
-                    <a href="{% url 'accounts:logout' %}"
-                        class="inline-flex items-center px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-lg transition-all shadow-md hover:shadow-lg">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                        </svg>
-                        Déconnexion
-                    </a>
                 </div>
             </div>
         </div>
 
         <!-- Menu Mobile (caché par défaut) -->
-        <div id="mobile-menu" class="lg:hidden hidden pb-4">
+        <div id="mobile-menu" class="lg:hidden hidden pb-4 pt-20">
             <div class="space-y-2">
 
                 <!-- User info mobile -->
