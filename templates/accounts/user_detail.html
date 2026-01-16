@@ -94,6 +94,49 @@
             </div>
         </div>
 
+        <!-- Après la carte "Dates", avant "Statistiques" -->
+        
+        <!-- Informations personnelles (si applicables) -->
+        {% if not user_obj.is_table %}
+        <div class="lg:col-span-3">
+            <div class="bg-white rounded-2xl shadow-lg p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-6">👤 Informations personnelles</h3>
+        
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Nom complet -->
+                    <div class="bg-gray-50 rounded-xl p-4">
+                        <p class="text-xs text-gray-500 uppercase mb-1">Nom complet</p>
+                        {% if user_obj.nom_complet %}
+                        <p class="text-lg font-semibold text-gray-900">{{ user_obj.nom_complet }}</p>
+                        {% else %}
+                        <p class="text-sm text-gray-400 italic">Non renseigné</p>
+                        {% endif %}
+                    </div>
+        
+                    <!-- Email -->
+                    <div class="bg-gray-50 rounded-xl p-4">
+                        <p class="text-xs text-gray-500 uppercase mb-1">Email</p>
+                        {% if user_obj.email %}
+                        <p class="text-lg font-semibold text-gray-900 break-all">{{ user_obj.email }}</p>
+                        {% else %}
+                        <p class="text-sm text-gray-400 italic">Non renseigné</p>
+                        {% endif %}
+                    </div>
+        
+                    <!-- Téléphone -->
+                    <div class="bg-gray-50 rounded-xl p-4">
+                        <p class="text-xs text-gray-500 uppercase mb-1">Téléphone</p>
+                        {% if user_obj.telephone %}
+                        <p class="text-lg font-semibold text-gray-900">{{ user_obj.telephone }}</p>
+                        {% else %}
+                        <p class="text-sm text-gray-400 italic">Non renseigné</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
         <!-- Statistiques selon le rôle -->
         {% if extra_stats %}
         <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">

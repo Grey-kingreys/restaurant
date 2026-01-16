@@ -129,6 +129,7 @@
                         <tr>
                             <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Login</th>
                             <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Rôle</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Nom complet</th>
                             <th class="px-6 py-4 text-center text-sm font-semibold text-gray-900">Statut</th>
                             <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Créé le</th>
                             <th class="px-6 py-4 text-center text-sm font-semibold text-gray-900">Actions</th>
@@ -171,6 +172,14 @@
                                     {% endif %}">
                                     {{ user_obj.get_role_display }}
                                 </span>
+                            </td>
+
+                            <td class="px-6 py-4">
+                                {% if user_obj.nom_complet %}
+                                <p class="text-sm font-medium text-gray-900">{{ user_obj.nom_complet }}</p>
+                                {% else %}
+                                <p class="text-sm text-gray-400 italic">—</p>
+                                {% endif %}
                             </td>
 
                             <!-- Statut -->

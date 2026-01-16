@@ -1,6 +1,8 @@
+# apps/accounts/models.py
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.utils import timezone
+from django.core.validators import EmailValidator, RegexValidator
 
 class UserManager(BaseUserManager):
     def create_user(self, login, password=None, **extra_fields):
@@ -29,10 +31,43 @@ class User(AbstractBaseUser, PermissionsMixin):
         ('Radmin', 'Administrateur'),
     ]
     
+    # Champs existants
     login = models.CharField(max_length=50, unique=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
     actif = models.BooleanField(default=True)
     date_creation = models.DateTimeField(default=timezone.now)
+    
+    # ✅ NOUVEAUX CHAMPS (optionnels dans le modèle, obligatoires via le formulaire)
+    nom_complet = models.CharField(
+        max_length=200,
+        blank=True,
+        null=True,
+        verbose_name="Nom complet",
+        help_text="Obligatoire pour les serveurs, cuisiniers, comptables et admins"
+    )
+    
+    email = models.EmailField(
+        max_length=254,
+        blank=True,
+        null=True,
+        validators=[EmailValidator()],
+        verbose_name="Adresse email",
+        help_text="Obligatoire pour les serveurs, cuisiniers, comptables et admins"
+    )
+    
+    telephone = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True,
+        validators=[
+            RegexValidator(
+                regex=r'^\+?[0-9]{9,20}$',
+                message="Format valide: +224XXXXXXXXX ou XXXXXXXXX (9-20 chiffres)"
+            )
+        ],
+        verbose_name="Numéro de téléphone",
+        help_text="Obligatoire pour les serveurs, cuisiniers, comptables et admins"
+    )
     
     # Champs requis par Django
     is_staff = models.BooleanField(default=False)
@@ -49,6 +84,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'Utilisateurs'
     
     def __str__(self):
+        if self.nom_complet and not self.is_table():
+            return f"{self.nom_complet} ({self.login})"
         return f"{self.login} ({self.get_role_display()})"
     
     # Méthodes helper pour vérifier les rôles
@@ -66,3 +103,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def is_admin(self):
         return self.role == 'Radmin'
+    
+    def requires_personal_info(self):
+        """
+        Retourne True si le rôle nécessite des informations personnelles
+        (tous les rôles SAUF Rtable)
+        """
+        return self.role != 'Rtable'

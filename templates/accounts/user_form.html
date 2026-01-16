@@ -72,6 +72,57 @@
                         </ul>
                     </div>
                 </div>
+                
+                <!-- Informations personnelles (conditionnelles) -->
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-6">
+                    <h4 class="font-semibold text-blue-900 mb-2">ℹ️ Informations personnelles</h4>
+                    <p class="text-sm text-blue-700">
+                        Les champs suivants sont <strong>obligatoires</strong> pour les serveurs, cuisiniers, comptables et admins.
+                        <br>Pour les <strong>tables</strong>, ces champs ne sont pas nécessaires.
+                    </p>
+                </div>
+                
+                <!-- Nom complet -->
+                <div>
+                    <label for="{{ form.nom_complet.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                        {{ form.nom_complet.label }} <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.nom_complet }}
+                    {% if form.nom_complet.help_text %}
+                    <p class="text-sm text-gray-500 mt-1">{{ form.nom_complet.help_text }}</p>
+                    {% endif %}
+                    {% if form.nom_complet.errors %}
+                    <p class="text-sm text-red-600 mt-1">{{ form.nom_complet.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <!-- Email -->
+                <div>
+                    <label for="{{ form.email.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                        {{ form.email.label }} <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.email }}
+                    {% if form.email.help_text %}
+                    <p class="text-sm text-gray-500 mt-1">{{ form.email.help_text }}</p>
+                    {% endif %}
+                    {% if form.email.errors %}
+                    <p class="text-sm text-red-600 mt-1">{{ form.email.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                
+                <!-- Téléphone -->
+                <div>
+                    <label for="{{ form.telephone.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                        {{ form.telephone.label }} <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.telephone }}
+                    {% if form.telephone.help_text %}
+                    <p class="text-sm text-gray-500 mt-1">{{ form.telephone.help_text }}</p>
+                    {% endif %}
+                    {% if form.telephone.errors %}
+                    <p class="text-sm text-red-600 mt-1">{{ form.telephone.errors.0 }}</p>
+                    {% endif %}
+                </div>
 
                 {% if action == 'create' %}
                 <!-- Mots de passe (uniquement pour création) -->
@@ -168,4 +219,77 @@
 
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+/**
+ * Active/désactive les champs d'informations personnelles
+ * selon le rôle sélectionné
+ */
+function togglePersonalInfoFields(role) {
+    const isTable = role === 'Rtable';
+    
+    // Liste des champs concernés
+    const fields = ['nom_complet', 'email', 'telephone'];
+    
+    fields.forEach(fieldName => {
+        const input = document.getElementById(`id_${fieldName}`);
+        const container = input.closest('div');
+        const label = container.querySelector('label');
+        
+        if (isTable) {
+            // Table : Désactiver et masquer visuellement
+            input.disabled = true;
+            input.value = '';
+            input.classList.add('bg-gray-100', 'cursor-not-allowed');
+            input.classList.remove('border-indigo-500');
+            
+            // Retirer l'astérisque obligatoire
+            if (label && label.querySelector('.text-red-500')) {
+                label.querySelector('.text-red-500').style.display = 'none';
+            }
+            
+            // Message explicatif
+            let notice = container.querySelector('.table-notice');
+            if (!notice) {
+                notice = document.createElement('p');
+                notice.className = 'table-notice text-xs text-gray-500 mt-1 italic';
+                notice.textContent = '(Non applicable pour les tables)';
+                container.appendChild(notice);
+            }
+            
+        } else {
+            // Autres rôles : Activer et rendre obligatoire
+            input.disabled = false;
+            input.classList.remove('bg-gray-100', 'cursor-not-allowed');
+            input.classList.add('border-gray-300');
+            
+            // Ajouter l'astérisque obligatoire
+            if (label && !label.querySelector('.text-red-500')) {
+                const asterisk = document.createElement('span');
+                asterisk.className = 'text-red-500';
+                asterisk.textContent = ' *';
+                label.appendChild(asterisk);
+            } else if (label && label.querySelector('.text-red-500')) {
+                label.querySelector('.text-red-500').style.display = 'inline';
+            }
+            
+            // Retirer le message explicatif
+            const notice = container.querySelector('.table-notice');
+            if (notice) {
+                notice.remove();
+            }
+        }
+    });
+}
+
+// Exécuter au chargement de la page
+document.addEventListener('DOMContentLoaded', function() {
+    const roleSelect = document.getElementById('id_role');
+    if (roleSelect) {
+        togglePersonalInfoFields(roleSelect.value);
+    }
+});
+</script>
 {% endblock %}
