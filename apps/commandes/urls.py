@@ -14,4 +14,7 @@ urlpatterns = [
     path('valider/', views.commande_valider, name='commande_valider'),
     path('mes-commandes/', views.commande_list, name='commande_list'),
     path('commande/<int:commande_id>/', views.commande_detail, name='commande_detail'),
+    
+    # Reçus
+    path('commande/<int:commande_id>/recu-pdf/', views.telecharger_recu_pdf, name='telecharger_recu_pdf'),
 ]

@@ -17,9 +17,7 @@ urlpatterns = [
     # ==========================================
     # URLs pour les SERVEURS (Rserveur)
     # ==========================================
-    # ==========================================
-    # URLs pour les SERVEURS (Rserveur)
-    # ==========================================
+
     
     # Gestion des tables
     path('tables/', views.table_list_serveur, name='table_list_serveur'),
