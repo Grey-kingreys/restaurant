@@ -204,46 +204,124 @@
                                 <p class="text-xs text-gray-500">{{ user_obj.date_creation|date:"H:i" }}</p>
                             </td>
 
-                            <!-- Actions -->
+                            <!-- Actions avec menu déroulant -->
                             <td class="px-6 py-4">
-                                <div class="flex items-center justify-center gap-2">
-                                    <!-- Voir -->
-                                    <a href="{% url 'accounts:user_detail' user_obj.id %}"
-                                        class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                                        title="Voir détails">
-                                        👁️
-                                    </a>
+                                <div class="flex items-center justify-center">
+                                    <!-- Bouton déroulant -->
+                                    <div class="relative dropdown-container">
+                                        <button type="button" onclick="toggleDropdown({{ user_obj.id }})"
+                                            class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors shadow-md">
+                                            Actions
+                                            <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 9l-7 7-7-7" />
+                                            </svg>
+                                        </button>
 
-                                    <!-- Modifier -->
-                                    {% if user_obj != user %}
-                                    <a href="{% url 'accounts:user_update' user_obj.id %}"
-                                        class="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
-                                        title="Modifier">
-                                        ✏️
-                                    </a>
-                                    {% endif %}
+                                        <!-- Menu déroulant -->
+                                        <div id="dropdown-{{ user_obj.id }}"
+                                            class="hidden absolute right-0 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+                                            <div class="py-1">
+                                                <!-- Voir détails -->
+                                                <a href="{% url 'accounts:user_detail' user_obj.id %}"
+                                                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                                                    <svg class="w-5 h-5 mr-3 text-blue-600" fill="none"
+                                                        stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                    </svg>
+                                                    <span class="font-medium">Voir les détails</span>
+                                                </a>
 
-                                    <!-- Activer/Désactiver -->
-                                    {% if user_obj != user %}
-                                    <a href="{% url 'accounts:user_toggle_status' user_obj.id %}"
-                                        class="p-2 {% if user_obj.actif %}text-red-600 hover:bg-red-50{% else %}text-green-600 hover:bg-green-50{% endif %} rounded-lg transition-colors"
-                                        onclick="return confirm('Voulez-vous {% if user_obj.actif %}désactiver{% else %}activer{% endif %} ce compte ?')"
-                                        title="{% if user_obj.actif %}Désactiver{% else %}Activer{% endif %}">
-                                        {% if user_obj.actif %}🔴{% else %}🟢{% endif %}
-                                    </a>
-                                    {% endif %}
+                                                {% if user_obj != user %}
+                                                <!-- Divider -->
+                                                <div class="border-t border-gray-200 my-1"></div>
 
-                                    <!-- Supprimer -->
-                                    {% if user_obj != user %}
-                                    <a href="{% url 'accounts:user_delete' user_obj.id %}"
-                                        class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                        title="Supprimer">
-                                        🗑️
-                                    </a>
-                                    {% endif %}
+                                                <!-- Modifier -->
+                                                <a href="{% url 'accounts:user_update' user_obj.id %}"
+                                                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-700 transition-colors">
+                                                    <svg class="w-5 h-5 mr-3 text-orange-600" fill="none"
+                                                        stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                    </svg>
+                                                    <span class="font-medium">Modifier</span>
+                                                </a>
+
+                                                <!-- Réinitialiser mot de passe -->
+                                                <a href="{% url 'accounts:user_reset_password' user_obj.id %}"
+                                                    class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors">
+                                                    <svg class="w-5 h-5 mr-3 text-purple-600" fill="none"
+                                                        stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                                                    </svg>
+                                                    <span class="font-medium">Mot de passe</span>
+                                                </a>
+
+                                                <!-- Divider -->
+                                                <div class="border-t border-gray-200 my-1"></div>
+
+                                                <!-- Activer/Désactiver -->
+                                                <a href="{% url 'accounts:user_toggle_status' user_obj.id %}"
+                                                    onclick="return confirm('Voulez-vous {% if user_obj.actif %}désactiver{% else %}activer{% endif %} ce compte ?')"
+                                                    class="flex items-center px-4 py-2 text-sm {% if user_obj.actif %}text-red-700 hover:bg-red-50{% else %}text-green-700 hover:bg-green-50{% endif %} transition-colors">
+                                                    {% if user_obj.actif %}
+                                                    <svg class="w-5 h-5 mr-3 text-red-600" fill="none"
+                                                        stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                                    </svg>
+                                                    <span class="font-medium">Désactiver</span>
+                                                    {% else %}
+                                                    <svg class="w-5 h-5 mr-3 text-green-600" fill="none"
+                                                        stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                    <span class="font-medium">Activer</span>
+                                                    {% endif %}
+                                                </a>
+
+                                                <!-- Divider -->
+                                                <div class="border-t border-gray-200 my-1"></div>
+
+                                                <!-- Supprimer -->
+                                                <a href="{% url 'accounts:user_delete' user_obj.id %}"
+                                                    class="flex items-center px-4 py-2 text-sm text-red-700 hover:bg-red-50 transition-colors rounded-b-lg">
+                                                    <svg class="w-5 h-5 mr-3 text-red-600" fill="none"
+                                                        stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                    </svg>
+                                                    <span class="font-medium">Supprimer</span>
+                                                </a>
+
+                                                {% else %}
+                                                <!-- Divider -->
+                                                <div class="border-t border-gray-200 my-1"></div>
+
+                                                <!-- Message pour son propre compte -->
+                                                <div class="px-4 py-2 text-xs text-gray-500 italic">
+                                                    Vous ne pouvez pas modifier votre propre compte
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
+                        {% empty %}
                         {% endfor %}
                     </tbody>
                 </table>
@@ -264,4 +342,41 @@
 
     </div>
 </div>
+
+<script>
+    // Gestion des menus déroulants
+    function toggleDropdown(userId) {
+        const dropdown = document.getElementById(`dropdown-${userId}`);
+        const allDropdowns = document.querySelectorAll('[id^="dropdown-"]');
+
+        // Fermer tous les autres dropdowns
+        allDropdowns.forEach(dd => {
+            if (dd.id !== `dropdown-${userId}`) {
+                dd.classList.add('hidden');
+            }
+        });
+
+        // Toggle le dropdown actuel
+        dropdown.classList.toggle('hidden');
+    }
+
+    // Fermer les dropdowns quand on clique ailleurs
+    document.addEventListener('click', function (event) {
+        const isDropdownButton = event.target.closest('button[onclick^="toggleDropdown"]');
+        const isDropdownMenu = event.target.closest('[id^="dropdown-"]');
+
+        if (!isDropdownButton && !isDropdownMenu) {
+            const allDropdowns = document.querySelectorAll('[id^="dropdown-"]');
+            allDropdowns.forEach(dd => dd.classList.add('hidden'));
+        }
+    });
+
+    // Fermer avec la touche Escape
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            const allDropdowns = document.querySelectorAll('[id^="dropdown-"]');
+            allDropdowns.forEach(dd => dd.classList.add('hidden'));
+        }
+    });
+</script>
 {% endblock %}

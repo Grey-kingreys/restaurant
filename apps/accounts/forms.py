@@ -47,7 +47,7 @@ class UserCreationForm(forms.ModelForm):
             }),
             'role': forms.Select(attrs={
                 'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-gray-900',
-                'onchange': 'togglePersonalInfoFields(this.value)',  # JavaScript pour activer/désactiver
+                'onchange': 'togglePersonalInfoFields(this.value)',
             }),
             'nom_complet': forms.TextInput(attrs={
                 'class': 'w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-gray-900',
@@ -253,8 +253,33 @@ class UserUpdateForm(forms.ModelForm):
             'actif': 'Si décoché, l\'utilisateur ne pourra pas se connecter',
         }
     
-    # Réutiliser les mêmes validations que UserCreationForm
-    clean_login = UserCreationForm.clean_login
+    # ✅ CORRECTION : Redéfinir clean_login pour UserUpdateForm
+    def clean_login(self):
+        """Validation du login (en tenant compte de l'instance existante)"""
+        login = self.cleaned_data.get('login')
+        
+        if not login:
+            raise forms.ValidationError("Le login est obligatoire")
+        
+        if len(login) < 6:
+            raise forms.ValidationError("Le login doit contenir au moins 6 caractères")
+        
+        if not re.match(r'^[a-zA-Z0-9]+$', login):
+            raise forms.ValidationError(
+                "Le login ne peut contenir que des lettres et des chiffres"
+            )
+        
+        # ✅ Exclure l'instance actuelle de la vérification d'unicité
+        existing = User.objects.filter(login=login)
+        if self.instance.pk:
+            existing = existing.exclude(pk=self.instance.pk)
+        
+        if existing.exists():
+            raise forms.ValidationError(f"Le login '{login}' est déjà utilisé")
+        
+        return login
+    
+    # Réutiliser les autres validations de UserCreationForm
     clean_email = UserCreationForm.clean_email
     clean_nom_complet = UserCreationForm.clean_nom_complet
     clean_telephone = UserCreationForm.clean_telephone
