@@ -5,7 +5,13 @@ from django.utils import timezone
 from django.core.validators import EmailValidator, RegexValidator
 
 class UserManager(BaseUserManager):
+    """
+    Manager personnalisé pour le modèle User
+    """
     def create_user(self, login, password=None, **extra_fields):
+        """
+        Créer un utilisateur standard
+        """
         if not login:
             raise ValueError("Le login est obligatoire")
         
@@ -15,14 +21,31 @@ class UserManager(BaseUserManager):
         return user
     
     def create_superuser(self, login, password=None, **extra_fields):
+        """
+        Créer un superutilisateur avec les informations complètes
+        """
         extra_fields.setdefault('role', 'Radmin')
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('actif', True)
+        
+        # ✅ Vérifier que les champs obligatoires sont fournis
+        if not extra_fields.get('nom_complet'):
+            raise ValueError("Le nom complet est obligatoire pour un superutilisateur")
+        
+        if not extra_fields.get('email'):
+            raise ValueError("L'email est obligatoire pour un superutilisateur")
+        
+        if not extra_fields.get('telephone'):
+            raise ValueError("Le téléphone est obligatoire pour un superutilisateur")
         
         return self.create_user(login, password, **extra_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    """
+    Modèle User personnalisé pour le système de restaurant
+    """
     ROLE_CHOICES = [
         ('Rtable', 'Table'),
         ('Rserveur', 'Serveur/Servante'),
@@ -31,13 +54,13 @@ class User(AbstractBaseUser, PermissionsMixin):
         ('Radmin', 'Administrateur'),
     ]
     
-    # Champs existants
+    # Champs de base
     login = models.CharField(max_length=50, unique=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
     actif = models.BooleanField(default=True)
     date_creation = models.DateTimeField(default=timezone.now)
     
-    # ✅ NOUVEAUX CHAMPS (optionnels dans le modèle, obligatoires via le formulaire)
+    # ✅ Informations personnelles (obligatoires sauf pour Rtable)
     nom_complet = models.CharField(
         max_length=200,
         blank=True,
@@ -73,10 +96,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     
+    # ✅ Manager
     objects = UserManager()
     
+    # ✅ Configuration de l'authentification
     USERNAME_FIELD = 'login'
-    REQUIRED_FIELDS = ['role']
+    REQUIRED_FIELDS = ['nom_complet', 'email', 'telephone']  # Demandés lors de createsuperuser
     
     class Meta:
         db_table = 'user'
