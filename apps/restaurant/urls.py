@@ -1,11 +1,11 @@
+# apps/restaurant/urls.py
 from django.urls import path
 from . import views
 
 app_name = 'restaurant'
 
 urlpatterns = [
-
-        # ==========================================
+    # ==========================================
     # URLs ADMIN - CRUD Tables Physiques
     # ==========================================
     path('admin/tables/', views.table_list_admin, name='table_list_admin'),
@@ -15,11 +15,19 @@ urlpatterns = [
     path('admin/tables/<int:pk>/delete/', views.table_delete, name='table_delete'),
     
     # ==========================================
+    # 🆕 QR CODE - ADMIN
+    # ==========================================
+    path('admin/tables/<int:table_id>/qr/', views.afficher_qr_code, name='qr_display'),
+    path('admin/tables/<int:table_id>/qr/generate/', views.generer_qr_code, name='qr_generate'),
+    
+    # ==========================================
+    # 🆕 CONNEXION AUTOMATIQUE VIA QR
+    # ==========================================
+    path('qr/<str:token>/', views.qr_login, name='qr_login'),
+    
+    # ==========================================
     # URLs pour les SERVEURS (Rserveur)
     # ==========================================
-
-    
-    # Gestion des tables
     path('tables/', views.table_list_serveur, name='table_list_serveur'),
     path('tables/<int:table_id>/', views.table_detail_serveur, name='table_detail_serveur'),
     

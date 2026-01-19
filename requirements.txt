@@ -50,3 +50,5 @@ whitenoise==6.7.0  # Pour servir les fichiers statiques en production
 gunicorn==21.2.0  # Serveur WSGI pour production
 
 
+qrcode[pil]==8.0 # QR Code
+

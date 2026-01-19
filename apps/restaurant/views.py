@@ -10,6 +10,11 @@ from apps.accounts.decorators import admin_required
 from .models import TableRestaurant
 from .forms import TableRestaurantForm, TableSearchForm
 from decimal import Decimal
+import qrcode
+from io import BytesIO
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from .models import TableToken
 
 
 # ==========================================
@@ -452,3 +457,167 @@ def commande_marquer_payee(request, commande_id):
         return redirect(next_url)
     
     return redirect('restaurant:commande_detail_serveur', commande_id=commande.id)
+
+
+
+
+# ==========================================
+# GESTION DES QR CODES (Admin)
+# ==========================================
+
+@login_required
+@admin_required
+def generer_qr_code(request, table_id):
+    """
+    Génère ou régénère un QR code pour une table
+    """
+    table = get_object_or_404(User, id=table_id, role='Rtable')
+    
+    # Générer ou régénérer le token
+    token_obj = TableToken.generer_token(table)
+    
+    # Obtenir l'URL de connexion
+    qr_url = token_obj.get_qr_url(request)
+    
+    # Générer le QR code
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    qr.add_data(qr_url)
+    qr.make(fit=True)
+    
+    img = qr.make_image(fill_color="black", back_color="white")
+    
+    # Retourner l'image PNG
+    buffer = BytesIO()
+    img.save(buffer, format='PNG')
+    buffer.seek(0)
+    
+    response = HttpResponse(buffer, content_type='image/png')
+    response['Content-Disposition'] = f'attachment; filename="qr_table_{table.login}.png"'
+    
+    messages.success(
+        request,
+        f"✅ QR Code généré avec succès pour la table {table.login}"
+    )
+    
+    return response
+
+
+@login_required
+@admin_required
+def afficher_qr_code(request, table_id):
+    """
+    Affiche la page avec le QR code et les instructions
+    """
+    table = get_object_or_404(User, id=table_id, role='Rtable')
+    
+    # Vérifier si un token existe
+    try:
+        token_obj = table.auth_token
+        qr_url = token_obj.get_qr_url(request)
+        token_valide = token_obj.est_valide()
+    except TableToken.DoesNotExist:
+        token_obj = None
+        qr_url = None
+        token_valide = False
+    
+    context = {
+        'table': table,
+        'token_obj': token_obj,
+        'qr_url': qr_url,
+        'token_valide': token_valide,
+    }
+    
+    return render(request, 'restaurant/qr_code_display.html', context)
+
+
+# ==========================================
+# CONNEXION AUTOMATIQUE VIA QR CODE
+# ==========================================
+
+def qr_login(request, token):
+    """
+    Connexion automatique via QR code
+    ✅ Pas besoin d'être connecté pour accéder à cette vue
+    """
+    try:
+        token_obj = TableToken.objects.select_related('table').get(token=token)
+    except TableToken.DoesNotExist:
+        messages.error(request, "❌ QR Code invalide ou expiré")
+        return redirect('accounts:login')
+    
+    # Vérifier si le token est toujours valide (mot de passe non changé)
+    if not token_obj.est_valide():
+        messages.error(
+            request,
+            "❌ Ce QR Code n'est plus valide. Le mot de passe de la table a été modifié. "
+            "Contactez l'administrateur pour générer un nouveau QR Code."
+        )
+        return redirect('accounts:login')
+    
+    # Récupérer la table
+    table = token_obj.table
+    
+    # Vérifier que le compte est actif
+    if not table.actif:
+        messages.error(request, "❌ Ce compte est désactivé")
+        return redirect('accounts:login')
+    
+    # ✅ CONNEXION AUTOMATIQUE
+    from django.contrib.auth import login
+    login(request, table, backend='django.contrib.auth.backends.ModelBackend')
+    
+    # ✅ CONFIGURER LA SESSION POUR 3 HEURES
+    request.session.set_expiry(3 * 60 * 60)  # 3 heures en secondes
+    
+    # Marquer le token comme utilisé
+    token_obj.marquer_utilise()
+    
+    messages.success(
+        request,
+        f"✅ Bienvenue ! Vous êtes connecté automatiquement en tant que {table.login}. "
+        f"Votre session expirera dans 3 heures."
+    )
+    
+    return redirect('menu:table_list')
+
+
+# ==========================================
+# INVALIDATION AUTO DES TOKENS
+# ==========================================
+
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+
+@receiver(pre_save, sender=User)
+def invalider_token_si_password_change(sender, instance, **kwargs):
+    """
+    Signal qui invalide le token si le mot de passe change
+    """
+    # Seulement pour les tables
+    if instance.role != 'Rtable':
+        return
+    
+    # Seulement si l'utilisateur existe déjà (modification)
+    if not instance.pk:
+        return
+    
+    try:
+        # Récupérer l'ancienne version
+        old_user = User.objects.get(pk=instance.pk)
+        
+        # Si le mot de passe a changé
+        if old_user.password != instance.password:
+            # Supprimer le token existant (il sera régénéré si nécessaire)
+            try:
+                token = instance.auth_token
+                token.delete()
+                print(f"🔒 Token invalidé pour {instance.login} (mot de passe modifié)")
+            except TableToken.DoesNotExist:
+                pass
+    except User.DoesNotExist:
+        pass

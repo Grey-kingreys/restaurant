@@ -141,6 +141,19 @@
 
         <!-- Actions -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <!-- 🆕 BOUTON QR CODE -->
+            <a href="{% url 'restaurant:qr_display' table.pk %}"
+                class="bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-green-500 rounded-2xl p-6 transition-all transform hover:scale-105 hover:shadow-xl">
+                <div class="flex items-center">
+                    <div class="text-5xl mr-4">📱</div>
+                    <div>
+                        <h3 class="font-bold text-gray-900 text-lg mb-1">QR Code de connexion</h3>
+                        <p class="text-gray-600 text-sm">Générer ou télécharger le QR</p>
+                    </div>
+                </div>
+            </a>
+
             <!-- Modifier -->
             <a href="{% url 'restaurant:table_update' table.pk %}"
                 class="bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-orange-500 rounded-2xl p-6 transition-all transform hover:scale-105 hover:shadow-xl">
