@@ -23,7 +23,7 @@ class TableRestaurant(models.Model):
     utilisateur = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        limit_choices_to={'role': 'RTABLE'},
+        limit_choices_to={'role': 'Rtable'},
         related_name='table_restaurant',
         verbose_name="Utilisateur associé"
     )

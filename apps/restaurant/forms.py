@@ -45,16 +45,20 @@ class TableRestaurantForm(forms.ModelForm):
         }
     
     def __init__(self, *args, **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)  # CORRECTION ICI
+    
+        # DEBUG: Vérifier combien d'utilisateurs RTABLE existent
+        all_rtable_users = User.objects.filter(role='Rtable').count()
+        print(f"DEBUG: Utilisateurs RTABLE total: {all_rtable_users}")
         
-        # Filtrer uniquement les utilisateurs avec rôle "Rtable"
+        # Filtrer uniquement les utilisateurs avec rôle "RTABLE"
         # Et exclure ceux déjà associés à une table (sauf pour l'instance actuelle)
         tables_associees = TableRestaurant.objects.values_list('utilisateur_id', flat=True)
         
         # Si on modifie une table existante, on peut garder son utilisateur actuel
         if self.instance.pk:
             utilisateurs_disponibles = User.objects.filter(
-                Q(role='Rtable') & (
+                Q(role='Rtable') & (  # CORRECTION ICI
                     Q(id=self.instance.utilisateur_id) | 
                     ~Q(id__in=tables_associees)
                 )
@@ -62,7 +66,7 @@ class TableRestaurantForm(forms.ModelForm):
         else:
             # Pour une nouvelle table, exclure tous les utilisateurs déjà associés
             utilisateurs_disponibles = User.objects.filter(
-                role='Rtable'
+                role='Rtable'  # CORRECTION ICI
             ).exclude(
                 id__in=tables_associees
             ).order_by('login')
@@ -73,7 +77,7 @@ class TableRestaurantForm(forms.ModelForm):
         if not utilisateurs_disponibles.exists():
             self.fields['utilisateur'].help_text = (
                 "⚠️ Aucun compte 'Table' disponible. "
-                "Créez d'abord un utilisateur avec le rôle 'Rtable'."
+                "Créez d'abord un utilisateur avec le rôle 'RTABLE'."
             )
             self.fields['utilisateur'].widget.attrs['disabled'] = True
     
@@ -117,9 +121,9 @@ class TableRestaurantForm(forms.ModelForm):
             raise forms.ValidationError("Vous devez sélectionner un utilisateur")
         
         # Vérifier que c'est bien un compte Table
-        if utilisateur.role != 'Rtable':
+        if utilisateur.role != 'Rtable':  # CORRECTION ICI
             raise forms.ValidationError(
-                "L'utilisateur doit avoir le rôle 'Table'"
+                "L'utilisateur doit avoir le rôle 'Table' (RTABLE)"
             )
         
         # Vérifier que l'utilisateur n'est pas déjà associé (sauf si c'est la même table)

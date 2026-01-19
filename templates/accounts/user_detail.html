@@ -286,20 +286,6 @@
 
         <!-- Actions -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-            <!-- 🆕 BOUTON QR CODE -->
-            {% if user_obj.is_table %}
-            <a href="{% url 'restaurant:qr_display' user_obj.id %}"
-                class="bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-green-500 rounded-2xl p-6 transition-all transform hover:scale-105 hover:shadow-xl">
-                <div class="flex items-center">
-                    <div class="text-5xl mr-4">📱</div>
-                    <div>
-                        <h3 class="font-bold text-gray-900 text-lg mb-1">QR Code de connexion</h3>
-                        <p class="text-gray-600 text-sm">Générer ou télécharger le QR</p>
-                    </div>
-                </div>
-            </a>
-            {% endif %}
             <!-- Modifier -->
             {% if user_obj != user %}
             <a href="{% url 'accounts:user_update' user_obj.id %}"

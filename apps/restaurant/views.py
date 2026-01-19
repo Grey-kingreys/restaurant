@@ -60,6 +60,7 @@ def table_list_admin(request):
     return render(request, 'restaurant/table_list_admin.html', context)
 
 
+# Dans views.py - table_create view
 @login_required
 @admin_required
 def table_create(request):
@@ -67,7 +68,11 @@ def table_create(request):
     Créer une nouvelle table physique
     """
     if request.method == 'POST':
+        print("=== DEBUG: Données POST ===")
+        print(request.POST)
+        
         form = TableRestaurantForm(request.POST)
+        
         if form.is_valid():
             table = form.save()
             messages.success(
@@ -76,6 +81,19 @@ def table_create(request):
                 f"Associée à {table.utilisateur.login}"
             )
             return redirect('restaurant:table_list_admin')
+        else:
+            # Afficher toutes les erreurs
+            print("=== DEBUG: Erreurs du formulaire ===")
+            for field, errors in form.errors.items():
+                print(f"{field}: {errors}")
+            
+            error_summary = []
+            for field, errors in form.errors.items():
+                field_label = form.fields[field].label if field in form.fields else field
+                for error in errors:
+                    error_summary.append(f"{field_label}: {error}")
+            
+            messages.error(request, "❌ " + " | ".join(error_summary))
     else:
         form = TableRestaurantForm()
     
@@ -471,10 +489,14 @@ def generer_qr_code(request, table_id):
     """
     Génère ou régénère un QR code pour une table
     """
-    table = get_object_or_404(User, id=table_id, role='Rtable')
+    # Récupérer d'abord la TableRestaurant
+    table_restaurant = get_object_or_404(TableRestaurant, pk=table_id)
+    
+    # Puis récupérer l'utilisateur associé
+    table_user = table_restaurant.utilisateur
     
     # Générer ou régénérer le token
-    token_obj = TableToken.generer_token(table)
+    token_obj = TableToken.generer_token(table_user)
     
     # Obtenir l'URL de connexion
     qr_url = token_obj.get_qr_url(request)
@@ -497,11 +519,11 @@ def generer_qr_code(request, table_id):
     buffer.seek(0)
     
     response = HttpResponse(buffer, content_type='image/png')
-    response['Content-Disposition'] = f'attachment; filename="qr_table_{table.login}.png"'
+    response['Content-Disposition'] = f'attachment; filename="qr_table_{table_restaurant.numero_table}.png"'
     
     messages.success(
         request,
-        f"✅ QR Code généré avec succès pour la table {table.login}"
+        f"✅ QR Code généré avec succès pour la table {table_restaurant.numero_table}"
     )
     
     return response
@@ -513,11 +535,15 @@ def afficher_qr_code(request, table_id):
     """
     Affiche la page avec le QR code et les instructions
     """
-    table = get_object_or_404(User, id=table_id, role='Rtable')
+    # Récupérer d'abord la TableRestaurant
+    table_restaurant = get_object_or_404(TableRestaurant, pk=table_id)
+    
+    # Puis récupérer l'utilisateur associé
+    table_user = table_restaurant.utilisateur
     
     # Vérifier si un token existe
     try:
-        token_obj = table.auth_token
+        token_obj = table_user.auth_token
         qr_url = token_obj.get_qr_url(request)
         token_valide = token_obj.est_valide()
     except TableToken.DoesNotExist:
@@ -526,7 +552,8 @@ def afficher_qr_code(request, table_id):
         token_valide = False
     
     context = {
-        'table': table,
+        'table': table_restaurant,  # TableRestaurant pour afficher le numéro, etc.
+        'table_user': table_user,   # User pour le token
         'token_obj': token_obj,
         'qr_url': qr_url,
         'token_valide': token_valide,
