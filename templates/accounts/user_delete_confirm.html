@@ -3,27 +3,26 @@
 {% block title %}Supprimer : {{ user_obj.login }} - Admin{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-red-50 to-orange-100 py-8 px-4">
-    <div class="max-w-3xl mx-auto">
+<div class="min-h-screen bg-gradient-to-br from-red-50 to-orange-100 py-4 sm:py-6 md:py-8 px-3 sm:px-4">
+    <div class="max-w-3xl mx-auto px-2 sm:px-4">
 
         <!-- En-tête -->
-        <div class="mb-8">
+        <div class="mb-6 sm:mb-8">
             <a href="{% url 'accounts:user_detail' user_obj.id %}"
-                class="inline-flex items-center text-red-600 hover:text-red-800 font-medium mb-4">
+                class="inline-flex items-center text-red-600 hover:text-red-800 font-medium mb-3 sm:mb-4 text-sm sm:text-base">
                 ← Annuler et retourner
             </a>
-            <h1 class="text-4xl font-bold text-gray-900">🗑️ Supprimer un utilisateur</h1>
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">🗑️Supprimer un utilisateur</h1>
         </div>
 
         <!-- Avertissement principal -->
-        <div class="bg-red-100 border-l-4 border-red-500 p-6 rounded-r-2xl mb-8">
+        <div class="bg-red-100 border-l-4 border-red-500 p-4 sm:p-6 rounded-r-xl sm:rounded-r-2xl mb-6 sm:mb-8">
             <div class="flex items-start">
-                <div class="text-4xl mr-4">⚠️</div>
+                <div class="text-3xl sm:text-4xl mr-3 sm:mr-4">⚠️</div>
                 <div>
-                    <h3 class="text-xl font-bold text-red-900 mb-2">Action irréversible !</h3>
-                    <p class="text-red-800">
-                        Vous êtes sur le point de supprimer définitivement l'utilisateur <strong>{{ user_obj.login
-                            }}</strong>.
+                    <h3 class="text-lg sm:text-xl font-bold text-red-900 mb-1 sm:mb-2">Action irréversible !</h3>
+                    <p class="text-sm sm:text-base text-red-800 break-words">
+                        Vous êtes sur le point de supprimer définitivement l'utilisateur <strong>{{ user_obj.login }}</strong>.
                         Cette action ne peut pas être annulée.
                     </p>
                 </div>
@@ -31,12 +30,12 @@
         </div>
 
         <!-- Informations de l'utilisateur -->
-        <div class="bg-white rounded-2xl shadow-xl p-8 mb-6">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Utilisateur à supprimer :</h2>
+        <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl p-4 sm:p-6 md:p-8 mb-4 sm:mb-6">
+            <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Utilisateur à supprimer :</h2>
 
-            <div class="space-y-4">
-                <div class="flex items-center gap-4 pb-4 border-b">
-                    <div class="text-6xl">
+            <div class="space-y-3 sm:space-y-4">
+                <div class="flex items-center gap-3 sm:gap-4 pb-3 sm:pb-4 border-b">
+                    <div class="text-5xl sm:text-6xl">
                         {% if user_obj.is_table %}🪑
                         {% elif user_obj.is_serveur %}👨‍🍳
                         {% elif user_obj.is_cuisinier %}🍳
@@ -45,24 +44,24 @@
                         {% endif %}
                     </div>
                     <div>
-                        <p class="text-2xl font-bold text-gray-900">{{ user_obj.login }}</p>
-                        <p class="text-lg text-gray-600">{{ user_obj.get_role_display }}</p>
+                        <p class="text-xl sm:text-2xl font-bold text-gray-900 break-words">{{ user_obj.login }}</p>
+                        <p class="text-base sm:text-lg text-gray-600">{{ user_obj.get_role_display }}</p>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <p class="text-sm text-gray-600 mb-1">Statut</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div class="bg-gray-50 rounded-lg p-3 sm:p-4">
+                        <p class="text-xs sm:text-sm text-gray-600 mb-1">Statut</p>
                         {% if user_obj.actif %}
-                        <p class="font-semibold text-green-600">✅ Actif</p>
+                        <p class="font-semibold text-green-600 text-sm sm:text-base">✅ Actif</p>
                         {% else %}
-                        <p class="font-semibold text-red-600">❌ Inactif</p>
+                        <p class="font-semibold text-red-600 text-sm sm:text-base">❌ Inactif</p>
                         {% endif %}
                     </div>
 
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <p class="text-sm text-gray-600 mb-1">Créé le</p>
-                        <p class="font-semibold text-gray-900">{{ user_obj.date_creation|date:"d/m/Y" }}</p>
+                    <div class="bg-gray-50 rounded-lg p-3 sm:p-4">
+                        <p class="text-xs sm:text-sm text-gray-600 mb-1">Créé le</p>
+                        <p class="font-semibold text-gray-900 text-sm sm:text-base">{{ user_obj.date_creation|date:"d/m/Y" }}</p>
                     </div>
                 </div>
             </div>
@@ -70,49 +69,50 @@
 
         <!-- Dépendances -->
         {% if dependencies %}
-        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded-r-2xl mb-8">
-            <h3 class="text-lg font-bold text-yellow-900 mb-3">⚠️ Éléments liés à cet utilisateur :</h3>
-            <ul class="space-y-2">
+        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 sm:p-6 rounded-r-xl sm:rounded-r-2xl mb-6 sm:mb-8">
+            <h3 class="text-base sm:text-lg font-bold text-yellow-900 mb-2 sm:mb-3">⚠️ Éléments liés à cet utilisateur :
+            </h3>
+            <ul class="space-y-1 sm:space-y-2">
                 {% for dep in dependencies %}
-                <li class="text-yellow-800 font-medium">• {{ dep }}</li>
+                <li class="text-yellow-800 font-medium text-sm sm:text-base break-words">• {{ dep }}</li>
                 {% endfor %}
             </ul>
-            <p class="text-sm text-yellow-700 mt-4">
+            <p class="text-xs sm:text-sm text-yellow-700 mt-3 sm:mt-4">
                 Ces éléments seront également affectés par la suppression (selon la configuration de la base de
                 données).
             </p>
         </div>
         {% else %}
-        <div class="bg-green-50 border-l-4 border-green-500 p-6 rounded-r-2xl mb-8">
-            <p class="text-green-800 font-medium">
+        <div class="bg-green-50 border-l-4 border-green-500 p-4 sm:p-6 rounded-r-xl sm:rounded-r-2xl mb-6 sm:mb-8">
+            <p class="text-green-800 font-medium text-sm sm:text-base">
                 ✅ Aucune dépendance détectée. La suppression peut être effectuée en toute sécurité.
             </p>
         </div>
         {% endif %}
 
         <!-- Formulaire de confirmation -->
-        <div class="bg-white rounded-2xl shadow-xl p-8">
+        <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl p-4 sm:p-6 md:p-8">
             <form method="post">
                 {% csrf_token %}
 
-                <div class="bg-red-50 border-2 border-red-200 rounded-xl p-6 mb-6">
+                <div class="bg-red-50 border-2 border-red-200 rounded-lg sm:rounded-xl p-4 sm:p-6 mb-4 sm:mb-6">
                     <label class="flex items-start cursor-pointer">
                         <input type="checkbox" id="confirm-delete" required
-                            class="w-5 h-5 text-red-600 border-gray-300 rounded focus:ring-2 focus:ring-red-500 mt-1">
-                        <span class="ml-3 text-gray-900">
+                            class="w-4 h-4 sm:w-5 sm:h-5 text-red-600 border-gray-300 rounded focus:ring-2 focus:ring-red-500 mt-0.5 sm:mt-1">
+                        <span class="ml-2 sm:ml-3 text-gray-900 text-sm sm:text-base break-words">
                             Je comprends que cette action est <strong class="text-red-600">irréversible</strong>
                             et que l'utilisateur <strong>{{ user_obj.login }}</strong> sera définitivement supprimé.
                         </span>
                     </label>
                 </div>
 
-                <div class="flex gap-4">
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
                     <button type="submit" id="delete-button" disabled
-                        class="flex-1 bg-red-600 hover:bg-red-700 text-white px-6 py-4 rounded-xl font-bold transition-all disabled:bg-gray-300 disabled:cursor-not-allowed">
+                        class="w-full sm:flex-1 bg-red-600 hover:bg-red-700 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-lg sm:rounded-xl font-bold transition-all disabled:bg-gray-300 disabled:cursor-not-allowed text-sm sm:text-base">
                         🗑️ Confirmer la suppression
                     </button>
                     <a href="{% url 'accounts:user_detail' user_obj.id %}"
-                        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-4 rounded-xl font-bold text-center transition-colors">
+                        class="w-full sm:flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 sm:px-6 py-3 sm:py-4 rounded-lg sm:rounded-xl font-bold text-center transition-colors text-sm sm:text-base">
                         ❌ Annuler
                     </a>
                 </div>
@@ -120,9 +120,9 @@
         </div>
 
         <!-- Information supplémentaire -->
-        <div class="mt-6 bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-2xl">
-            <h3 class="font-semibold text-blue-900 mb-2">💡 Alternative</h3>
-            <p class="text-sm text-blue-700">
+        <div class="mt-4 sm:mt-6 bg-blue-50 border-l-4 border-blue-500 p-4 sm:p-6 rounded-r-xl sm:rounded-r-2xl">
+            <h3 class="font-semibold text-blue-900 mb-1 sm:mb-2 text-sm sm:text-base">💡 Alternative</h3>
+            <p class="text-xs sm:text-sm text-blue-700 break-words">
                 Si vous souhaitez simplement empêcher l'utilisateur de se connecter sans supprimer ses données,
                 vous pouvez <strong>désactiver le compte</strong> au lieu de le supprimer.
             </p>

@@ -3,26 +3,26 @@
 {% block title %}{{ title }} - Admin{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 py-8 px-4">
-    <div class="max-w-3xl mx-auto">
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 py-4 sm:py-6 md:py-8 px-3 sm:px-4 md:px-4">
+    <div class="max-w-3xl mx-auto px-2 sm:px-4">
 
         <!-- En-tête -->
-        <div class="mb-8">
+        <div class="mb-6 sm:mb-8">
             <a href="{% url 'accounts:user_list' %}"
-                class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium mb-4">
+                class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium mb-3 sm:mb-4 text-sm sm:text-base">
                 ← Retour à la liste
             </a>
-            <h1 class="text-4xl font-bold text-gray-900">{{ title }}</h1>
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">{{ title }}</h1>
         </div>
 
         <!-- Formulaire -->
-        <div class="bg-white rounded-2xl shadow-xl p-8">
-            <form method="post" class="space-y-6">
+        <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl p-4 sm:p-6 md:p-8">
+            <form method="post" class="space-y-4 sm:space-y-6">
                 {% csrf_token %}
 
                 <!-- Messages d'erreur globaux -->
                 {% if form.non_field_errors %}
-                <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
+                <div class="bg-red-50 border-l-4 border-red-500 p-3 sm:p-4 rounded-r-lg text-sm sm:text-base">
                     <div class="flex">
                         <div class="text-red-700">
                             {{ form.non_field_errors }}
@@ -33,135 +33,148 @@
 
                 <!-- Login -->
                 <div>
-                    <label for="{{ form.login.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                    <label for="{{ form.login.id_for_label }}"
+                        class="block text-sm font-semibold text-gray-700 mb-1 sm:mb-2">
                         {{ form.login.label }} <span class="text-red-500">*</span>
                     </label>
                     {{ form.login }}
                     {% if form.login.help_text %}
-                    <p class="text-sm text-gray-500 mt-1">{{ form.login.help_text }}</p>
+                    <p class="text-xs sm:text-sm text-gray-500 mt-1">{{ form.login.help_text }}</p>
                     {% endif %}
                     {% if form.login.errors %}
-                    <p class="text-sm text-red-600 mt-1">{{ form.login.errors.0 }}</p>
+                    <p class="text-xs sm:text-sm text-red-600 mt-1">{{ form.login.errors.0 }}</p>
                     {% endif %}
                 </div>
 
                 <!-- Rôle -->
                 <div>
-                    <label for="{{ form.role.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                    <label for="{{ form.role.id_for_label }}"
+                        class="block text-sm font-semibold text-gray-700 mb-1 sm:mb-2">
                         {{ form.role.label }} <span class="text-red-500">*</span>
                     </label>
                     {{ form.role }}
                     {% if form.role.help_text %}
-                    <p class="text-sm text-gray-500 mt-1">{{ form.role.help_text }}</p>
+                    <p class="text-xs sm:text-sm text-gray-500 mt-1">{{ form.role.help_text }}</p>
                     {% endif %}
                     {% if form.role.errors %}
-                    <p class="text-sm text-red-600 mt-1">{{ form.role.errors.0 }}</p>
+                    <p class="text-xs sm:text-sm text-red-600 mt-1">{{ form.role.errors.0 }}</p>
                     {% endif %}
 
                     <!-- Descriptions des rôles -->
-                    <div class="mt-4 bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg">
-                        <h4 class="font-semibold text-blue-900 mb-2">ℹ️ Description des rôles :</h4>
-                        <ul class="text-sm text-blue-800 space-y-1">
-                            <li>• <strong>Table (Rtable)</strong> : Consulter le menu et commander depuis une tablette
-                            </li>
-                            <li>• <strong>Serveur (Rserveur)</strong> : Gérer les tables, valider commandes et
-                                paiements</li>
-                            <li>• <strong>Cuisinier (Rcuisinier)</strong> : Gérer le menu (CRUD plats)</li>
-                            <li>• <strong>Comptable (Rcomptable)</strong> : Gérer la caisse, paiements et dépenses</li>
-                            <li>• <strong>Admin (Radmin)</strong> : Accès complet à toutes les fonctionnalités</li>
+                    <div class="mt-3 sm:mt-4 bg-blue-50 border-l-4 border-blue-500 p-3 sm:p-4 rounded-r-lg">
+                        <h4 class="font-semibold text-blue-900 mb-1 sm:mb-2 text-sm sm:text-base">ℹ️ Description des
+                            rôles :</h4>
+                        <ul class="text-xs sm:text-sm text-blue-800 space-y-1">
+                            <li class="break-words">• <strong>Table (Rtable)</strong> : Consulter le menu et commander
+                                depuis une tablette</li>
+                            <li class="break-words">• <strong>Serveur (Rserveur)</strong> : Gérer les tables, valider
+                                commandes et paiements</li>
+                            <li class="break-words">• <strong>Cuisinier (Rcuisinier)</strong> : Gérer le menu (CRUD
+                                plats)</li>
+                            <li class="break-words">• <strong>Comptable (Rcomptable)</strong> : Gérer la caisse,
+                                paiements et dépenses</li>
+                            <li class="break-words">• <strong>Admin (Radmin)</strong> : Accès complet à toutes les
+                                fonctionnalités</li>
                         </ul>
                     </div>
                 </div>
-                
+
                 <!-- Informations personnelles (conditionnelles) -->
-                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-6">
-                    <h4 class="font-semibold text-blue-900 mb-2">ℹ️ Informations personnelles</h4>
-                    <p class="text-sm text-blue-700">
-                        Les champs suivants sont <strong>obligatoires</strong> pour les serveurs, cuisiniers, comptables et admins.
-                        <br>Pour les <strong>tables</strong>, ces champs ne sont pas nécessaires.
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-3 sm:p-4 rounded-r-lg mb-4 sm:mb-6">
+                    <h4 class="font-semibold text-blue-900 mb-1 sm:mb-2 text-sm sm:text-base">ℹ️ Informations
+                        personnelles</h4>
+                    <p class="text-xs sm:text-sm text-blue-700 break-words">
+                        Les champs suivants sont <strong>obligatoires</strong> pour les serveurs, cuisiniers, comptables
+                        et admins.
+                        <br class="hidden sm:block">Pour les <strong>tables</strong>, ces champs ne sont pas
+                        nécessaires.
                     </p>
                 </div>
-                
+
                 <!-- Nom complet -->
                 <div>
-                    <label for="{{ form.nom_complet.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                    <label for="{{ form.nom_complet.id_for_label }}"
+                        class="block text-sm font-semibold text-gray-700 mb-1 sm:mb-2">
                         {{ form.nom_complet.label }} <span class="text-red-500">*</span>
                     </label>
                     {{ form.nom_complet }}
                     {% if form.nom_complet.help_text %}
-                    <p class="text-sm text-gray-500 mt-1">{{ form.nom_complet.help_text }}</p>
+                    <p class="text-xs sm:text-sm text-gray-500 mt-1">{{ form.nom_complet.help_text }}</p>
                     {% endif %}
                     {% if form.nom_complet.errors %}
-                    <p class="text-sm text-red-600 mt-1">{{ form.nom_complet.errors.0 }}</p>
+                    <p class="text-xs sm:text-sm text-red-600 mt-1">{{ form.nom_complet.errors.0 }}</p>
                     {% endif %}
                 </div>
-                
+
                 <!-- Email -->
                 <div>
-                    <label for="{{ form.email.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                    <label for="{{ form.email.id_for_label }}"
+                        class="block text-sm font-semibold text-gray-700 mb-1 sm:mb-2">
                         {{ form.email.label }} <span class="text-red-500">*</span>
                     </label>
                     {{ form.email }}
                     {% if form.email.help_text %}
-                    <p class="text-sm text-gray-500 mt-1">{{ form.email.help_text }}</p>
+                    <p class="text-xs sm:text-sm text-gray-500 mt-1">{{ form.email.help_text }}</p>
                     {% endif %}
                     {% if form.email.errors %}
-                    <p class="text-sm text-red-600 mt-1">{{ form.email.errors.0 }}</p>
+                    <p class="text-xs sm:text-sm text-red-600 mt-1">{{ form.email.errors.0 }}</p>
                     {% endif %}
                 </div>
-                
+
                 <!-- Téléphone -->
                 <div>
-                    <label for="{{ form.telephone.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                    <label for="{{ form.telephone.id_for_label }}"
+                        class="block text-sm font-semibold text-gray-700 mb-1 sm:mb-2">
                         {{ form.telephone.label }} <span class="text-red-500">*</span>
                     </label>
                     {{ form.telephone }}
                     {% if form.telephone.help_text %}
-                    <p class="text-sm text-gray-500 mt-1">{{ form.telephone.help_text }}</p>
+                    <p class="text-xs sm:text-sm text-gray-500 mt-1">{{ form.telephone.help_text }}</p>
                     {% endif %}
                     {% if form.telephone.errors %}
-                    <p class="text-sm text-red-600 mt-1">{{ form.telephone.errors.0 }}</p>
+                    <p class="text-xs sm:text-sm text-red-600 mt-1">{{ form.telephone.errors.0 }}</p>
                     {% endif %}
                 </div>
 
                 {% if action == 'create' %}
                 <!-- Mots de passe (uniquement pour création) -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                     <!-- Mot de passe -->
                     <div>
                         <label for="{{ form.password1.id_for_label }}"
-                            class="block text-sm font-semibold text-gray-700 mb-2">
+                            class="block text-sm font-semibold text-gray-700 mb-1 sm:mb-2">
                             {{ form.password1.label }} <span class="text-red-500">*</span>
                         </label>
                         {{ form.password1 }}
                         {% if form.password1.help_text %}
-                        <p class="text-sm text-gray-500 mt-1">{{ form.password1.help_text }}</p>
+                        <p class="text-xs sm:text-sm text-gray-500 mt-1">{{ form.password1.help_text }}</p>
                         {% endif %}
                         {% if form.password1.errors %}
-                        <p class="text-sm text-red-600 mt-1">{{ form.password1.errors.0 }}</p>
+                        <p class="text-xs sm:text-sm text-red-600 mt-1">{{ form.password1.errors.0 }}</p>
                         {% endif %}
                     </div>
 
                     <!-- Confirmation mot de passe -->
                     <div>
                         <label for="{{ form.password2.id_for_label }}"
-                            class="block text-sm font-semibold text-gray-700 mb-2">
+                            class="block text-sm font-semibold text-gray-700 mb-1 sm:mb-2">
                             {{ form.password2.label }} <span class="text-red-500">*</span>
                         </label>
                         {{ form.password2 }}
                         {% if form.password2.help_text %}
-                        <p class="text-sm text-gray-500 mt-1">{{ form.password2.help_text }}</p>
+                        <p class="text-xs sm:text-sm text-gray-500 mt-1">{{ form.password2.help_text }}</p>
                         {% endif %}
                         {% if form.password2.errors %}
-                        <p class="text-sm text-red-600 mt-1">{{ form.password2.errors.0 }}</p>
+                        <p class="text-xs sm:text-sm text-red-600 mt-1">{{ form.password2.errors.0 }}</p>
                         {% endif %}
                     </div>
                 </div>
 
                 <!-- Exigences du mot de passe -->
-                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg">
-                    <h4 class="font-semibold text-yellow-900 mb-2">⚠️ Exigences du mot de passe :</h4>
-                    <ul class="text-sm text-yellow-800 space-y-1">
+                <div class="bg-yellow-50 border-l-4 border-yellow-500 p-3 sm:p-4 rounded-r-lg">
+                    <h4 class="font-semibold text-yellow-900 mb-1 sm:mb-2 text-sm sm:text-base">⚠️ Exigences du mot de
+                        passe :</h4>
+                    <ul class="text-xs sm:text-sm text-yellow-800 space-y-1">
                         <li>• Minimum 8 caractères</li>
                         <li>• Au moins une lettre (a-z, A-Z)</li>
                         <li>• Au moins un chiffre (0-9)</li>
@@ -170,8 +183,8 @@
                 </div>
                 {% else %}
                 <!-- Message pour modification -->
-                <div class="bg-gray-50 border-l-4 border-gray-400 p-4 rounded-r-lg">
-                    <p class="text-sm text-gray-700">
+                <div class="bg-gray-50 border-l-4 border-gray-400 p-3 sm:p-4 rounded-r-lg">
+                    <p class="text-xs sm:text-sm text-gray-700 break-words">
                         💡 <strong>Note :</strong> Le mot de passe ne peut pas être modifié via ce formulaire.
                         Utilisez le bouton "Réinitialiser le mot de passe" sur la page de détails.
                     </p>
@@ -179,27 +192,27 @@
                 {% endif %}
 
                 <!-- Compte actif -->
-                <div class="bg-gray-50 rounded-xl p-4">
+                <div class="bg-gray-50 rounded-lg sm:rounded-xl p-3 sm:p-4">
                     <label class="flex items-center cursor-pointer">
                         {{ form.actif }}
-                        <span class="ml-3 text-sm font-semibold text-gray-700">{{ form.actif.label }}</span>
+                        <span class="ml-2 sm:ml-3 text-sm font-semibold text-gray-700">{{ form.actif.label }}</span>
                     </label>
                     {% if form.actif.help_text %}
-                    <p class="text-sm text-gray-500 mt-2 ml-8">{{ form.actif.help_text }}</p>
+                    <p class="text-xs sm:text-sm text-gray-500 mt-1 sm:mt-2 ml-6 sm:ml-8">{{ form.actif.help_text }}</p>
                     {% endif %}
                     {% if form.actif.errors %}
-                    <p class="text-sm text-red-600 mt-1 ml-8">{{ form.actif.errors.0 }}</p>
+                    <p class="text-xs sm:text-sm text-red-600 mt-1 ml-6 sm:ml-8">{{ form.actif.errors.0 }}</p>
                     {% endif %}
                 </div>
 
                 <!-- Boutons d'action -->
-                <div class="flex gap-4 pt-6 border-t">
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4 sm:pt-6 border-t">
                     <button type="submit"
-                        class="flex-1 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-medium shadow-lg transition-all transform hover:scale-105">
+                        class="w-full sm:flex-1 bg-green-600 hover:bg-green-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium shadow-md sm:shadow-lg transition-all transform hover:scale-[1.02] sm:hover:scale-105 text-sm sm:text-base">
                         💾 {{ button_text }}
                     </button>
                     <a href="{% url 'accounts:user_list' %}"
-                        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-3 rounded-xl font-medium text-center transition-colors">
+                        class="w-full sm:flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium text-center transition-colors text-sm sm:text-base">
                         ❌ Annuler
                     </a>
                 </div>
@@ -207,9 +220,9 @@
         </div>
 
         <!-- Informations supplémentaires -->
-        <div class="mt-6 bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-2xl">
-            <h3 class="font-semibold text-blue-900 mb-2">💡 Conseils</h3>
-            <ul class="text-sm text-blue-700 space-y-1">
+        <div class="mt-4 sm:mt-6 bg-blue-50 border-l-4 border-blue-500 p-4 sm:p-6 rounded-r-xl sm:rounded-r-2xl">
+            <h3 class="font-semibold text-blue-900 mb-1 sm:mb-2 text-sm sm:text-base">💡 Conseils</h3>
+            <ul class="text-xs sm:text-sm text-blue-700 space-y-1 break-words">
                 <li>• Le login doit être unique dans le système</li>
                 <li>• Utilisez un format cohérent (ex: TABLE001, SERV001, COOK001)</li>
                 <li>• Un compte inactif ne pourra pas se connecter</li>
@@ -223,73 +236,73 @@
 
 {% block extra_js %}
 <script>
-/**
- * Active/désactive les champs d'informations personnelles
- * selon le rôle sélectionné
- */
-function togglePersonalInfoFields(role) {
-    const isTable = role === 'Rtable';
-    
-    // Liste des champs concernés
-    const fields = ['nom_complet', 'email', 'telephone'];
-    
-    fields.forEach(fieldName => {
-        const input = document.getElementById(`id_${fieldName}`);
-        const container = input.closest('div');
-        const label = container.querySelector('label');
-        
-        if (isTable) {
-            // Table : Désactiver et masquer visuellement
-            input.disabled = true;
-            input.value = '';
-            input.classList.add('bg-gray-100', 'cursor-not-allowed');
-            input.classList.remove('border-indigo-500');
-            
-            // Retirer l'astérisque obligatoire
-            if (label && label.querySelector('.text-red-500')) {
-                label.querySelector('.text-red-500').style.display = 'none';
+    /**
+     * Active/désactive les champs d'informations personnelles
+     * selon le rôle sélectionné
+     */
+    function togglePersonalInfoFields(role) {
+        const isTable = role === 'Rtable';
+
+        // Liste des champs concernés
+        const fields = ['nom_complet', 'email', 'telephone'];
+
+        fields.forEach(fieldName => {
+            const input = document.getElementById(`id_${fieldName}`);
+            const container = input.closest('div');
+            const label = container.querySelector('label');
+
+            if (isTable) {
+                // Table : Désactiver et masquer visuellement
+                input.disabled = true;
+                input.value = '';
+                input.classList.add('bg-gray-100', 'cursor-not-allowed');
+                input.classList.remove('border-indigo-500');
+
+                // Retirer l'astérisque obligatoire
+                if (label && label.querySelector('.text-red-500')) {
+                    label.querySelector('.text-red-500').style.display = 'none';
+                }
+
+                // Message explicatif
+                let notice = container.querySelector('.table-notice');
+                if (!notice) {
+                    notice = document.createElement('p');
+                    notice.className = 'table-notice text-xs text-gray-500 mt-1 italic';
+                    notice.textContent = '(Non applicable pour les tables)';
+                    container.appendChild(notice);
+                }
+
+            } else {
+                // Autres rôles : Activer et rendre obligatoire
+                input.disabled = false;
+                input.classList.remove('bg-gray-100', 'cursor-not-allowed');
+                input.classList.add('border-gray-300');
+
+                // Ajouter l'astérisque obligatoire
+                if (label && !label.querySelector('.text-red-500')) {
+                    const asterisk = document.createElement('span');
+                    asterisk.className = 'text-red-500';
+                    asterisk.textContent = ' *';
+                    label.appendChild(asterisk);
+                } else if (label && label.querySelector('.text-red-500')) {
+                    label.querySelector('.text-red-500').style.display = 'inline';
+                }
+
+                // Retirer le message explicatif
+                const notice = container.querySelector('.table-notice');
+                if (notice) {
+                    notice.remove();
+                }
             }
-            
-            // Message explicatif
-            let notice = container.querySelector('.table-notice');
-            if (!notice) {
-                notice = document.createElement('p');
-                notice.className = 'table-notice text-xs text-gray-500 mt-1 italic';
-                notice.textContent = '(Non applicable pour les tables)';
-                container.appendChild(notice);
-            }
-            
-        } else {
-            // Autres rôles : Activer et rendre obligatoire
-            input.disabled = false;
-            input.classList.remove('bg-gray-100', 'cursor-not-allowed');
-            input.classList.add('border-gray-300');
-            
-            // Ajouter l'astérisque obligatoire
-            if (label && !label.querySelector('.text-red-500')) {
-                const asterisk = document.createElement('span');
-                asterisk.className = 'text-red-500';
-                asterisk.textContent = ' *';
-                label.appendChild(asterisk);
-            } else if (label && label.querySelector('.text-red-500')) {
-                label.querySelector('.text-red-500').style.display = 'inline';
-            }
-            
-            // Retirer le message explicatif
-            const notice = container.querySelector('.table-notice');
-            if (notice) {
-                notice.remove();
-            }
+        });
+    }
+
+    // Exécuter au chargement de la page
+    document.addEventListener('DOMContentLoaded', function () {
+        const roleSelect = document.getElementById('id_role');
+        if (roleSelect) {
+            togglePersonalInfoFields(roleSelect.value);
         }
     });
-}
-
-// Exécuter au chargement de la page
-document.addEventListener('DOMContentLoaded', function() {
-    const roleSelect = document.getElementById('id_role');
-    if (roleSelect) {
-        togglePersonalInfoFields(roleSelect.value);
-    }
-});
 </script>
 {% endblock %}

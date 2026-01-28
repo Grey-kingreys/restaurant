@@ -4,62 +4,66 @@
 {% block title %}Gestion des Plats - Cuisinier{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gray-50 py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gray-50 py-4 sm:py-6 md:py-8">
+    <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
 
         <!-- Header avec statistiques -->
-        <div class="mb-8">
-            <div class="flex items-center justify-between mb-6">
+        <div class="mb-6 sm:mb-8">
+            <div
+                class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-4 sm:gap-0">
                 <div>
-                    <h1 class="text-4xl font-bold text-gray-900">🍳 Gestion des Plats</h1>
-                    <p class="text-gray-600 mt-2">Gérez le menu du restaurant</p>
+                    <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">🍳 Gestion des Plats</h1>
+                    <p class="text-gray-600 mt-1 sm:mt-2 text-sm sm:text-base">Gérez le menu du restaurant</p>
                 </div>
                 <a href="{% url 'menu:plat_create' %}"
-                    class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-medium shadow-lg transition-all transform hover:scale-105">
+                    class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium shadow-md sm:shadow-lg transition-all transform hover:scale-105 text-sm sm:text-base text-center">
                     ➕ Ajouter un plat
                 </a>
             </div>
 
             <!-- Statistiques -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white rounded-2xl shadow-md p-6 border-l-4 border-blue-500">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+                <div
+                    class="bg-white rounded-xl sm:rounded-2xl shadow-sm sm:shadow-md p-4 sm:p-6 border-l-4 border-blue-500">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-gray-600 text-sm">Total des plats</p>
-                            <p class="text-3xl font-bold text-gray-900">{{ stats.total }}</p>
+                            <p class="text-gray-600 text-xs sm:text-sm">Total des plats</p>
+                            <p class="text-2xl sm:text-3xl font-bold text-gray-900">{{ stats.total }}</p>
                         </div>
-                        <div class="text-4xl">📋</div>
+                        <div class="text-3xl sm:text-4xl">📋</div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-2xl shadow-md p-6 border-l-4 border-green-500">
+                <div
+                    class="bg-white rounded-xl sm:rounded-2xl shadow-sm sm:shadow-md p-4 sm:p-6 border-l-4 border-green-500">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-gray-600 text-sm">Plats disponibles</p>
-                            <p class="text-3xl font-bold text-green-600">{{ stats.disponibles }}</p>
+                            <p class="text-gray-600 text-xs sm:text-sm">Plats disponibles</p>
+                            <p class="text-2xl sm:text-3xl font-bold text-green-600">{{ stats.disponibles }}</p>
                         </div>
-                        <div class="text-4xl">✅</div>
+                        <div class="text-3xl sm:text-4xl">✅</div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-2xl shadow-md p-6 border-l-4 border-red-500">
+                <div
+                    class="bg-white rounded-xl sm:rounded-2xl shadow-sm sm:shadow-md p-4 sm:p-6 border-l-4 border-red-500">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-gray-600 text-sm">Non disponibles</p>
-                            <p class="text-3xl font-bold text-red-600">{{ stats.non_disponibles }}</p>
+                            <p class="text-gray-600 text-xs sm:text-sm">Non disponibles</p>
+                            <p class="text-2xl sm:text-3xl font-bold text-red-600">{{ stats.non_disponibles }}</p>
                         </div>
-                        <div class="text-4xl">❌</div>
+                        <div class="text-3xl sm:text-4xl">❌</div>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Filtres et recherche -->
-        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
-            <form method="get" class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white rounded-xl sm:rounded-2xl shadow-md sm:shadow-lg p-4 sm:p-6 mb-6 sm:mb-8">
+            <form method="get" class="space-y-3 sm:space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                     <!-- Recherche -->
-                    <div class="md:col-span-2">
+                    <div class="sm:col-span-2">
                         {{ search_form.recherche }}
                     </div>
 
@@ -74,13 +78,13 @@
                     </div>
                 </div>
 
-                <div class="flex gap-3">
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                     <button type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                        class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base">
                         🔍 Filtrer
                     </button>
                     <a href="{% url 'menu:cuisinier_list' %}"
-                        class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors">
+                        class="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 sm:px-6 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base text-center">
                         ↻ Réinitialiser
                     </a>
                 </div>
@@ -89,94 +93,107 @@
 
         <!-- Liste des plats -->
         {% if plats %}
-        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div class="bg-white rounded-xl sm:rounded-2xl shadow-md sm:shadow-lg overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="w-full">
+                <table class="w-full min-w-full">
                     <thead class="bg-gray-50 border-b-2 border-gray-200">
                         <tr>
-                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Image</th>
-                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Nom</th>
-                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Catégorie</th>
-                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Prix</th>
-                            <th class="px-6 py-4 text-center text-sm font-semibold text-gray-900">État</th>
-                            <th class="px-6 py-4 text-center text-sm font-semibold text-gray-900">Actions</th>
+                            <th
+                                class="px-3 sm:px-4 md:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-gray-900">
+                                Image</th>
+                            <th
+                                class="px-3 sm:px-4 md:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-gray-900">
+                                Nom</th>
+                            <th
+                                class="px-3 sm:px-4 md:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-gray-900">
+                                Catégorie</th>
+                            <th
+                                class="px-3 sm:px-4 md:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-gray-900">
+                                Prix</th>
+                            <th
+                                class="px-3 sm:px-4 md:px-6 py-3 text-center text-xs sm:text-sm font-semibold text-gray-900">
+                                État</th>
+                            <th
+                                class="px-3 sm:px-4 md:px-6 py-3 text-center text-xs sm:text-sm font-semibold text-gray-900">
+                                Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         {% for plat in plats %}
                         <tr class="hover:bg-gray-50 transition-colors">
                             <!-- Image -->
-                            <td class="px-6 py-4">
+                            <td class="px-3 sm:px-4 md:px-6 py-3 sm:py-4">
                                 <div
-                                    class="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
+                                    class="w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
                                     {% if plat.image %}
                                     <img src="{{ plat.image.url }}" alt="{{ plat.nom }}"
                                         class="w-full h-full object-cover">
                                     {% else %}
-                                    <span class="text-2xl">🍽️</span>
+                                    <span class="text-xl sm:text-2xl">🍽️</span>
                                     {% endif %}
                                 </div>
                             </td>
 
                             <!-- Nom -->
-                            <td class="px-6 py-4">
-                                <p class="font-semibold text-gray-900">{{ plat.nom }}</p>
+                            <td class="px-3 sm:px-4 md:px-6 py-3 sm:py-4">
+                                <p class="font-semibold text-gray-900 text-sm sm:text-base break-words">{{ plat.nom }}
+                                </p>
                                 {% if plat.description %}
-                                <p class="text-sm text-gray-500 mt-1 line-clamp-1">{{ plat.description|truncatewords:10 }}</p>
+                                <p class="text-xs sm:text-sm text-gray-500 mt-1 line-clamp-1 break-words">{{ plat.description|truncatewords:10 }}</p>
                                 {% endif %}
                             </td>
 
                             <!-- Catégorie -->
-                            <td class="px-6 py-4">
+                            <td class="px-3 sm:px-4 md:px-6 py-3 sm:py-4">
                                 <span
-                                    class="inline-flex px-3 py-1 text-sm font-medium rounded-full bg-blue-100 text-blue-800">
+                                    class="inline-flex px-2 py-1 sm:px-3 sm:py-1 text-xs sm:text-sm font-medium rounded-full bg-blue-100 text-blue-800 break-words">
                                     {{ plat.get_categorie_display }}
                                 </span>
                             </td>
 
                             <!-- Prix -->
-                            <td class="px-6 py-4">
-                                <p class="font-bold text-gray-900">{{ plat.prix_formate }} GNF</p>
+                            <td class="px-3 sm:px-4 md:px-6 py-3 sm:py-4">
+                                <p class="font-bold text-gray-900 text-sm sm:text-base">{{ plat.prix_formate }} GNF</p>
                             </td>
 
                             <!-- État -->
-                            <td class="px-6 py-4 text-center">
+                            <td class="px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-center">
                                 {% if plat.disponible %}
                                 <span
-                                    class="inline-flex items-center px-3 py-1 text-sm font-medium rounded-full bg-green-100 text-green-800">
-                                    ✅ Disponible
+                                    class="inline-flex items-center px-2 py-1 sm:px-3 sm:py-1 text-xs sm:text-sm font-medium rounded-full bg-green-100 text-green-800">
+                                    ✅ <span class="ml-1">Dispo</span>
                                 </span>
                                 {% else %}
                                 <span
-                                    class="inline-flex items-center px-3 py-1 text-sm font-medium rounded-full bg-red-100 text-red-800">
-                                    ❌ Non disponible
+                                    class="inline-flex items-center px-2 py-1 sm:px-3 sm:py-1 text-xs sm:text-sm font-medium rounded-full bg-red-100 text-red-800">
+                                    ❌ <span class="ml-1">Indispo</span>
                                 </span>
                                 {% endif %}
                             </td>
 
                             <!-- Actions -->
-                            <td class="px-6 py-4">
-                                <div class="flex items-center justify-center gap-2">
+                            <td class="px-3 sm:px-4 md:px-6 py-3 sm:py-4">
+                                <div class="flex items-center justify-center gap-1 sm:gap-2">
                                     <!-- Voir -->
                                     <a href="{% url 'menu:cuisinier_detail' plat.pk %}"
-                                        class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                        class="p-1 sm:p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                                         title="Voir détails">
-                                        👁️
+                                        <span class="text-sm sm:text-base">👁️</span>
                                     </a>
 
                                     <!-- Modifier -->
                                     <a href="{% url 'menu:plat_update' plat.pk %}"
-                                        class="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
+                                        class="p-1 sm:p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
                                         title="Modifier">
-                                        ✏️
+                                        <span class="text-sm sm:text-base">✏️</span>
                                     </a>
 
                                     <!-- Activer/Désactiver -->
                                     <a href="{% url 'menu:plat_toggle' plat.pk %}"
-                                        class="p-2 {% if plat.disponible %}text-red-600 hover:bg-red-50{% else %}text-green-600 hover:bg-green-50{% endif %} rounded-lg transition-colors"
+                                        class="p-1 sm:p-2 {% if plat.disponible %}text-red-600 hover:bg-red-50{% else %}text-green-600 hover:bg-green-50{% endif %} rounded-lg transition-colors"
                                         onclick="return confirm('Voulez-vous {% if plat.disponible %}désactiver{% else %}activer{% endif %} ce plat ?')"
                                         title="{% if plat.disponible %}Désactiver{% else %}Activer{% endif %}">
-                                        {% if plat.disponible %}🔴{% else %}🟢{% endif %}
+                                        <span class="text-sm sm:text-base">{% if plat.disponible %}🔴{% else %}🟢{% endif %}</span>
                                     </a>
                                 </div>
                             </td>
@@ -188,12 +205,12 @@
         </div>
         {% else %}
         <!-- Message si aucun plat -->
-        <div class="bg-white rounded-2xl shadow-lg p-12 text-center">
-            <div class="text-6xl mb-4">📝</div>
-            <h3 class="text-2xl font-bold text-gray-900 mb-2">Aucun plat trouvé</h3>
-            <p class="text-gray-600 mb-6">Commencez par ajouter des plats au menu</p>
+        <div class="bg-white rounded-xl sm:rounded-2xl shadow-md sm:shadow-lg p-6 sm:p-8 md:p-12 text-center">
+            <div class="text-4xl sm:text-6xl mb-3 sm:mb-4">📝</div>
+            <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">Aucun plat trouvé</h3>
+            <p class="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">Commencez par ajouter des plats au menu</p>
             <a href="{% url 'menu:plat_create' %}"
-                class="inline-block bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-medium transition-colors">
+                class="inline-block bg-green-600 hover:bg-green-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-colors text-sm sm:text-base">
                 ➕ Ajouter un plat
             </a>
         </div>

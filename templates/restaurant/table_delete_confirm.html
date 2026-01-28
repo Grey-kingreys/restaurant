@@ -3,25 +3,25 @@
 {% block title %}Supprimer : {{ table.numero_table }} - Admin{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-red-50 to-orange-100 py-8 px-4">
+<div class="min-h-screen bg-gradient-to-br from-red-50 to-orange-100 py-4 sm:py-8 px-4">
     <div class="max-w-3xl mx-auto">
 
         <!-- En-tête -->
-        <div class="mb-8">
+        <div class="mb-6 sm:mb-8">
             <a href="{% url 'restaurant:table_detail_admin' table.pk %}"
-                class="inline-flex items-center text-red-600 hover:text-red-800 font-medium mb-4">
+                class="inline-flex items-center text-red-600 hover:text-red-800 font-medium mb-3 sm:mb-4 text-sm sm:text-base">
                 ← Annuler et retourner
             </a>
-            <h1 class="text-4xl font-bold text-gray-900">🗑️ Supprimer une table</h1>
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">🗑️ Supprimer une table</h1>
         </div>
 
         <!-- Avertissement principal -->
-        <div class="bg-red-100 border-l-4 border-red-500 p-6 rounded-r-2xl mb-8">
+        <div class="bg-red-100 border-l-4 border-red-500 p-4 sm:p-6 rounded-r-2xl mb-6 sm:mb-8">
             <div class="flex items-start">
-                <div class="text-4xl mr-4">⚠️</div>
+                <div class="text-3xl sm:text-4xl mr-3 sm:mr-4">⚠️</div>
                 <div>
-                    <h3 class="text-xl font-bold text-red-900 mb-2">Action irréversible !</h3>
-                    <p class="text-red-800">
+                    <h3 class="text-lg sm:text-xl font-bold text-red-900 mb-1 sm:mb-2">Action irréversible !</h3>
+                    <p class="text-red-800 text-sm sm:text-base">
                         Vous êtes sur le point de supprimer définitivement la table
                         <strong>{{ table.numero_table }}</strong>.
                         Cette action ne peut pas être annulée.
@@ -31,91 +31,91 @@
         </div>
 
         <!-- Informations de la table -->
-        <div class="bg-white rounded-2xl shadow-xl p-8 mb-6">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Table à supprimer :</h2>
+        <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-6 md:p-8 mb-4 sm:mb-6">
+            <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Table à supprimer :</h2>
 
-            <div class="space-y-4">
-                <div class="flex items-center gap-4 pb-4 border-b">
-                    <div class="text-6xl">🪑</div>
+            <div class="space-y-3 sm:space-y-4">
+                <div class="flex items-center gap-3 sm:gap-4 pb-3 sm:pb-4 border-b">
+                    <div class="text-4xl sm:text-5xl md:text-6xl">🪑</div>
                     <div>
-                        <p class="text-2xl font-bold text-gray-900">{{ table.numero_table }}</p>
-                        <p class="text-lg text-gray-600">Table Restaurant</p>
+                        <p class="text-xl sm:text-2xl font-bold text-gray-900">{{ table.numero_table }}</p>
+                        <p class="text-base sm:text-lg text-gray-600">Table Restaurant</p>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <p class="text-sm text-gray-600 mb-1">Nombre de places</p>
-                        <p class="font-semibold text-gray-900">👥 {{ table.nombre_places }}</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div class="bg-gray-50 rounded-lg p-3 sm:p-4">
+                        <p class="text-xs sm:text-sm text-gray-600 mb-1">Nombre de places</p>
+                        <p class="font-semibold text-gray-900 text-sm sm:text-base">👥 {{ table.nombre_places }}</p>
                     </div>
 
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <p class="text-sm text-gray-600 mb-1">Compte associé</p>
-                        <p class="font-semibold text-gray-900">{{ table.utilisateur.login }}</p>
+                    <div class="bg-gray-50 rounded-lg p-3 sm:p-4">
+                        <p class="text-xs sm:text-sm text-gray-600 mb-1">Compte associé</p>
+                        <p class="font-semibold text-gray-900 text-sm sm:text-base">{{ table.utilisateur.login }}</p>
                     </div>
 
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <p class="text-sm text-gray-600 mb-1">Créée le</p>
-                        <p class="font-semibold text-gray-900">{{ table.date_creation|date:"d/m/Y" }}</p>
+                    <div class="bg-gray-50 rounded-lg p-3 sm:p-4">
+                        <p class="text-xs sm:text-sm text-gray-600 mb-1">Créée le</p>
+                        <p class="font-semibold text-gray-900 text-sm sm:text-base">{{ table.date_creation|date:"d/m/Y" }}</p>
                     </div>
 
-                    <div class="bg-gray-50 rounded-lg p-4">
-                        <p class="text-sm text-gray-600 mb-1">Rôle utilisateur</p>
-                        <p class="font-semibold text-gray-900">{{ table.utilisateur.get_role_display }}</p>
+                    <div class="bg-gray-50 rounded-lg p-3 sm:p-4">
+                        <p class="text-xs sm:text-sm text-gray-600 mb-1">Rôle utilisateur</p>
+                        <p class="font-semibold text-gray-900 text-sm sm:text-base">{{ table.utilisateur.get_role_display }}</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Impact de la suppression -->
-        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded-r-2xl mb-8">
-            <h3 class="text-lg font-bold text-yellow-900 mb-3">📊 Impact de la suppression :</h3>
-            <ul class="space-y-2">
+        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 sm:p-6 rounded-r-2xl mb-6 sm:mb-8">
+            <h3 class="text-base sm:text-lg font-bold text-yellow-900 mb-2 sm:mb-3">📊 Impact de la suppression :</h3>
+            <ul class="space-y-1 sm:space-y-2">
                 {% if commandes_count > 0 %}
-                <li class="text-yellow-800 font-medium">
+                <li class="text-yellow-800 font-medium text-sm sm:text-base">
                     • <strong>{{ commandes_count }} commande(s)</strong> sont associées à cette table
                 </li>
-                <li class="text-yellow-700 text-sm ml-4">
+                <li class="text-yellow-700 text-xs sm:text-sm ml-4">
                     Les commandes historiques seront conservées mais ne seront plus liées à une table physique
                 </li>
                 {% else %}
-                <li class="text-yellow-800 font-medium">
+                <li class="text-yellow-800 font-medium text-sm sm:text-base">
                     • ✅ Aucune commande n'est associée à cette table
                 </li>
                 {% endif %}
 
-                <li class="text-yellow-800 font-medium">
+                <li class="text-yellow-800 font-medium text-sm sm:text-base">
                     • Le compte utilisateur <strong>{{ table.utilisateur.login }}</strong> sera préservé
                 </li>
-                <li class="text-yellow-700 text-sm ml-4">
+                <li class="text-yellow-700 text-xs sm:text-sm ml-4">
                     L'utilisateur pourra être réassocié à une nouvelle table si nécessaire
                 </li>
             </ul>
         </div>
 
         <!-- Formulaire de confirmation -->
-        <div class="bg-white rounded-2xl shadow-xl p-8">
+        <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-6 md:p-8">
             <form method="post">
                 {% csrf_token %}
 
-                <div class="bg-red-50 border-2 border-red-200 rounded-xl p-6 mb-6">
+                <div class="bg-red-50 border-2 border-red-200 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6">
                     <label class="flex items-start cursor-pointer">
                         <input type="checkbox" id="confirm-delete" required
-                            class="w-5 h-5 text-red-600 border-gray-300 rounded focus:ring-2 focus:ring-red-500 mt-1">
-                        <span class="ml-3 text-gray-900">
+                            class="w-4 h-4 sm:w-5 sm:h-5 text-red-600 border-gray-300 rounded focus:ring-2 focus:ring-red-500 mt-1">
+                        <span class="ml-2 sm:ml-3 text-gray-900 text-sm sm:text-base">
                             Je comprends que cette action est <strong class="text-red-600">irréversible</strong>
                             et que la table <strong>{{ table.numero_table }}</strong> sera définitivement supprimée.
                         </span>
                     </label>
                 </div>
 
-                <div class="flex gap-4">
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
                     <button type="submit" id="delete-button" disabled
-                        class="flex-1 bg-red-600 hover:bg-red-700 text-white px-6 py-4 rounded-xl font-bold transition-all disabled:bg-gray-300 disabled:cursor-not-allowed">
+                        class="flex-1 bg-red-600 hover:bg-red-700 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-xl font-bold transition-all disabled:bg-gray-300 disabled:cursor-not-allowed text-sm sm:text-base">
                         🗑️ Confirmer la suppression
                     </button>
                     <a href="{% url 'restaurant:table_detail_admin' table.pk %}"
-                        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-4 rounded-xl font-bold text-center transition-colors">
+                        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 sm:px-6 py-3 sm:py-4 rounded-xl font-bold text-center transition-colors text-sm sm:text-base">
                         ❌ Annuler
                     </a>
                 </div>
@@ -123,9 +123,9 @@
         </div>
 
         <!-- Information supplémentaire -->
-        <div class="mt-6 bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-2xl">
-            <h3 class="font-semibold text-blue-900 mb-2">💡 Conséquences</h3>
-            <ul class="text-sm text-blue-700 space-y-1">
+        <div class="mt-4 sm:mt-6 bg-blue-50 border-l-4 border-blue-500 p-4 sm:p-6 rounded-r-2xl">
+            <h3 class="font-semibold text-blue-900 mb-1 sm:mb-2 text-sm sm:text-base">💡 Conséquences</h3>
+            <ul class="text-xs sm:text-sm text-blue-700 space-y-1">
                 <li>• La table physique sera supprimée de la base de données</li>
                 <li>• Le compte utilisateur {{ table.utilisateur.login }} sera préservé</li>
                 <li>• Les commandes historiques seront conservées pour traçabilité</li>

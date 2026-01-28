@@ -3,23 +3,24 @@
 {% block title %}Gestion des Utilisateurs - Admin{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 py-8 px-4">
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 py-4 sm:py-8 px-4">
     <div class="max-w-7xl mx-auto">
 
         <!-- En-tête -->
-        <div class="bg-white rounded-2xl shadow-xl p-6 mb-6 border-t-4 border-indigo-500">
-            <div class="flex items-center justify-between">
+        <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-6 mb-4 sm:mb-6 border-t-4 border-indigo-500">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between">
                 <div>
-                    <h1 class="text-3xl font-bold text-gray-900 mb-2">👥 Gestion des Utilisateurs</h1>
-                    <p class="text-gray-600">Administration : {{ user.login }}</p>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">👥 Gestion des Utilisateurs
+                    </h1>
+                    <p class="text-sm sm:text-base text-gray-600">Administration : {{ user.login }}</p>
                 </div>
-                <div class="flex gap-3">
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-4 sm:mt-0">
                     <a href="{% url 'accounts:user_create' %}"
-                        class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium transition-colors shadow-lg">
+                        class="px-4 sm:px-6 py-2 sm:py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium transition-colors shadow-lg text-center text-sm sm:text-base">
                         ➕ Nouvel utilisateur
                     </a>
                     <a href="{% url 'dashboard:index' %}"
-                        class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors">
+                        class="px-4 sm:px-6 py-2 sm:py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors text-center text-sm sm:text-base">
                         ← Dashboard
                     </a>
                 </div>
@@ -27,65 +28,65 @@
         </div>
 
         <!-- Statistiques -->
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-8">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-4 mb-6 sm:mb-8">
             <!-- Total -->
-            <div class="bg-white rounded-xl shadow-lg p-4 border-l-4 border-gray-500">
+            <div class="bg-white rounded-xl shadow-lg p-2 sm:p-4 border-l-2 sm:border-l-4 border-gray-500">
                 <p class="text-xs text-gray-600 uppercase mb-1">Total</p>
-                <p class="text-2xl font-bold text-gray-900">{{ stats.total }}</p>
+                <p class="text-lg sm:text-2xl font-bold text-gray-900">{{ stats.total }}</p>
             </div>
 
             <!-- Actifs -->
-            <div class="bg-white rounded-xl shadow-lg p-4 border-l-4 border-green-500">
+            <div class="bg-white rounded-xl shadow-lg p-2 sm:p-4 border-l-2 sm:border-l-4 border-green-500">
                 <p class="text-xs text-gray-600 uppercase mb-1">Actifs</p>
-                <p class="text-2xl font-bold text-green-600">{{ stats.actifs }}</p>
+                <p class="text-lg sm:text-2xl font-bold text-green-600">{{ stats.actifs }}</p>
             </div>
 
             <!-- Inactifs -->
-            <div class="bg-white rounded-xl shadow-lg p-4 border-l-4 border-red-500">
+            <div class="bg-white rounded-xl shadow-lg p-2 sm:p-4 border-l-2 sm:border-l-4 border-red-500">
                 <p class="text-xs text-gray-600 uppercase mb-1">Inactifs</p>
-                <p class="text-2xl font-bold text-red-600">{{ stats.inactifs }}</p>
+                <p class="text-lg sm:text-2xl font-bold text-red-600">{{ stats.inactifs }}</p>
             </div>
 
             <!-- Tables -->
-            <div class="bg-white rounded-xl shadow-lg p-4 border-l-4 border-orange-500">
+            <div class="bg-white rounded-xl shadow-lg p-2 sm:p-4 border-l-2 sm:border-l-4 border-orange-500">
                 <p class="text-xs text-gray-600 uppercase mb-1">Tables</p>
-                <p class="text-2xl font-bold text-orange-600">{{ stats.tables }}</p>
+                <p class="text-lg sm:text-2xl font-bold text-orange-600">{{ stats.tables }}</p>
             </div>
 
             <!-- Serveurs -->
-            <div class="bg-white rounded-xl shadow-lg p-4 border-l-4 border-purple-500">
+            <div class="bg-white rounded-xl shadow-lg p-2 sm:p-4 border-l-2 sm:border-l-4 border-purple-500">
                 <p class="text-xs text-gray-600 uppercase mb-1">Serveurs</p>
-                <p class="text-2xl font-bold text-purple-600">{{ stats.serveurs }}</p>
+                <p class="text-lg sm:text-2xl font-bold text-purple-600">{{ stats.serveurs }}</p>
             </div>
 
             <!-- Cuisiniers -->
-            <div class="bg-white rounded-xl shadow-lg p-4 border-l-4 border-yellow-500">
+            <div class="bg-white rounded-xl shadow-lg p-2 sm:p-4 border-l-2 sm:border-l-4 border-yellow-500">
                 <p class="text-xs text-gray-600 uppercase mb-1">Cuisiniers</p>
-                <p class="text-2xl font-bold text-yellow-600">{{ stats.cuisiniers }}</p>
+                <p class="text-lg sm:text-2xl font-bold text-yellow-600">{{ stats.cuisiniers }}</p>
             </div>
 
             <!-- Admins -->
-            <div class="bg-white rounded-xl shadow-lg p-4 border-l-4 border-indigo-500">
+            <div class="bg-white rounded-xl shadow-lg p-2 sm:p-4 border-l-2 sm:border-l-4 border-indigo-500">
                 <p class="text-xs text-gray-600 uppercase mb-1">Admins</p>
-                <p class="text-2xl font-bold text-indigo-600">{{ stats.admins }}</p>
+                <p class="text-lg sm:text-2xl font-bold text-indigo-600">{{ stats.admins }}</p>
             </div>
         </div>
 
         <!-- Filtres et recherche -->
-        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+        <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8">
             <form method="get" class="space-y-4">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <!-- Recherche -->
-                    <div class="md:col-span-2">
+                    <div class="sm:col-span-2">
                         <input type="text" name="search" value="{{ search_query }}"
                             placeholder="🔍 Rechercher par login..."
-                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-gray-900">
+                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-gray-900 text-sm sm:text-base">
                     </div>
 
                     <!-- Filtre par rôle -->
                     <div>
                         <select name="role"
-                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-gray-900">
+                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-gray-900 text-sm sm:text-base">
                             <option value="">Tous les rôles</option>
                             {% for code, label in role_choices %}
                             <option value="{{ code }}" {% if role_filter == code %}selected{% endif %}>{{ label }}
@@ -97,7 +98,7 @@
                     <!-- Filtre par statut -->
                     <div>
                         <select name="statut"
-                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-gray-900">
+                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-gray-900 text-sm sm:text-base">
                             <option value="">Tous les statuts</option>
                             <option value="actif" {% if statut_filter == 'actif' %}selected{% endif %}>✅ Actifs
                             </option>
@@ -107,13 +108,13 @@
                     </div>
                 </div>
 
-                <div class="flex gap-3">
+                <div class="flex flex-col sm:flex-row gap-3">
                     <button type="submit"
-                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base">
                         🔍 Filtrer
                     </button>
                     <a href="{% url 'accounts:user_list' %}"
-                        class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors">
+                        class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base">
                         ↻ Réinitialiser
                     </a>
                 </div>
@@ -124,22 +125,28 @@
         {% if users %}
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="w-full">
+                <table class="w-full min-w-[800px] sm:min-w-full">
                     <thead class="bg-gray-50 border-b-2 border-gray-200">
                         <tr>
-                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Login</th>
-                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Rôle</th>
-                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Nom complet</th>
-                            <th class="px-6 py-4 text-center text-sm font-semibold text-gray-900">Statut</th>
-                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Créé le</th>
-                            <th class="px-6 py-4 text-center text-sm font-semibold text-gray-900">Actions</th>
+                            <th class="px-4 sm:px-6 py-3 sm:py-4 text-left text-sm font-semibold text-gray-900">Login
+                            </th>
+                            <th class="px-4 sm:px-6 py-3 sm:py-4 text-left text-sm font-semibold text-gray-900">Rôle
+                            </th>
+                            <th class="px-4 sm:px-6 py-3 sm:py-4 text-left text-sm font-semibold text-gray-900">Nom
+                                complet</th>
+                            <th class="px-4 sm:px-6 py-3 sm:py-4 text-center text-sm font-semibold text-gray-900">Statut
+                            </th>
+                            <th class="px-4 sm:px-6 py-3 sm:py-4 text-left text-sm font-semibold text-gray-900">Créé le
+                            </th>
+                            <th class="px-4 sm:px-6 py-3 sm:py-4 text-center text-sm font-semibold text-gray-900">
+                                Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
                         {% for user_obj in users %}
                         <tr class="hover:bg-gray-50 transition-colors">
                             <!-- Login -->
-                            <td class="px-6 py-4">
+                            <td class="px-4 sm:px-6 py-3 sm:py-4">
                                 <div class="flex items-center">
                                     <div class="text-2xl mr-3">
                                         {% if user_obj.is_table %}🪑
@@ -150,7 +157,7 @@
                                         {% endif %}
                                     </div>
                                     <div>
-                                        <p class="font-bold text-gray-900">{{ user_obj.login }}</p>
+                                        <p class="font-bold text-gray-900 text-sm sm:text-base">{{ user_obj.login }}</p>
                                         {% if user_obj == user %}
                                         <span
                                             class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-semibold">
@@ -162,7 +169,7 @@
                             </td>
 
                             <!-- Rôle -->
-                            <td class="px-6 py-4">
+                            <td class="px-4 sm:px-6 py-3 sm:py-4">
                                 <span class="px-3 py-1 rounded-full text-sm font-medium
                                     {% if user_obj.is_table %}bg-orange-100 text-orange-800
                                     {% elif user_obj.is_serveur %}bg-purple-100 text-purple-800
@@ -174,7 +181,7 @@
                                 </span>
                             </td>
 
-                            <td class="px-6 py-4">
+                            <td class="px-4 sm:px-6 py-3 sm:py-4">
                                 {% if user_obj.nom_complet %}
                                 <p class="text-sm font-medium text-gray-900">{{ user_obj.nom_complet }}</p>
                                 {% else %}
@@ -183,7 +190,7 @@
                             </td>
 
                             <!-- Statut -->
-                            <td class="px-6 py-4 text-center">
+                            <td class="px-4 sm:px-6 py-3 sm:py-4 text-center">
                                 {% if user_obj.actif %}
                                 <span
                                     class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
@@ -198,19 +205,19 @@
                             </td>
 
                             <!-- Date création -->
-                            <td class="px-6 py-4">
+                            <td class="px-4 sm:px-6 py-3 sm:py-4">
                                 <p class="text-sm font-semibold text-gray-900">{{ user_obj.date_creation|date:"d/m/Y" }}
                                 </p>
                                 <p class="text-xs text-gray-500">{{ user_obj.date_creation|date:"H:i" }}</p>
                             </td>
 
                             <!-- Actions avec menu déroulant -->
-                            <td class="px-6 py-4">
+                            <td class="px-4 sm:px-6 py-3 sm:py-4">
                                 <div class="flex items-center justify-center">
                                     <!-- Bouton déroulant -->
-                                    <div class="relative dropdown-container">
+                                    <div class="relative dropdown-container w-full sm:w-auto">
                                         <button type="button" onclick="toggleDropdown({{ user_obj.id }})"
-                                            class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors shadow-md">
+                                            class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors shadow-md w-full sm:w-auto justify-center text-sm sm:text-base">
                                             Actions
                                             <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
@@ -221,7 +228,7 @@
 
                                         <!-- Menu déroulant -->
                                         <div id="dropdown-{{ user_obj.id }}"
-                                            class="hidden absolute right-0 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+                                            class="hidden absolute right-0 left-0 sm:left-auto w-full sm:w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
                                             <div class="py-1">
                                                 <!-- Voir détails -->
                                                 <a href="{% url 'accounts:user_detail' user_obj.id %}"
@@ -329,12 +336,13 @@
         </div>
         {% else %}
         <!-- Aucun utilisateur -->
-        <div class="bg-white rounded-2xl shadow-lg p-12 text-center">
-            <div class="text-8xl mb-6">👥</div>
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">Aucun utilisateur trouvé</h2>
-            <p class="text-gray-600 mb-8">Aucun utilisateur ne correspond aux filtres sélectionnés</p>
+        <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8 md:p-12 text-center">
+            <div class="text-6xl sm:text-7xl md:text-8xl mb-6">👥</div>
+            <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Aucun utilisateur trouvé</h2>
+            <p class="text-sm sm:text-base text-gray-600 mb-8">Aucun utilisateur ne correspond aux filtres sélectionnés
+            </p>
             <a href="{% url 'accounts:user_create' %}"
-                class="inline-block px-8 py-4 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold transition-colors shadow-lg">
+                class="inline-block px-6 sm:px-8 py-3 sm:py-4 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold transition-colors shadow-lg text-sm sm:text-base">
                 ➕ Créer un utilisateur
             </a>
         </div>

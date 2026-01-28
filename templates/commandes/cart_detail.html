@@ -5,18 +5,18 @@
 {% block title %}Mon Panier{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-4 sm:py-8 px-4">
     <div class="max-w-5xl mx-auto">
 
         <!-- En-tête -->
-        <div class="bg-white rounded-2xl shadow-xl p-6 mb-6 border-t-4 border-blue-500">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-900 mb-2">🛒 Mon Panier</h1>
-                    <p class="text-gray-600">Table : {{ user.login }}</p>
+        <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-6 mb-4 sm:mb-6 border-t-4 border-blue-500">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between">
+                <div class="mb-3 sm:mb-0">
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">🛒 Mon Panier</h1>
+                    <p class="text-sm sm:text-base text-gray-600">Table : {{ user.login }}</p>
                 </div>
                 <a href="{% url 'menu:table_list' %}"
-                    class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors">
+                    class="px-4 sm:px-6 py-2 sm:py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors text-center text-sm sm:text-base">
                     ← Retour au menu
                 </a>
             </div>
@@ -24,83 +24,85 @@
 
         {% if cart.is_empty %}
         <!-- Panier vide -->
-        <div class="bg-white rounded-2xl shadow-lg p-12 text-center">
-            <div class="text-8xl mb-6">🛒</div>
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">Votre panier est vide</h2>
-            <p class="text-gray-600 mb-8">Ajoutez des plats depuis le menu pour commencer</p>
+        <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8 md:p-12 text-center">
+            <div class="text-6xl sm:text-7xl md:text-8xl mb-4 sm:mb-6">🛒</div>
+            <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Votre panier est vide</h2>
+            <p class="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">Ajoutez des plats depuis le menu pour commencer
+            </p>
             <a href="{% url 'menu:table_list' %}"
-                class="inline-flex items-center px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-colors shadow-lg">
-                Consulter le menu
-                <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                class="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-colors shadow-lg text-sm sm:text-base">
+                <span class="text-sm sm:text-base">Consulter le menu</span>
+                <svg class="ml-1 sm:ml-2 w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
             </a>
         </div>
         {% else %}
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
 
             <!-- Liste des plats -->
-            <div class="lg:col-span-2 space-y-4">
+            <div class="lg:col-span-2 space-y-3 sm:space-y-4">
                 {% for item in cart %}
-                <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-                    <div class="flex items-center gap-6">
+                <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 hover:shadow-xl transition-shadow">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
 
                         <!-- Image du plat -->
-                        <div class="flex-shrink-0">
+                        <div class="flex-shrink-0 self-center sm:self-start">
                             {% if item.image %}
                             <img src="{{ item.image }}" alt="{{ item.nom }}"
-                                class="w-24 h-24 object-cover rounded-xl shadow-md">
+                                class="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-xl shadow-md">
                             {% else %}
                             <div
-                                class="w-24 h-24 bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl flex items-center justify-center">
-                                <span class="text-4xl">🍽️</span>
+                                class="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl flex items-center justify-center">
+                                <span class="text-3xl sm:text-4xl">🍽️</span>
                             </div>
                             {% endif %}
                         </div>
 
                         <!-- Infos du plat -->
                         <div class="flex-1">
-                            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ item.nom }}</h3>
-                            <p class="text-lg text-blue-600 font-semibold mb-3">
+                            <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-1 sm:mb-2">{{ item.nom }}</h3>
+                            <p class="text-base sm:text-lg text-blue-600 font-semibold mb-2 sm:mb-3">
                                 {{ item.prix_unitaire }} GNF / unité
                             </p>
 
                             <!-- Contrôles quantité -->
-                            <div class="flex items-center gap-4">
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
                                 <form method="post" action="{% url 'commandes:cart_update' item.plat.id %}"
-                                    class="flex items-center gap-2">
+                                    class="flex items-center gap-1 sm:gap-2">
                                     {% csrf_token %}
                                     <button type="button"
                                         onclick="updateQuantity({{ item.plat.id }}, -1, {{ item.quantite }})"
-                                        class="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-lg font-bold text-gray-700 transition-colors">
+                                        class="w-8 h-8 sm:w-10 sm:h-10 bg-gray-200 hover:bg-gray-300 rounded-lg font-bold text-gray-700 transition-colors text-sm sm:text-base">
                                         −
                                     </button>
 
                                     <input type="number" name="quantite" id="qty-{{ item.plat.id }}"
                                         value="{{ item.quantite }}" min="1" max="10"
-                                        class="w-16 text-center border-2 border-gray-300 rounded-lg py-2 font-bold text-gray-900"
+                                        class="w-14 sm:w-16 text-center border-2 border-gray-300 rounded-lg py-1.5 sm:py-2 font-bold text-gray-900 text-sm sm:text-base"
                                         onchange="updateQuantityInput({{ item.plat.id }})">
 
                                     <button type="button"
                                         onclick="updateQuantity({{ item.plat.id }}, 1, {{ item.quantite }})"
-                                        class="w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-lg font-bold text-gray-700 transition-colors">
+                                        class="w-8 h-8 sm:w-10 sm:h-10 bg-gray-200 hover:bg-gray-300 rounded-lg font-bold text-gray-700 transition-colors text-sm sm:text-base">
                                         +
                                     </button>
                                 </form>
 
-                                <span class="text-gray-600">×</span>
-                                <span class="text-lg font-bold text-gray-900">{{ item.total }} GNF</span>
+                                <span class="text-gray-600 hidden sm:inline">×</span>
+                                <span class="text-base sm:text-lg font-bold text-gray-900">{{ item.total }} GNF</span>
                             </div>
                         </div>
 
                         <!-- Bouton supprimer -->
                         <form method="post" action="{% url 'commandes:cart_remove' item.plat.id %}"
-                            onsubmit="return confirm('Retirer ce plat du panier ?')">
+                            onsubmit="return confirm('Retirer ce plat du panier ?')" class="self-end sm:self-center">
                             {% csrf_token %}
                             <button type="submit"
-                                class="p-3 bg-red-100 hover:bg-red-200 text-red-600 rounded-xl transition-colors">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                class="p-2 sm:p-3 bg-red-100 hover:bg-red-200 text-red-600 rounded-xl transition-colors">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                 </svg>
@@ -113,27 +115,27 @@
 
             <!-- Récapitulatif -->
             <div class="lg:col-span-1">
-                <div class="bg-white rounded-2xl shadow-xl p-6 sticky top-6">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-6 pb-4 border-b-2">
+                <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-6 sticky top-4 sm:top-6">
+                    <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b-2">
                         📋 Récapitulatif
                     </h2>
 
-                    <div class="space-y-4 mb-6">
+                    <div class="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
                         <div class="flex justify-between items-center">
-                            <span class="text-gray-600">Nombre d'articles :</span>
-                            <span class="font-bold text-gray-900">{{ cart|length }}</span>
+                            <span class="text-sm sm:text-base text-gray-600">Nombre d'articles :</span>
+                            <span class="font-bold text-gray-900 text-sm sm:text-base">{{ cart|length }}</span>
                         </div>
 
                         <div class="flex justify-between items-center">
-                            <span class="text-gray-600">Types de plats :</span>
-                            <span class="font-bold text-gray-900">{{ items_count }}</span>
+                            <span class="text-sm sm:text-base text-gray-600">Types de plats :</span>
+                            <span class="font-bold text-gray-900 text-sm sm:text-base">{{ items_count }}</span>
                         </div>
 
                         <div class="h-px bg-gray-200"></div>
 
-                        <div class="flex justify-between items-center text-xl">
-                            <span class="font-bold text-gray-900">Total :</span>
-                            <span class="font-bold text-blue-600">{{ total }} GNF</span>
+                        <div class="flex justify-between items-center text-lg sm:text-xl">
+                            <span class="font-bold text-gray-900 text-sm sm:text-base">Total :</span>
+                            <span class="font-bold text-blue-600 text-sm sm:text-base">{{ total }} GNF</span>
                         </div>
                     </div>
 
@@ -141,12 +143,12 @@
                     <form method="post" action="{% url 'commandes:commande_valider' %}">
                         {% csrf_token %}
                         <button type="submit"
-                            class="w-full py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl font-bold text-lg shadow-lg transition-all transform hover:scale-105">
+                            class="w-full py-3 sm:py-4 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl font-bold text-base sm:text-lg shadow-lg transition-all transform hover:scale-105">
                             ✅ Valider la commande
                         </button>
                     </form>
 
-                    <p class="text-xs text-gray-500 text-center mt-4">
+                    <p class="text-xs text-gray-500 text-center mt-3 sm:mt-4">
                         En validant, votre commande sera envoyée à la cuisine
                     </p>
                 </div>

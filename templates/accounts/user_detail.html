@@ -3,21 +3,21 @@
 {% block title %}Détails : {{ user_obj.login }} - Admin{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 py-8 px-4">
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 py-4 sm:py-8 px-4">
     <div class="max-w-5xl mx-auto">
 
         <!-- En-tête -->
-        <div class="bg-white rounded-2xl shadow-xl p-6 mb-6 border-t-4 border-indigo-500">
-            <div class="flex items-center justify-between mb-4">
-                <h1 class="text-3xl font-bold text-gray-900">👤 Détails de l'utilisateur</h1>
+        <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-6 mb-4 sm:mb-6 border-t-4 border-indigo-500">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-3 sm:mb-4">
+                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-0">👤 Détails de l'utilisateur</h1>
                 <a href="{% url 'accounts:user_list' %}"
-                    class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors">
+                    class="px-4 sm:px-6 py-2 sm:py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors text-center text-sm sm:text-base">
                     ← Retour à la liste
                 </a>
             </div>
 
-            <div class="flex items-center gap-4">
-                <div class="text-6xl">
+            <div class="flex items-center gap-3 sm:gap-4">
+                <div class="text-4xl sm:text-5xl md:text-6xl">
                     {% if user_obj.is_table %}🪑
                     {% elif user_obj.is_serveur %}👨‍🍳
                     {% elif user_obj.is_cuisinier %}🍳
@@ -26,11 +26,11 @@
                     {% endif %}
                 </div>
                 <div>
-                    <h2 class="text-2xl font-bold text-gray-900">{{ user_obj.login }}</h2>
-                    <p class="text-lg text-gray-600">{{ user_obj.get_role_display }}</p>
+                    <h2 class="text-xl sm:text-2xl font-bold text-gray-900">{{ user_obj.login }}</h2>
+                    <p class="text-base sm:text-lg text-gray-600">{{ user_obj.get_role_display }}</p>
                     {% if user_obj == user %}
                     <span
-                        class="inline-block mt-2 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">
+                        class="inline-block mt-1 sm:mt-2 bg-blue-100 text-blue-800 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-semibold">
                         C'est vous
                     </span>
                     {% endif %}
@@ -39,35 +39,35 @@
         </div>
 
         <!-- Informations principales -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-4 sm:mb-6">
             <!-- Carte statut -->
-            <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 
+            <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 border-l-4 
                 {% if user_obj.actif %}border-green-500{% else %}border-red-500{% endif %}">
-                <h3 class="text-sm font-semibold text-gray-600 uppercase mb-3">Statut du compte</h3>
+                <h3 class="text-xs sm:text-sm font-semibold text-gray-600 uppercase mb-2 sm:mb-3">Statut du compte</h3>
                 {% if user_obj.actif %}
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="text-4xl">✅</span>
+                <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                    <span class="text-3xl sm:text-4xl">✅</span>
                     <div>
-                        <p class="text-xl font-bold text-green-600">Actif</p>
-                        <p class="text-sm text-gray-600">Peut se connecter</p>
+                        <p class="text-lg sm:text-xl font-bold text-green-600">Actif</p>
+                        <p class="text-xs sm:text-sm text-gray-600">Peut se connecter</p>
                     </div>
                 </div>
                 {% else %}
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="text-4xl">❌</span>
+                <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                    <span class="text-3xl sm:text-4xl">❌</span>
                     <div>
-                        <p class="text-xl font-bold text-red-600">Inactif</p>
-                        <p class="text-sm text-gray-600">Ne peut pas se connecter</p>
+                        <p class="text-lg sm:text-xl font-bold text-red-600">Inactif</p>
+                        <p class="text-xs sm:text-sm text-gray-600">Ne peut pas se connecter</p>
                     </div>
                 </div>
                 {% endif %}
             </div>
 
             <!-- Carte rôle -->
-            <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-indigo-500">
-                <h3 class="text-sm font-semibold text-gray-600 uppercase mb-3">Rôle</h3>
-                <div class="flex items-center gap-3 mb-4">
-                    <span class="text-4xl">
+            <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 border-l-4 border-indigo-500">
+                <h3 class="text-xs sm:text-sm font-semibold text-gray-600 uppercase mb-2 sm:mb-3">Rôle</h3>
+                <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                    <span class="text-3xl sm:text-4xl">
                         {% if user_obj.is_table %}🪑
                         {% elif user_obj.is_serveur %}👨‍🍳
                         {% elif user_obj.is_cuisinier %}🍳
@@ -76,58 +76,58 @@
                         {% endif %}
                     </span>
                     <div>
-                        <p class="text-xl font-bold text-indigo-600">{{ user_obj.get_role_display }}</p>
-                        <p class="text-sm text-gray-600">{{ user_obj.role }}</p>
+                        <p class="text-lg sm:text-xl font-bold text-indigo-600">{{ user_obj.get_role_display }}</p>
+                        <p class="text-xs sm:text-sm text-gray-600">{{ user_obj.role }}</p>
                     </div>
                 </div>
             </div>
 
             <!-- Carte dates -->
-            <div class="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-gray-500">
-                <h3 class="text-sm font-semibold text-gray-600 uppercase mb-3">Dates</h3>
-                <div class="space-y-3">
+            <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 border-l-4 border-gray-500">
+                <h3 class="text-xs sm:text-sm font-semibold text-gray-600 uppercase mb-2 sm:mb-3">Dates</h3>
+                <div class="space-y-2 sm:space-y-3">
                     <div>
                         <p class="text-xs text-gray-500">Créé le</p>
-                        <p class="font-semibold text-gray-900">{{ user_obj.date_creation|date:"d/m/Y à H:i" }}</p>
+                        <p class="font-semibold text-gray-900 text-sm sm:text-base">{{ user_obj.date_creation|date:"d/m/Y à H:i" }}</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Après la carte "Dates", avant "Statistiques" -->
-        
+
         <!-- Informations personnelles (si applicables) -->
         {% if not user_obj.is_table %}
-        <div class="lg:col-span-3">
-            <div class="bg-white rounded-2xl shadow-lg p-6">
-                <h3 class="text-xl font-bold text-gray-900 mb-6">👤 Informations personnelles</h3>
-        
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="lg:col-span-3 mb-4 sm:mb-6">
+            <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
+                <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">👤 Informations personnelles</h3>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
                     <!-- Nom complet -->
-                    <div class="bg-gray-50 rounded-xl p-4">
+                    <div class="bg-gray-50 rounded-xl p-3 sm:p-4">
                         <p class="text-xs text-gray-500 uppercase mb-1">Nom complet</p>
                         {% if user_obj.nom_complet %}
-                        <p class="text-lg font-semibold text-gray-900">{{ user_obj.nom_complet }}</p>
+                        <p class="text-base sm:text-lg font-semibold text-gray-900">{{ user_obj.nom_complet }}</p>
                         {% else %}
                         <p class="text-sm text-gray-400 italic">Non renseigné</p>
                         {% endif %}
                     </div>
-        
+
                     <!-- Email -->
-                    <div class="bg-gray-50 rounded-xl p-4">
+                    <div class="bg-gray-50 rounded-xl p-3 sm:p-4">
                         <p class="text-xs text-gray-500 uppercase mb-1">Email</p>
                         {% if user_obj.email %}
-                        <p class="text-lg font-semibold text-gray-900 break-all">{{ user_obj.email }}</p>
+                        <p class="text-base sm:text-lg font-semibold text-gray-900 break-all">{{ user_obj.email }}</p>
                         {% else %}
                         <p class="text-sm text-gray-400 italic">Non renseigné</p>
                         {% endif %}
                     </div>
-        
+
                     <!-- Téléphone -->
-                    <div class="bg-gray-50 rounded-xl p-4">
+                    <div class="bg-gray-50 rounded-xl p-3 sm:p-4">
                         <p class="text-xs text-gray-500 uppercase mb-1">Téléphone</p>
                         {% if user_obj.telephone %}
-                        <p class="text-lg font-semibold text-gray-900">{{ user_obj.telephone }}</p>
+                        <p class="text-base sm:text-lg font-semibold text-gray-900">{{ user_obj.telephone }}</p>
                         {% else %}
                         <p class="text-sm text-gray-400 italic">Non renseigné</p>
                         {% endif %}
@@ -139,162 +139,164 @@
 
         <!-- Statistiques selon le rôle -->
         {% if extra_stats %}
-        <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
-            <h3 class="text-xl font-bold text-gray-900 mb-6">📊 Statistiques</h3>
+        <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-4 sm:mb-6">
+            <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">📊 Statistiques</h3>
 
             {% if user_obj.is_table %}
             <!-- Stats pour Table -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div class="bg-gray-50 rounded-xl p-4">
-                    <p class="text-sm text-gray-600 mb-1">Total commandes</p>
-                    <p class="text-3xl font-bold text-indigo-600">{{ extra_stats.total_commandes }}</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                <div class="bg-gray-50 rounded-xl p-3 sm:p-4">
+                    <p class="text-xs sm:text-sm text-gray-600 mb-1">Total commandes</p>
+                    <p class="text-xl sm:text-2xl md:text-3xl font-bold text-indigo-600">{{ extra_stats.total_commandes }}</p>
                 </div>
-                <div class="bg-yellow-50 rounded-xl p-4">
-                    <p class="text-sm text-gray-600 mb-1">En attente</p>
-                    <p class="text-3xl font-bold text-yellow-600">{{ extra_stats.commandes_en_attente }}</p>
+                <div class="bg-yellow-50 rounded-xl p-3 sm:p-4">
+                    <p class="text-xs sm:text-sm text-gray-600 mb-1">En attente</p>
+                    <p class="text-xl sm:text-2xl md:text-3xl font-bold text-yellow-600">{{ extra_stats.commandes_en_attente }}</p>
                 </div>
-                <div class="bg-green-50 rounded-xl p-4">
-                    <p class="text-sm text-gray-600 mb-1">Payées</p>
-                    <p class="text-3xl font-bold text-green-600">{{ extra_stats.commandes_payees }}</p>
+                <div class="bg-green-50 rounded-xl p-3 sm:p-4">
+                    <p class="text-xs sm:text-sm text-gray-600 mb-1">Payées</p>
+                    <p class="text-xl sm:text-2xl md:text-3xl font-bold text-green-600">{{ extra_stats.commandes_payees }}</p>
                 </div>
-                <div class="bg-blue-50 rounded-xl p-4">
-                    <p class="text-sm text-gray-600 mb-1">Montant total</p>
-                    <p class="text-2xl font-bold text-blue-600">{{ extra_stats.montant_total }} GNF</p>
+                <div class="bg-blue-50 rounded-xl p-3 sm:p-4">
+                    <p class="text-xs sm:text-sm text-gray-600 mb-1">Montant total</p>
+                    <p class="text-lg sm:text-xl md:text-2xl font-bold text-blue-600">{{ extra_stats.montant_total }}
+                        GNF</p>
                 </div>
             </div>
             {% elif user_obj.is_comptable %}
             <!-- Stats pour Comptable -->
-            <div class="bg-green-50 rounded-xl p-4 inline-block">
-                <p class="text-sm text-gray-600 mb-1">Dépenses enregistrées</p>
-                <p class="text-3xl font-bold text-green-600">{{ extra_stats.depenses_enregistrees }}</p>
+            <div class="bg-green-50 rounded-xl p-3 sm:p-4 inline-block">
+                <p class="text-xs sm:text-sm text-gray-600 mb-1">Dépenses enregistrées</p>
+                <p class="text-xl sm:text-2xl md:text-3xl font-bold text-green-600">{{ extra_stats.depenses_enregistrees }}</p>
             </div>
             {% endif %}
         </div>
         {% endif %}
 
         <!-- Permissions du rôle -->
-        <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
-            <h3 class="text-xl font-bold text-gray-900 mb-6">🔐 Permissions et fonctionnalités</h3>
+        <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-4 sm:mb-6">
+            <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">🔐 Permissions et fonctionnalités</h3>
 
             {% if user_obj.is_table %}
-            <ul class="space-y-3">
+            <ul class="space-y-2 sm:space-y-3">
                 <li class="flex items-start">
-                    <span class="text-green-500 mr-3 text-xl">✅</span>
+                    <span class="text-green-500 mr-2 sm:mr-3 text-lg sm:text-xl">✅</span>
                     <div>
-                        <p class="font-semibold text-gray-900">Consulter le menu</p>
-                        <p class="text-sm text-gray-600">Voir tous les plats disponibles</p>
+                        <p class="font-semibold text-gray-900 text-sm sm:text-base">Consulter le menu</p>
+                        <p class="text-xs sm:text-sm text-gray-600">Voir tous les plats disponibles</p>
                     </div>
                 </li>
                 <li class="flex items-start">
-                    <span class="text-green-500 mr-3 text-xl">✅</span>
+                    <span class="text-green-500 mr-2 sm:mr-3 text-lg sm:text-xl">✅</span>
                     <div>
-                        <p class="font-semibold text-gray-900">Commander des plats</p>
-                        <p class="text-sm text-gray-600">Ajouter au panier et valider une commande</p>
+                        <p class="font-semibold text-gray-900 text-sm sm:text-base">Commander des plats</p>
+                        <p class="text-xs sm:text-sm text-gray-600">Ajouter au panier et valider une commande</p>
                     </div>
                 </li>
                 <li class="flex items-start">
-                    <span class="text-green-500 mr-3 text-xl">✅</span>
+                    <span class="text-green-500 mr-2 sm:mr-3 text-lg sm:text-xl">✅</span>
                     <div>
-                        <p class="font-semibold text-gray-900">Voir ses commandes</p>
-                        <p class="text-sm text-gray-600">Historique personnel uniquement</p>
+                        <p class="font-semibold text-gray-900 text-sm sm:text-base">Voir ses commandes</p>
+                        <p class="text-xs sm:text-sm text-gray-600">Historique personnel uniquement</p>
                     </div>
                 </li>
             </ul>
 
             {% elif user_obj.is_serveur %}
-            <ul class="space-y-3">
+            <ul class="space-y-2 sm:space-y-3">
                 <li class="flex items-start">
-                    <span class="text-green-500 mr-3 text-xl">✅</span>
+                    <span class="text-green-500 mr-2 sm:mr-3 text-lg sm:text-xl">✅</span>
                     <div>
-                        <p class="font-semibold text-gray-900">Gérer les tables</p>
-                        <p class="text-sm text-gray-600">Voir l'état de toutes les tables</p>
+                        <p class="font-semibold text-gray-900 text-sm sm:text-base">Gérer les tables</p>
+                        <p class="text-xs sm:text-sm text-gray-600">Voir l'état de toutes les tables</p>
                     </div>
                 </li>
                 <li class="flex items-start">
-                    <span class="text-green-500 mr-3 text-xl">✅</span>
+                    <span class="text-green-500 mr-2 sm:mr-3 text-lg sm:text-xl">✅</span>
                     <div>
-                        <p class="font-semibold text-gray-900">Valider les commandes</p>
-                        <p class="text-sm text-gray-600">Marquer comme "servie"</p>
+                        <p class="font-semibold text-gray-900 text-sm sm:text-base">Valider les commandes</p>
+                        <p class="text-xs sm:text-sm text-gray-600">Marquer comme "servie"</p>
                     </div>
                 </li>
                 <li class="flex items-start">
-                    <span class="text-green-500 mr-3 text-xl">✅</span>
+                    <span class="text-green-500 mr-2 sm:mr-3 text-lg sm:text-xl">✅</span>
                     <div>
-                        <p class="font-semibold text-gray-900">Valider les paiements</p>
-                        <p class="text-sm text-gray-600">Marquer comme "payée" et mettre à jour la caisse</p>
+                        <p class="font-semibold text-gray-900 text-sm sm:text-base">Valider les paiements</p>
+                        <p class="text-xs sm:text-sm text-gray-600">Marquer comme "payée" et mettre à jour la caisse</p>
                     </div>
                 </li>
             </ul>
 
             {% elif user_obj.is_cuisinier %}
-            <ul class="space-y-3">
+            <ul class="space-y-2 sm:space-y-3">
                 <li class="flex items-start">
-                    <span class="text-green-500 mr-3 text-xl">✅</span>
+                    <span class="text-green-500 mr-2 sm:mr-3 text-lg sm:text-xl">✅</span>
                     <div>
-                        <p class="font-semibold text-gray-900">Gérer le menu</p>
-                        <p class="text-sm text-gray-600">Créer, modifier des plats</p>
+                        <p class="font-semibold text-gray-900 text-sm sm:text-base">Gérer le menu</p>
+                        <p class="text-xs sm:text-sm text-gray-600">Créer, modifier des plats</p>
                     </div>
                 </li>
                 <li class="flex items-start">
-                    <span class="text-green-500 mr-3 text-xl">✅</span>
+                    <span class="text-green-500 mr-2 sm:mr-3 text-lg sm:text-xl">✅</span>
                     <div>
-                        <p class="font-semibold text-gray-900">Gérer les images</p>
-                        <p class="text-sm text-gray-600">Upload d'images de plats</p>
+                        <p class="font-semibold text-gray-900 text-sm sm:text-base">Gérer les images</p>
+                        <p class="text-xs sm:text-sm text-gray-600">Upload d'images de plats</p>
                     </div>
                 </li>
                 <li class="flex items-start">
-                    <span class="text-green-500 mr-3 text-xl">✅</span>
+                    <span class="text-green-500 mr-2 sm:mr-3 text-lg sm:text-xl">✅</span>
                     <div>
-                        <p class="font-semibold text-gray-900">Activer/Désactiver des plats</p>
-                        <p class="text-sm text-gray-600">Gérer la disponibilité</p>
+                        <p class="font-semibold text-gray-900 text-sm sm:text-base">Activer/Désactiver des plats</p>
+                        <p class="text-xs sm:text-sm text-gray-600">Gérer la disponibilité</p>
                     </div>
                 </li>
             </ul>
 
             {% elif user_obj.is_comptable %}
-            <ul class="space-y-3">
+            <ul class="space-y-2 sm:space-y-3">
                 <li class="flex items-start">
-                    <span class="text-green-500 mr-3 text-xl">✅</span>
+                    <span class="text-green-500 mr-2 sm:mr-3 text-lg sm:text-xl">✅</span>
                     <div>
-                        <p class="font-semibold text-gray-900">Dashboard caisse</p>
-                        <p class="text-sm text-gray-600">Voir le solde et les statistiques</p>
+                        <p class="font-semibold text-gray-900 text-sm sm:text-base">Dashboard caisse</p>
+                        <p class="text-xs sm:text-sm text-gray-600">Voir le solde et les statistiques</p>
                     </div>
                 </li>
                 <li class="flex items-start">
-                    <span class="text-green-500 mr-3 text-xl">✅</span>
+                    <span class="text-green-500 mr-2 sm:mr-3 text-lg sm:text-xl">✅</span>
                     <div>
-                        <p class="font-semibold text-gray-900">Gérer les dépenses</p>
-                        <p class="text-sm text-gray-600">Enregistrer et consulter les dépenses</p>
+                        <p class="font-semibold text-gray-900 text-sm sm:text-base">Gérer les dépenses</p>
+                        <p class="text-xs sm:text-sm text-gray-600">Enregistrer et consulter les dépenses</p>
                     </div>
                 </li>
                 <li class="flex items-start">
-                    <span class="text-green-500 mr-3 text-xl">✅</span>
+                    <span class="text-green-500 mr-2 sm:mr-3 text-lg sm:text-xl">✅</span>
                     <div>
-                        <p class="font-semibold text-gray-900">Consulter les paiements</p>
-                        <p class="text-sm text-gray-600">Historique complet des paiements</p>
+                        <p class="font-semibold text-gray-900 text-sm sm:text-base">Consulter les paiements</p>
+                        <p class="text-xs sm:text-sm text-gray-600">Historique complet des paiements</p>
                     </div>
                 </li>
             </ul>
 
             {% elif user_obj.is_admin %}
-            <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-r-lg">
-                <p class="font-semibold text-indigo-900 mb-2">👑 Administrateur - Accès complet</p>
-                <p class="text-sm text-indigo-700">Toutes les fonctionnalités du système sont accessibles</p>
+            <div class="bg-indigo-50 border-l-4 border-indigo-500 p-3 sm:p-4 rounded-r-lg">
+                <p class="font-semibold text-indigo-900 mb-1 sm:mb-2 text-sm sm:text-base">👑 Administrateur - Accès
+                    complet</p>
+                <p class="text-xs sm:text-sm text-indigo-700">Toutes les fonctionnalités du système sont accessibles</p>
             </div>
             {% endif %}
         </div>
 
         <!-- Actions -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <!-- Modifier -->
             {% if user_obj != user %}
             <a href="{% url 'accounts:user_update' user_obj.id %}"
-                class="bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-orange-500 rounded-2xl p-6 transition-all transform hover:scale-105 hover:shadow-xl">
+                class="bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-orange-500 rounded-2xl p-4 sm:p-6 transition-all transform hover:scale-105 hover:shadow-xl">
                 <div class="flex items-center">
-                    <div class="text-5xl mr-4">✏️</div>
+                    <div class="text-3xl sm:text-4xl md:text-5xl mr-3 sm:mr-4">✏️</div>
                     <div>
-                        <h3 class="font-bold text-gray-900 text-lg mb-1">Modifier l'utilisateur</h3>
-                        <p class="text-gray-600 text-sm">Changer le login, rôle ou statut</p>
+                        <h3 class="font-bold text-gray-900 text-base sm:text-lg mb-1">Modifier l'utilisateur</h3>
+                        <p class="text-gray-600 text-xs sm:text-sm">Changer le login, rôle ou statut</p>
                     </div>
                 </div>
             </a>
@@ -303,12 +305,12 @@
             <!-- Réinitialiser mot de passe -->
             {% if user_obj != user %}
             <a href="{% url 'accounts:user_reset_password' user_obj.id %}"
-                class="bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-blue-500 rounded-2xl p-6 transition-all transform hover:scale-105 hover:shadow-xl">
+                class="bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-blue-500 rounded-2xl p-4 sm:p-6 transition-all transform hover:scale-105 hover:shadow-xl">
                 <div class="flex items-center">
-                    <div class="text-5xl mr-4">🔑</div>
+                    <div class="text-3xl sm:text-4xl md:text-5xl mr-3 sm:mr-4">🔑</div>
                     <div>
-                        <h3 class="font-bold text-gray-900 text-lg mb-1">Réinitialiser le mot de passe</h3>
-                        <p class="text-gray-600 text-sm">Générer un nouveau mot de passe temporaire</p>
+                        <h3 class="font-bold text-gray-900 text-base sm:text-lg mb-1">Réinitialiser le mot de passe</h3>
+                        <p class="text-gray-600 text-xs sm:text-sm">Générer un nouveau mot de passe temporaire</p>
                     </div>
                 </div>
             </a>
@@ -318,14 +320,14 @@
             {% if user_obj != user %}
             <a href="{% url 'accounts:user_toggle_status' user_obj.id %}"
                 onclick="return confirm('Voulez-vous {% if user_obj.actif %}désactiver{% else %}activer{% endif %} ce compte ?')"
-                class="bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-{% if user_obj.actif %}red{% else %}green{% endif %}-500 rounded-2xl p-6 transition-all transform hover:scale-105 hover:shadow-xl">
+                class="bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-{% if user_obj.actif %}red{% else %}green{% endif %}-500 rounded-2xl p-4 sm:p-6 transition-all transform hover:scale-105 hover:shadow-xl">
                 <div class="flex items-center">
-                    <div class="text-5xl mr-4">{% if user_obj.actif %}🔴{% else %}🟢{% endif %}</div>
+                    <div class="text-3xl sm:text-4xl md:text-5xl mr-3 sm:mr-4">{% if user_obj.actif %}🔴{% else %}🟢{% endif %}</div>
                     <div>
-                        <h3 class="font-bold text-gray-900 text-lg mb-1">
+                        <h3 class="font-bold text-gray-900 text-base sm:text-lg mb-1">
                             {% if user_obj.actif %}Désactiver{% else %}Activer{% endif %} le compte
                         </h3>
-                        <p class="text-gray-600 text-sm">
+                        <p class="text-gray-600 text-xs sm:text-sm">
                             {% if user_obj.actif %}Empêcher la connexion{% else %}Autoriser la connexion{% endif %}
                         </p>
                     </div>
@@ -336,12 +338,12 @@
             <!-- Supprimer -->
             {% if user_obj != user %}
             <a href="{% url 'accounts:user_delete' user_obj.id %}"
-                class="bg-white hover:bg-red-50 border-2 border-gray-200 hover:border-red-500 rounded-2xl p-6 transition-all transform hover:scale-105 hover:shadow-xl">
+                class="bg-white hover:bg-red-50 border-2 border-gray-200 hover:border-red-500 rounded-2xl p-4 sm:p-6 transition-all transform hover:scale-105 hover:shadow-xl">
                 <div class="flex items-center">
-                    <div class="text-5xl mr-4">🗑️</div>
+                    <div class="text-3xl sm:text-4xl md:text-5xl mr-3 sm:mr-4">🗑️</div>
                     <div>
-                        <h3 class="font-bold text-red-600 text-lg mb-1">Supprimer l'utilisateur</h3>
-                        <p class="text-gray-600 text-sm">Action irréversible</p>
+                        <h3 class="font-bold text-red-600 text-base sm:text-lg mb-1">Supprimer l'utilisateur</h3>
+                        <p class="text-gray-600 text-xs sm:text-sm">Action irréversible</p>
                     </div>
                 </div>
             </a>
@@ -350,9 +352,9 @@
 
         {% if user_obj == user %}
         <!-- Message si c'est son propre compte -->
-        <div class="mt-6 bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded-r-2xl">
-            <h3 class="font-semibold text-yellow-900 mb-2">⚠️ Votre propre compte</h3>
-            <p class="text-sm text-yellow-700">
+        <div class="mt-4 sm:mt-6 bg-yellow-50 border-l-4 border-yellow-500 p-4 sm:p-6 rounded-r-2xl">
+            <h3 class="font-semibold text-yellow-900 mb-1 sm:mb-2 text-sm sm:text-base">⚠️ Votre propre compte</h3>
+            <p class="text-xs sm:text-sm text-yellow-700">
                 Vous ne pouvez pas modifier, désactiver ou supprimer votre propre compte via cette interface.
                 Utilisez l'interface d'administration Django ou demandez à un autre administrateur.
             </p>

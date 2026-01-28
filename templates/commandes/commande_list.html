@@ -3,79 +3,80 @@
 {% block title %}Mes Commandes{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-4 sm:py-8 px-4">
     <div class="max-w-7xl mx-auto">
 
         <!-- En-tête -->
-        <div class="bg-white rounded-2xl shadow-xl p-6 mb-6 border-t-4 border-blue-500">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-900 mb-2">📦 Mes Commandes</h1>
-                    <p class="text-gray-600">Table : {{ user.login }}</p>
+        <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-6 mb-4 sm:mb-6 border-t-4 border-blue-500">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between">
+                <div class="mb-3 sm:mb-0">
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">📦 Mes Commandes</h1>
+                    <p class="text-sm sm:text-base text-gray-600">Table : {{ user.login }}</p>
                 </div>
                 <a href="{% url 'dashboard:index' %}"
-                    class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors">
+                    class="px-4 sm:px-6 py-2 sm:py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors text-center text-sm sm:text-base">
                     ← Dashboard
                 </a>
             </div>
         </div>
 
         <!-- Statistiques -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+            <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-gray-600 text-sm mb-1">Total</p>
-                        <p class="text-3xl font-bold text-gray-900">{{ total_commandes }}</p>
+                        <p class="text-gray-600 text-xs sm:text-sm mb-1">Total</p>
+                        <p class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">{{ total_commandes }}</p>
                     </div>
-                    <div class="text-4xl">📊</div>
+                    <div class="text-3xl sm:text-4xl">📊</div>
                 </div>
             </div>
 
-            <div class="bg-yellow-50 rounded-xl shadow-lg p-6 border-2 border-yellow-200">
+            <div class="bg-yellow-50 rounded-xl shadow-lg p-4 sm:p-6 border-2 border-yellow-200">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-yellow-700 text-sm mb-1">En attente</p>
-                        <p class="text-3xl font-bold text-yellow-600">{{ commandes_en_attente }}</p>
+                        <p class="text-yellow-700 text-xs sm:text-sm mb-1">En attente</p>
+                        <p class="text-xl sm:text-2xl md:text-3xl font-bold text-yellow-600">{{ commandes_en_attente }}
+                        </p>
                     </div>
-                    <div class="text-4xl">⏳</div>
+                    <div class="text-3xl sm:text-4xl">⏳</div>
                 </div>
             </div>
 
-            <div class="bg-blue-50 rounded-xl shadow-lg p-6 border-2 border-blue-200">
+            <div class="bg-blue-50 rounded-xl shadow-lg p-4 sm:p-6 border-2 border-blue-200">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-blue-700 text-sm mb-1">Servies</p>
-                        <p class="text-3xl font-bold text-blue-600">{{ commandes_servies }}</p>
+                        <p class="text-blue-700 text-xs sm:text-sm mb-1">Servies</p>
+                        <p class="text-xl sm:text-2xl md:text-3xl font-bold text-blue-600">{{ commandes_servies }}</p>
                     </div>
-                    <div class="text-4xl">🍽️</div>
+                    <div class="text-3xl sm:text-4xl">🍽️</div>
                 </div>
             </div>
 
-            <div class="bg-green-50 rounded-xl shadow-lg p-6 border-2 border-green-200">
+            <div class="bg-green-50 rounded-xl shadow-lg p-4 sm:p-6 border-2 border-green-200">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-green-700 text-sm mb-1">Payées</p>
-                        <p class="text-3xl font-bold text-green-600">{{ commandes_payees }}</p>
+                        <p class="text-green-700 text-xs sm:text-sm mb-1">Payées</p>
+                        <p class="text-xl sm:text-2xl md:text-3xl font-bold text-green-600">{{ commandes_payees }}</p>
                     </div>
-                    <div class="text-4xl">✅</div>
+                    <div class="text-3xl sm:text-4xl">✅</div>
                 </div>
             </div>
         </div>
 
         {% if commandes %}
         <!-- Liste des commandes -->
-        <div class="space-y-6">
+        <div class="space-y-4 sm:space-y-6">
             {% for commande in commandes %}
             <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow overflow-hidden">
-                <div class="p-6">
-                    <div class="flex items-start justify-between mb-4">
-                        <div>
-                            <div class="flex items-center gap-3 mb-2">
-                                <h3 class="text-2xl font-bold text-gray-900">
+                <div class="p-4 sm:p-6">
+                    <div class="flex flex-col sm:flex-row sm:items-start justify-between mb-3 sm:mb-4">
+                        <div class="mb-3 sm:mb-0">
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+                                <h3 class="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">
                                     Commande #{{ commande.id }}
                                 </h3>
-                                <span class="px-4 py-1 rounded-full text-sm font-bold
+                                <span class="px-3 sm:px-4 py-1 rounded-full text-xs sm:text-sm font-bold self-start sm:self-center
                                     {% if commande.statut == 'en_attente' %}bg-yellow-100 text-yellow-800
                                     {% elif commande.statut == 'servie' %}bg-blue-100 text-blue-800
                                     {% else %}bg-green-100 text-green-800{% endif %}">
@@ -84,41 +85,45 @@
                                     {% else %}✅ Payée{% endif %}
                                 </span>
                             </div>
-                            <p class="text-gray-600">
+                            <p class="text-sm sm:text-base text-gray-600">
                                 📅 {{ commande.date_commande|date:"d/m/Y à H:i" }}
                             </p>
                         </div>
-                        <div class="text-right">
-                            <p class="text-sm text-gray-600 mb-1">Montant total</p>
-                            <p class="text-3xl font-bold text-blue-600">
+                        <div class="text-left sm:text-right">
+                            <p class="text-xs sm:text-sm text-gray-600 mb-1">Montant total</p>
+                            <p class="text-xl sm:text-2xl md:text-3xl font-bold text-blue-600">
                                 {{ commande.montant_total }} GNF
                             </p>
                         </div>
                     </div>
 
                     <!-- Plats de la commande -->
-                    <div class="border-t-2 border-gray-100 pt-4 mb-4">
-                        <h4 class="font-bold text-gray-900 mb-3">🍽️ Détails de la commande :</h4>
+                    <div class="border-t-2 border-gray-100 pt-3 sm:pt-4 mb-3 sm:mb-4">
+                        <h4 class="font-bold text-gray-900 mb-2 sm:mb-3 text-sm sm:text-base">🍽️ Détails de la commande
+                            :</h4>
                         <div class="space-y-2">
                             {% for item in commande.items.all %}
-                            <div class="flex items-center justify-between bg-gray-50 rounded-lg p-3">
-                                <div class="flex items-center gap-3">
+                            <div
+                                class="flex flex-col sm:flex-row sm:items-center justify-between bg-gray-50 rounded-lg p-2 sm:p-3">
+                                <div class="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-0">
                                     {% if item.plat.image %}
                                     <img src="{{ item.plat.image.url }}" alt="{{ item.plat.nom }}"
-                                        class="w-12 h-12 object-cover rounded-lg">
+                                        class="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-lg">
                                     {% else %}
-                                    <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
-                                        <span class="text-xl">🍽️</span>
+                                    <div
+                                        class="w-10 h-10 sm:w-12 sm:h-12 bg-gray-200 rounded-lg flex items-center justify-center">
+                                        <span class="text-lg sm:text-xl">🍽️</span>
                                     </div>
                                     {% endif %}
                                     <div>
-                                        <p class="font-semibold text-gray-900">{{ item.plat.nom }}</p>
-                                        <p class="text-sm text-gray-600">
+                                        <p class="font-semibold text-gray-900 text-sm sm:text-base">{{ item.plat.nom }}
+                                        </p>
+                                        <p class="text-xs sm:text-sm text-gray-600">
                                             {{ item.prix_unitaire }} GNF × {{ item.quantite }}
                                         </p>
                                     </div>
                                 </div>
-                                <p class="font-bold text-gray-900">
+                                <p class="font-bold text-gray-900 text-sm sm:text-base self-end sm:self-center">
                                     {{ item.sous_total }} GNF
                                 </p>
                             </div>
@@ -129,9 +134,10 @@
                     <!-- Actions -->
                     <div class="flex justify-end">
                         <a href="{% url 'commandes:commande_detail' commande.id %}"
-                            class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-colors shadow-md">
-                            Voir les détails
-                            <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            class="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-colors shadow-md text-sm sm:text-base">
+                            <span class="text-sm sm:text-base">Voir les détails</span>
+                            <svg class="ml-1 sm:ml-2 w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 5l7 7-7 7" />
                             </svg>
@@ -143,14 +149,14 @@
         </div>
         {% else %}
         <!-- Aucune commande -->
-        <div class="bg-white rounded-2xl shadow-lg p-12 text-center">
-            <div class="text-8xl mb-6">📦</div>
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">Aucune commande</h2>
-            <p class="text-gray-600 mb-8">Vous n'avez pas encore passé de commande</p>
+        <div class="bg-white rounded-2xl shadow-lg p-6 sm:p-8 md:p-12 text-center">
+            <div class="text-6xl sm:text-7xl md:text-8xl mb-4 sm:mb-6">📦</div>
+            <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Aucune commande</h2>
+            <p class="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">Vous n'avez pas encore passé de commande</p>
             <a href="{% url 'menu:table_list' %}"
-                class="inline-flex items-center px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-colors shadow-lg">
-                Consulter le menu
-                <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                class="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-colors shadow-lg text-sm sm:text-base">
+                <span class="text-sm sm:text-base">Consulter le menu</span>
+                <svg class="ml-1 sm:ml-2 w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
             </a>

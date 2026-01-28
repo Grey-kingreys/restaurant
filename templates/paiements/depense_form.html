@@ -3,37 +3,40 @@
 {% block title %}Enregistrer une Dépense - Comptable{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 py-8 px-4">
-    <div class="max-w-3xl mx-auto">
+<div class="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 py-4 sm:py-6 md:py-8 px-3 sm:px-4">
+    <div class="max-w-3xl mx-auto px-2 sm:px-4">
 
         <!-- En-tête -->
-        <div class="mb-8">
+        <div class="mb-6 sm:mb-8">
             <a href="{% url 'paiements:depense_list' %}"
-                class="inline-flex items-center text-green-600 hover:text-green-800 font-medium mb-4">
+                class="inline-flex items-center text-green-600 hover:text-green-800 font-medium mb-3 sm:mb-4 text-sm sm:text-base">
                 ← Retour à la liste
             </a>
-            <h1 class="text-4xl font-bold text-gray-900">💸 Enregistrer une Dépense</h1>
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">💸 Enregistrer une Dépense</h1>
         </div>
 
         <!-- Solde de la caisse -->
-        <div class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl shadow-xl p-6 mb-8 text-white">
+        <div
+            class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl p-4 sm:p-6 mb-6 sm:mb-8 text-white">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-green-100 mb-2">💰 Solde Actuel de la Caisse</p>
-                    <p class="text-5xl font-bold">{{ caisse.solde_actuel|floatformat:0 }} GNF</p>
+                    <p class="text-green-100 mb-1 sm:mb-2 text-sm sm:text-base">💰 Solde Actuel de la Caisse</p>
+                    <p class="text-3xl sm:text-4xl md:text-5xl font-bold">{{ caisse.solde_actuel|floatformat:0 }} GNF
+                    </p>
                 </div>
-                <div class="text-7xl opacity-20">💵</div>
+                <div class="text-4xl sm:text-5xl md:text-7xl opacity-20">💵</div>
             </div>
         </div>
 
         <!-- Avertissement si solde faible -->
         {% if caisse.solde_actuel < 100000 %} <div
-            class="bg-orange-50 border-l-4 border-orange-500 p-6 rounded-r-2xl mb-8">
+            class="bg-orange-50 border-l-4 border-orange-500 p-4 sm:p-6 rounded-r-xl sm:rounded-r-2xl mb-6 sm:mb-8">
             <div class="flex items-start">
-                <div class="text-3xl mr-3">⚠️</div>
+                <div class="text-2xl sm:text-3xl mr-2 sm:mr-3">⚠️</div>
                 <div>
-                    <h3 class="font-semibold text-orange-900 mb-2">Attention : Solde de caisse faible</h3>
-                    <p class="text-orange-700 text-sm">
+                    <h3 class="font-semibold text-orange-900 mb-1 sm:mb-2 text-sm sm:text-base">Attention : Solde de
+                        caisse faible</h3>
+                    <p class="text-orange-700 text-xs sm:text-sm break-words">
                         Le solde de la caisse est inférieur à 100 000 GNF.
                         Assurez-vous que la dépense est nécessaire.
                     </p>
@@ -43,15 +46,15 @@
     {% endif %}
 
     <!-- Formulaire -->
-    <div class="bg-white rounded-2xl shadow-xl p-8">
-        <form method="post" class="space-y-6">
+    <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl p-4 sm:p-6 md:p-8">
+        <form method="post" class="space-y-4 sm:space-y-6">
             {% csrf_token %}
 
             <!-- Messages d'erreur globaux -->
             {% if form.non_field_errors %}
-            <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
+            <div class="bg-red-50 border-l-4 border-red-500 p-3 sm:p-4 rounded-r-lg">
                 <div class="flex">
-                    <div class="text-red-700">
+                    <div class="text-red-700 text-sm sm:text-base">
                         {{ form.non_field_errors }}
                     </div>
                 </div>
@@ -60,82 +63,83 @@
 
             <!-- Motif -->
             <div>
-                <label for="{{ form.motif.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                <label for="{{ form.motif.id_for_label }}"
+                    class="block text-sm font-semibold text-gray-700 mb-1 sm:mb-2">
                     {{ form.motif.label }} <span class="text-red-500">*</span>
                 </label>
                 {{ form.motif }}
                 {% if form.motif.help_text %}
-                <p class="text-sm text-gray-500 mt-1">{{ form.motif.help_text }}</p>
+                <p class="text-xs sm:text-sm text-gray-500 mt-1">{{ form.motif.help_text }}</p>
                 {% endif %}
                 {% if form.motif.errors %}
-                <p class="text-sm text-red-600 mt-1">{{ form.motif.errors.0 }}</p>
+                <p class="text-xs sm:text-sm text-red-600 mt-1">{{ form.motif.errors.0 }}</p>
                 {% endif %}
             </div>
 
             <!-- Montant et Date (côte à côte) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <!-- Montant -->
                 <div>
-                    <label for="{{ form.montant.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                    <label for="{{ form.montant.id_for_label }}"
+                        class="block text-sm font-semibold text-gray-700 mb-1 sm:mb-2">
                         {{ form.montant.label }} <span class="text-red-500">*</span>
                     </label>
                     {{ form.montant }}
                     {% if form.montant.help_text %}
-                    <p class="text-sm text-gray-500 mt-1">{{ form.montant.help_text }}</p>
+                    <p class="text-xs sm:text-sm text-gray-500 mt-1">{{ form.montant.help_text }}</p>
                     {% endif %}
                     {% if form.montant.errors %}
-                    <p class="text-sm text-red-600 mt-1">{{ form.montant.errors.0 }}</p>
+                    <p class="text-xs sm:text-sm text-red-600 mt-1">{{ form.montant.errors.0 }}</p>
                     {% endif %}
                 </div>
 
                 <!-- Date -->
                 <div>
                     <label for="{{ form.date_depense.id_for_label }}"
-                        class="block text-sm font-semibold text-gray-700 mb-2">
+                        class="block text-sm font-semibold text-gray-700 mb-1 sm:mb-2">
                         {{ form.date_depense.label }} <span class="text-red-500">*</span>
                     </label>
                     {{ form.date_depense }}
                     {% if form.date_depense.help_text %}
-                    <p class="text-sm text-gray-500 mt-1">{{ form.date_depense.help_text }}</p>
+                    <p class="text-xs sm:text-sm text-gray-500 mt-1">{{ form.date_depense.help_text }}</p>
                     {% endif %}
                     {% if form.date_depense.errors %}
-                    <p class="text-sm text-red-600 mt-1">{{ form.date_depense.errors.0 }}</p>
+                    <p class="text-xs sm:text-sm text-red-600 mt-1">{{ form.date_depense.errors.0 }}</p>
                     {% endif %}
                 </div>
             </div>
 
             <!-- Aperçu du nouveau solde -->
-            <div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-2xl">
-                <h3 class="font-semibold text-blue-900 mb-2">💡 Aperçu</h3>
-                <p class="text-blue-700 text-sm">
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 sm:p-6 rounded-r-xl sm:rounded-r-2xl">
+                <h3 class="font-semibold text-blue-900 mb-1 sm:mb-2 text-sm sm:text-base">💡 Aperçu</h3>
+                <p class="text-blue-700 text-xs sm:text-sm break-words">
                     Après l'enregistrement de cette dépense, le solde de la caisse sera mis à jour automatiquement.
                 </p>
-                <div class="mt-4 bg-white rounded-lg p-4">
+                <div class="mt-3 sm:mt-4 bg-white rounded-lg sm:rounded-xl p-3 sm:p-4">
                     <div class="flex justify-between items-center">
-                        <span class="text-sm text-gray-600">Solde actuel :</span>
-                        <span class="font-bold text-gray-900">{{ caisse.solde_actuel|floatformat:0 }} GNF</span>
+                        <span class="text-xs sm:text-sm text-gray-600">Solde actuel :</span>
+                        <span class="font-bold text-gray-900 text-sm sm:text-base">{{ caisse.solde_actuel|floatformat:0  }} GNF</span>
                     </div>
-                    <div class="flex justify-between items-center mt-2 text-red-600">
-                        <span class="text-sm">Dépense à enregistrer :</span>
-                        <span class="font-bold" id="montant-preview">0 GNF</span>
+                    <div class="flex justify-between items-center mt-1 sm:mt-2 text-red-600">
+                        <span class="text-xs sm:text-sm">Dépense à enregistrer :</span>
+                        <span class="font-bold text-sm sm:text-base" id="montant-preview">0 GNF</span>
                     </div>
-                    <div class="h-px bg-gray-200 my-3"></div>
+                    <div class="h-px bg-gray-200 my-2 sm:my-3"></div>
                     <div class="flex justify-between items-center">
-                        <span class="text-sm font-semibold text-gray-900">Nouveau solde :</span>
-                        <span class="font-bold text-green-600 text-lg" id="nouveau-solde">{{
-                            caisse.solde_actuel|floatformat:0 }} GNF</span>
+                        <span class="text-xs sm:text-sm font-semibold text-gray-900">Nouveau solde :</span>
+                        <span class="font-bold text-green-600 text-base sm:text-lg" id="nouveau-solde">{{ caisse.solde_actuel|floatformat:0 }} GNF</span>
                     </div>
                 </div>
             </div>
 
             <!-- Boutons d'action -->
-            <div class="flex gap-4 pt-6 border-t">
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4 sm:pt-6 border-t">
                 <button type="submit"
-                    class="flex-1 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-medium shadow-lg transition-all transform hover:scale-105">
+                    class="w-full sm:flex-1 bg-green-600 hover:bg-green-700 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium shadow-md sm:shadow-lg transition-all transform hover:scale-105 text-sm sm:text-base">
                     💾 Enregistrer la dépense
                 </button>
                 <a href="{% url 'paiements:depense_list' %}"
-                    class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-3 rounded-xl font-medium text-center transition-colors">
+                    class="w-full sm:flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium text-center transition-colors text-sm sm:text-base">
                     ❌ Annuler
                 </a>
             </div>
@@ -143,13 +147,13 @@
     </div>
 
     <!-- Informations supplémentaires -->
-    <div class="mt-6 bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded-r-2xl">
-        <h3 class="font-semibold text-yellow-900 mb-2">⚠️ Important</h3>
-        <ul class="text-sm text-yellow-700 space-y-1">
-            <li>• Le solde de la caisse doit être suffisant pour enregistrer une dépense</li>
-            <li>• La dépense sera immédiatement déduite du solde de la caisse</li>
-            <li>• Cette action ne peut pas être annulée (seul l'admin peut supprimer)</li>
-            <li>• Assurez-vous que les informations sont correctes avant de valider</li>
+    <div class="mt-4 sm:mt-6 bg-yellow-50 border-l-4 border-yellow-500 p-4 sm:p-6 rounded-r-xl sm:rounded-r-2xl">
+        <h3 class="font-semibold text-yellow-900 mb-1 sm:mb-2 text-sm sm:text-base">⚠️ Important</h3>
+        <ul class="text-xs sm:text-sm text-yellow-700 space-y-1">
+            <li class="break-words">• Le solde de la caisse doit être suffisant pour enregistrer une dépense</li>
+            <li class="break-words">• La dépense sera immédiatement déduite du solde de la caisse</li>
+            <li class="break-words">• Cette action ne peut pas être annulée (seul l'admin peut supprimer)</li>
+            <li class="break-words">• Assurez-vous que les informations sont correctes avant de valider</li>
         </ul>
     </div>
 
@@ -161,7 +165,7 @@
     const montantInput = document.querySelector('input[name="montant"]');
     const montantPreview = document.getElementById('montant-preview');
     const nouveauSolde = document.getElementById('nouveau-solde');
-    const soldeActuel = {{ caisse.solde_actuel|floatformat:0 }};
+    const soldeActuel = {{ caisse.solde_actuel| floatformat:0 }};
 
     montantInput.addEventListener('input', function () {
         const montant = parseFloat(this.value) || 0;
@@ -172,11 +176,11 @@
 
         // Changer la couleur selon le solde
         if (nouveauSoldeValue < 0) {
-            nouveauSolde.className = 'font-bold text-red-600 text-lg';
+            nouveauSolde.className = 'font-bold text-red-600 text-base sm:text-lg';
         } else if (nouveauSoldeValue < 100000) {
-            nouveauSolde.className = 'font-bold text-orange-600 text-lg';
+            nouveauSolde.className = 'font-bold text-orange-600 text-base sm:text-lg';
         } else {
-            nouveauSolde.className = 'font-bold text-green-600 text-lg';
+            nouveauSolde.className = 'font-bold text-green-600 text-base sm:text-lg';
         }
     });
 </script>

@@ -3,24 +3,24 @@
 {% block title %}Dashboard - {{ role_display }}{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4">
+<div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-6 px-4 sm:py-10">
     <div class="max-w-7xl mx-auto">
 
         <!-- En-tête avec info utilisateur -->
-        <div class="bg-white rounded-2xl shadow-xl p-8 mb-8 border-t-4 border-blue-500">
-            <div class="flex items-center justify-between">
+        <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 border-t-4 border-blue-500">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <h1 class="text-4xl font-bold text-gray-900 mb-2">
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
                         Bienvenue, {{ user.login }} !
                     </h1>
-                    <p class="text-lg text-gray-600">
+                    <p class="text-sm sm:text-base lg:text-lg text-gray-600">
                         Rôle : <span class="font-semibold text-blue-600">{{ role_display }}</span>
                     </p>
-                    <p class="text-sm text-gray-500 mt-2">
+                    <p class="text-xs sm:text-sm text-gray-500 mt-2">
                         Connecté depuis {{ user.date_joined|date:"d/m/Y" }}
                     </p>
                 </div>
-                <div class="text-7xl animate-bounce">
+                <div class="text-5xl sm:text-6xl lg:text-7xl animate-bounce self-start sm:self-auto">
                     {% if user.is_table %}🍽️
                     {% elif user.is_serveur %}👨‍🍳
                     {% elif user.is_cuisinier %}🍳
@@ -31,23 +31,22 @@
             </div>
         </div>
 
-
         <!-- Grille des fonctionnalités -->
-        <div class="mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+        <div class="mb-6 sm:mb-8">
+            <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 flex items-center">
                 <span class="mr-3">🎯</span>
                 Vos fonctionnalités
             </h2>
-            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="grid grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {% for feature in features %}
                 <div
-                    class="bg-white overflow-hidden shadow-lg rounded-2xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 {% if feature.status == 'Disponible' %}border-green-200{% else %}border-gray-200{% endif %}">
-                    <div class="p-6">
-                        <div class="flex items-start justify-between mb-4">
-                            <div class="text-5xl">
+                    class="bg-white overflow-hidden shadow-lg rounded-2xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 sm:hover:-translate-y-2 border-2 {% if feature.status == 'Disponible' %}border-green-200{% else %}border-gray-200{% endif %}">
+                    <div class="p-4 sm:p-6">
+                        <div class="flex items-start justify-between mb-4 gap-4">
+                            <div class="text-4xl sm:text-5xl">
                                 {{ feature.icon }}
                             </div>
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
+                            <span class="inline-flex items-center px-2 sm:px-3 py-1 rounded-full text-xs font-medium
                                 {% if feature.status == 'Disponible' %}bg-green-100 text-green-800 ring-2 ring-green-200
                                 {% elif feature.status == 'En développement' %}bg-yellow-100 text-yellow-800
                                 {% else %}bg-gray-100 text-gray-800{% endif %}">
@@ -55,14 +54,15 @@
                             </span>
                         </div>
 
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">
+                        <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-2">
                             {{ feature.title }}
                         </h3>
-                        <p class="text-sm text-gray-600 mb-4 min-h-[40px]">
+                        <p class="text-sm text-gray-600 mb-4 min-h-[32px] sm:min-h-[40px]">
                             {{ feature.description }}
                         </p>
 
-                        <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                        <div
+                            class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between pt-4 border-t border-gray-100">
                             <span class="text-sm font-semibold
                                 {% if feature.status == 'Disponible' %}text-green-600
                                 {% elif feature.status == 'En développement' %}text-yellow-600
@@ -72,7 +72,7 @@
 
                             {% if feature.status == 'Disponible' %}
                             <a href="{{ feature.url }}"
-                                class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors shadow-md">
+                                class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors shadow-md w-full sm:w-auto">
                                 Accéder
                                 <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -81,7 +81,7 @@
                             </a>
                             {% else %}
                             <button disabled
-                                class="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-500 text-sm cursor-not-allowed rounded-lg">
+                                class="inline-flex items-center justify-center px-4 py-2 bg-gray-200 text-gray-500 text-sm cursor-not-allowed rounded-lg w-full sm:w-auto">
                                 Bientôt
                             </button>
                             {% endif %}
@@ -91,8 +91,6 @@
                 {% endfor %}
             </div>
         </div>
-
-       
 
     </div>
 </div>

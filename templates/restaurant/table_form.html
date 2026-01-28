@@ -1,36 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 py-8 px-4">
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 py-4 sm:py-8 px-4">
     <div class="max-w-2xl mx-auto">
 
         <!-- En-tête -->
-        <div class="bg-white rounded-2xl shadow-xl p-6 mb-6 border-t-4 border-indigo-500">
-            <h1 class="text-2xl font-bold text-gray-900 mb-2">{{ title }}</h1>
-            <p class="text-gray-600">Formulaire de création/modification de table</p>
+        <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-6 mb-4 sm:mb-6 border-t-4 border-indigo-500">
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">{{ title }}</h1>
+            <p class="text-sm sm:text-base text-gray-600">Formulaire de création/modification de table</p>
         </div>
 
         <!-- Messages d'erreur/succès -->
         {% if messages %}
-        <div class="mb-6">
+        <div class="mb-4 sm:mb-6">
             {% for message in messages %}
             <div
-                class="p-4 rounded-xl mb-3 {% if message.tags == 'error' %}bg-red-100 text-red-700 border-l-4 border-red-500{% elif message.tags == 'success' %}bg-green-100 text-green-700 border-l-4 border-green-500{% else %}bg-blue-100 text-blue-700 border-l-4 border-blue-500{% endif %}">
-                {{ message }}
+                class="p-3 sm:p-4 rounded-xl mb-2 sm:mb-3 {% if message.tags == 'error' %}bg-red-100 text-red-700 border-l-4 border-red-500{% elif message.tags == 'success' %}bg-green-100 text-green-700 border-l-4 border-green-500{% else %}bg-blue-100 text-blue-700 border-l-4 border-blue-500{% endif %}">
+                <p class="text-sm sm:text-base">{{ message }}</p>
             </div>
             {% endfor %}
         </div>
         {% endif %}
 
         <!-- Formulaire -->
-        <div class="bg-white rounded-2xl shadow-lg p-6">
-            <form method="post" class="space-y-6">
+        <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
+            <form method="post" class="space-y-4 sm:space-y-6">
                 {% csrf_token %}
 
                 <!-- Afficher les erreurs non-field -->
                 {% if form.non_field_errors %}
-                <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
-                    <ul class="text-red-700 text-sm">
+                <div class="bg-red-50 border-l-4 border-red-500 p-3 sm:p-4 rounded-r-lg">
+                    <ul class="text-red-700 text-xs sm:text-sm">
                         {% for error in form.non_field_errors %}
                         <li>{{ error }}</li>
                         {% endfor %}
@@ -41,7 +41,7 @@
                 <!-- Champ Numéro de table -->
                 <div>
                     <label for="{{ form.numero_table.id_for_label }}"
-                        class="block text-sm font-medium text-gray-700 mb-2">
+                        class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                         {{ form.numero_table.label }}
                     </label>
                     {{ form.numero_table }}
@@ -49,7 +49,7 @@
                     <p class="mt-1 text-xs text-gray-500">{{ form.numero_table.help_text }}</p>
                     {% endif %}
                     {% if form.numero_table.errors %}
-                    <div class="mt-1 text-sm text-red-600">
+                    <div class="mt-1 text-xs sm:text-sm text-red-600">
                         {% for error in form.numero_table.errors %}
                         <p>{{ error }}</p>
                         {% endfor %}
@@ -60,7 +60,7 @@
                 <!-- Champ Nombre de places -->
                 <div>
                     <label for="{{ form.nombre_places.id_for_label }}"
-                        class="block text-sm font-medium text-gray-700 mb-2">
+                        class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                         {{ form.nombre_places.label }}
                     </label>
                     {{ form.nombre_places }}
@@ -68,7 +68,7 @@
                     <p class="mt-1 text-xs text-gray-500">{{ form.nombre_places.help_text }}</p>
                     {% endif %}
                     {% if form.nombre_places.errors %}
-                    <div class="mt-1 text-sm text-red-600">
+                    <div class="mt-1 text-xs sm:text-sm text-red-600">
                         {% for error in form.nombre_places.errors %}
                         <p>{{ error }}</p>
                         {% endfor %}
@@ -79,7 +79,7 @@
                 <!-- Champ Utilisateur -->
                 <div>
                     <label for="{{ form.utilisateur.id_for_label }}"
-                        class="block text-sm font-medium text-gray-700 mb-2">
+                        class="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
                         {{ form.utilisateur.label }}
                     </label>
                     {{ form.utilisateur }}
@@ -90,7 +90,7 @@
                     </p>
                     {% endif %}
                     {% if form.utilisateur.errors %}
-                    <div class="mt-1 text-sm text-red-600">
+                    <div class="mt-1 text-xs sm:text-sm text-red-600">
                         {% for error in form.utilisateur.errors %}
                         <p>{{ error }}</p>
                         {% endfor %}
@@ -99,13 +99,13 @@
                 </div>
 
                 <!-- Boutons -->
-                <div class="flex gap-4 pt-4">
+                <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-3 sm:pt-4">
                     <button type="submit"
-                        class="flex-1 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium transition-colors shadow-lg">
+                        class="flex-1 py-2.5 sm:py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium transition-colors shadow-lg text-sm sm:text-base">
                         {{ button_text }}
                     </button>
                     <a href="{% url 'restaurant:table_list_admin' %}"
-                        class="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium text-center transition-colors">
+                        class="flex-1 py-2.5 sm:py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium text-center transition-colors text-sm sm:text-base">
                         Annuler
                     </a>
                 </div>
@@ -113,9 +113,9 @@
         </div>
 
         <!-- Aide -->
-        <div class="mt-6 bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-2xl">
-            <h3 class="font-semibold text-blue-900 mb-2">💡 Informations importantes</h3>
-            <ul class="text-sm text-blue-700 space-y-1">
+        <div class="mt-4 sm:mt-6 bg-blue-50 border-l-4 border-blue-500 p-4 sm:p-6 rounded-r-2xl">
+            <h3 class="font-semibold text-blue-900 mb-1 sm:mb-2 text-sm sm:text-base">💡 Informations importantes</h3>
+            <ul class="text-xs sm:text-sm text-blue-700 space-y-1">
                 <li>• Le numéro de table doit être unique (ex: T001, TABLE01)</li>
                 <li>• Le nombre de places doit être entre 1 et 20</li>
                 <li>• Vous devez sélectionner un utilisateur avec le rôle "Table"</li>

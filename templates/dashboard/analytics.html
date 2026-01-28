@@ -3,27 +3,27 @@
 {% block title %}Dashboard Analytics - Admin{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 py-8 px-4">
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100 py-4 sm:py-8 px-4">
     <div class="max-w-7xl mx-auto">
 
         <!-- En-tête -->
-        <div class="bg-white rounded-2xl shadow-xl p-6 mb-6 border-t-4 border-indigo-500">
-            <div class="flex items-center justify-between">
+        <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-6 mb-4 sm:mb-6 border-t-4 border-indigo-500">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between">
                 <div>
-                    <h1 class="text-3xl font-bold text-gray-900 mb-2">📊 Dashboard Analytics</h1>
-                    <p class="text-gray-600">Vue d'ensemble complète du restaurant</p>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">📊 Dashboard Analytics</h1>
+                    <p class="text-sm sm:text-base text-gray-600">Vue d'ensemble complète du restaurant</p>
                 </div>
-                <div class="flex gap-3">
+                <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-4 sm:mt-0">
                     <a href="/dashboard/export/excel/"
-                        class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium transition-colors shadow-lg">
+                        class="px-4 sm:px-6 py-2 sm:py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl font-medium transition-colors shadow-lg text-center text-sm sm:text-base">
                         📥 Export Excel
                     </a>
                     <a href="/dashboard/export/pdf/"
-                        class="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-medium transition-colors shadow-lg">
+                        class="px-4 sm:px-6 py-2 sm:py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-medium transition-colors shadow-lg text-center text-sm sm:text-base">
                         📄 Export PDF
                     </a>
                     <a href="{% url 'dashboard:index' %}"
-                        class="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors">
+                        class="px-4 sm:px-6 py-2 sm:py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors text-center text-sm sm:text-base">
                         ← Dashboard
                     </a>
                 </div>
@@ -31,193 +31,206 @@
         </div>
 
         <!-- Stats Générales -->
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
-            <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
-                <p class="text-sm text-gray-600 mb-1">👥 Utilisateurs</p>
-                <p class="text-3xl font-bold text-blue-600">{{ stats_generales.total_utilisateurs }}</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 mb-6 sm:mb-8">
+            <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 border-l-4 border-blue-500">
+                <p class="text-xs sm:text-sm text-gray-600 mb-1">👥 Utilisateurs</p>
+                <p class="text-xl sm:text-2xl md:text-3xl font-bold text-blue-600">{{ stats_generales.total_utilisateurs }}</p>
                 <p class="text-xs text-gray-500 mt-1">{{ stats_generales.utilisateurs_actifs }} actifs</p>
             </div>
 
-            <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500">
-                <p class="text-sm text-gray-600 mb-1">🪑 Tables</p>
-                <p class="text-3xl font-bold text-purple-600">{{ stats_generales.total_tables }}</p>
+            <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 border-l-4 border-purple-500">
+                <p class="text-xs sm:text-sm text-gray-600 mb-1">🪑 Tables</p>
+                <p class="text-xl sm:text-2xl md:text-3xl font-bold text-purple-600">{{ stats_generales.total_tables }}
+                </p>
             </div>
 
-            <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-orange-500">
-                <p class="text-sm text-gray-600 mb-1">🍽️ Plats</p>
-                <p class="text-3xl font-bold text-orange-600">{{ stats_generales.total_plats }}</p>
+            <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 border-l-4 border-orange-500">
+                <p class="text-xs sm:text-sm text-gray-600 mb-1">🍽️ Plats</p>
+                <p class="text-xl sm:text-2xl md:text-3xl font-bold text-orange-600">{{ stats_generales.total_plats }}
+                </p>
                 <p class="text-xs text-gray-500 mt-1">{{ stats_generales.plats_disponibles }} disponibles</p>
             </div>
 
-            <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
-                <p class="text-sm text-gray-600 mb-1">📦 Commandes</p>
-                <p class="text-3xl font-bold text-green-600">{{ commandes_stats.total }}</p>
+            <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 border-l-4 border-green-500">
+                <p class="text-xs sm:text-sm text-gray-600 mb-1">📦 Commandes</p>
+                <p class="text-xl sm:text-2xl md:text-3xl font-bold text-green-600">{{ commandes_stats.total }}</p>
                 <p class="text-xs text-gray-500 mt-1">{{ commandes_stats.payees }} payées</p>
             </div>
 
-            <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-indigo-500">
-                <p class="text-sm text-gray-600 mb-1">💰 Solde Caisse</p>
-                <p class="text-2xl font-bold text-indigo-600">{{ finances_stats.solde_caisse|floatformat:0 }} GNF</p>
+            <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6 border-l-4 border-indigo-500">
+                <p class="text-xs sm:text-sm text-gray-600 mb-1">💰 Solde Caisse</p>
+                <p class="text-lg sm:text-xl md:text-2xl font-bold text-indigo-600">{{ finances_stats.solde_caisse|floatformat:0 }} GNF</p>
             </div>
         </div>
 
         <!-- Finances -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
             <!-- Revenus -->
-            <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-xl p-6 text-white">
-                <h3 class="text-lg font-bold mb-4 flex items-center">
-                    <span class="text-2xl mr-2">💵</span> Revenus
+            <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-xl p-4 sm:p-6 text-white">
+                <h3 class="text-base sm:text-lg font-bold mb-3 sm:mb-4 flex items-center">
+                    <span class="text-xl sm:text-2xl mr-2">💵</span> Revenus
                 </h3>
-                <div class="space-y-3">
+                <div class="space-y-2 sm:space-y-3">
                     <div>
-                        <p class="text-green-100 text-sm">Aujourd'hui</p>
-                        <p class="text-2xl font-bold">{{ finances_stats.revenus.jour|floatformat:0 }} GNF</p>
+                        <p class="text-green-100 text-xs sm:text-sm">Aujourd'hui</p>
+                        <p class="text-xl sm:text-2xl font-bold">{{ finances_stats.revenus.jour|floatformat:0 }} GNF</p>
                     </div>
                     <div>
-                        <p class="text-green-100 text-sm">Cette semaine</p>
-                        <p class="text-2xl font-bold">{{ finances_stats.revenus.semaine|floatformat:0 }} GNF</p>
+                        <p class="text-green-100 text-xs sm:text-sm">Cette semaine</p>
+                        <p class="text-xl sm:text-2xl font-bold">{{ finances_stats.revenus.semaine|floatformat:0 }} GNF
+                        </p>
                     </div>
                     <div>
-                        <p class="text-green-100 text-sm">Ce mois</p>
-                        <p class="text-3xl font-bold">{{ finances_stats.revenus.mois|floatformat:0 }} GNF</p>
+                        <p class="text-green-100 text-xs sm:text-sm">Ce mois</p>
+                        <p class="text-2xl sm:text-3xl font-bold">{{ finances_stats.revenus.mois|floatformat:0 }} GNF
+                        </p>
                     </div>
                 </div>
             </div>
 
             <!-- Dépenses -->
-            <div class="bg-gradient-to-br from-red-500 to-orange-600 rounded-2xl shadow-xl p-6 text-white">
-                <h3 class="text-lg font-bold mb-4 flex items-center">
-                    <span class="text-2xl mr-2">💸</span> Dépenses
+            <div class="bg-gradient-to-br from-red-500 to-orange-600 rounded-2xl shadow-xl p-4 sm:p-6 text-white">
+                <h3 class="text-base sm:text-lg font-bold mb-3 sm:mb-4 flex items-center">
+                    <span class="text-xl sm:text-2xl mr-2">💸</span> Dépenses
                 </h3>
-                <div class="space-y-3">
+                <div class="space-y-2 sm:space-y-3">
                     <div>
-                        <p class="text-red-100 text-sm">Aujourd'hui</p>
-                        <p class="text-2xl font-bold">{{ finances_stats.depenses.jour|floatformat:0 }} GNF</p>
+                        <p class="text-red-100 text-xs sm:text-sm">Aujourd'hui</p>
+                        <p class="text-xl sm:text-2xl font-bold">{{ finances_stats.depenses.jour|floatformat:0 }} GNF
+                        </p>
                     </div>
                     <div>
-                        <p class="text-red-100 text-sm">Cette semaine</p>
-                        <p class="text-2xl font-bold">{{ finances_stats.depenses.semaine|floatformat:0 }} GNF</p>
+                        <p class="text-red-100 text-xs sm:text-sm">Cette semaine</p>
+                        <p class="text-xl sm:text-2xl font-bold">{{ finances_stats.depenses.semaine|floatformat:0 }} GNF
+                        </p>
                     </div>
                     <div>
-                        <p class="text-red-100 text-sm">Ce mois</p>
-                        <p class="text-3xl font-bold">{{ finances_stats.depenses.mois|floatformat:0 }} GNF</p>
+                        <p class="text-red-100 text-xs sm:text-sm">Ce mois</p>
+                        <p class="text-2xl sm:text-3xl font-bold">{{ finances_stats.depenses.mois|floatformat:0 }} GNF
+                        </p>
                     </div>
                 </div>
             </div>
 
             <!-- Bénéfice -->
-            <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-xl p-6 text-white">
-                <h3 class="text-lg font-bold mb-4 flex items-center">
-                    <span class="text-2xl mr-2">📈</span> Bénéfice Net
+            <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-xl p-4 sm:p-6 text-white">
+                <h3 class="text-base sm:text-lg font-bold mb-3 sm:mb-4 flex items-center">
+                    <span class="text-xl sm:text-2xl mr-2">📈</span> Bénéfice Net
                 </h3>
-                <div class="space-y-3">
+                <div class="space-y-2 sm:space-y-3">
                     <div>
-                        <p class="text-blue-100 text-sm">Aujourd'hui</p>
-                        <p class="text-2xl font-bold">{{ finances_stats.benefice.jour|floatformat:0 }} GNF</p>
+                        <p class="text-blue-100 text-xs sm:text-sm">Aujourd'hui</p>
+                        <p class="text-xl sm:text-2xl font-bold">{{ finances_stats.benefice.jour|floatformat:0 }} GNF
+                        </p>
                     </div>
                     <div>
-                        <p class="text-blue-100 text-sm">Cette semaine</p>
-                        <p class="text-2xl font-bold">{{ finances_stats.benefice.semaine|floatformat:0 }} GNF</p>
+                        <p class="text-blue-100 text-xs sm:text-sm">Cette semaine</p>
+                        <p class="text-xl sm:text-2xl font-bold">{{ finances_stats.benefice.semaine|floatformat:0 }} GNF
+                        </p>
                     </div>
                     <div>
-                        <p class="text-blue-100 text-sm">Ce mois</p>
-                        <p class="text-3xl font-bold">{{ finances_stats.benefice.mois|floatformat:0 }} GNF</p>
+                        <p class="text-blue-100 text-xs sm:text-sm">Ce mois</p>
+                        <p class="text-2xl sm:text-3xl font-bold">{{ finances_stats.benefice.mois|floatformat:0 }} GNF
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- KPIs -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <h3 class="text-sm font-semibold text-gray-600 uppercase mb-3">Taux de Conversion</h3>
-                <p class="text-4xl font-bold text-indigo-600 mb-2">{{ taux_conversion }}%</p>
-                <p class="text-sm text-gray-600">Commandes payées / Total commandes</p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8">
+            <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6">
+                <h3 class="text-xs sm:text-sm font-semibold text-gray-600 uppercase mb-2 sm:mb-3">Taux de Conversion
+                </h3>
+                <p class="text-2xl sm:text-3xl md:text-4xl font-bold text-indigo-600 mb-1 sm:mb-2">{{ taux_conversion }}%</p>
+                <p class="text-xs sm:text-sm text-gray-600">Commandes payées / Total commandes</p>
             </div>
 
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <h3 class="text-sm font-semibold text-gray-600 uppercase mb-3">Panier Moyen</h3>
-                <p class="text-4xl font-bold text-green-600 mb-2">{{ panier_moyen|floatformat:0 }} GNF</p>
-                <p class="text-sm text-gray-600">Montant moyen par commande</p>
+            <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6">
+                <h3 class="text-xs sm:text-sm font-semibold text-gray-600 uppercase mb-2 sm:mb-3">Panier Moyen</h3>
+                <p class="text-2xl sm:text-3xl md:text-4xl font-bold text-green-600 mb-1 sm:mb-2">{{ panier_moyen|floatformat:0 }} GNF</p>
+                <p class="text-xs sm:text-sm text-gray-600">Montant moyen par commande</p>
             </div>
 
-            <div class="bg-white rounded-xl shadow-lg p-6">
-                <h3 class="text-sm font-semibold text-gray-600 uppercase mb-3">Commandes Actives</h3>
-                <p class="text-4xl font-bold text-yellow-600 mb-2">{{ commandes_stats.en_attente }}</p>
-                <p class="text-sm text-gray-600">En attente de service</p>
+            <div class="bg-white rounded-xl shadow-lg p-4 sm:p-6">
+                <h3 class="text-xs sm:text-sm font-semibold text-gray-600 uppercase mb-2 sm:mb-3">Commandes Actives</h3>
+                <p class="text-2xl sm:text-3xl md:text-4xl font-bold text-yellow-600 mb-1 sm:mb-2">{{ commandes_stats.en_attente }}</p>
+                <p class="text-xs sm:text-sm text-gray-600">En attente de service</p>
             </div>
         </div>
 
         <!-- Graphiques côte à côte -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
             <!-- Top Plats -->
-            <div class="bg-white rounded-2xl shadow-lg p-6">
-                <h3 class="text-xl font-bold text-gray-900 mb-6">🍽️ Top 10 Plats</h3>
-                <div class="space-y-3">
+            <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
+                <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">🍽️ Top 10 Plats</h3>
+                <div class="space-y-2 sm:space-y-3">
                     {% for plat in top_plats %}
                     <div
-                        class="flex items-center justify-between bg-gray-50 rounded-lg p-3 hover:bg-gray-100 transition-colors">
-                        <div class="flex-1">
-                            <p class="font-semibold text-gray-900">{{ forloop.counter }}. {{ plat.plat__nom }}</p>
-                            <p class="text-sm text-gray-600">{{ plat.nombre_commandes }} commande(s)</p>
+                        class="flex flex-col sm:flex-row sm:items-center justify-between bg-gray-50 rounded-lg p-2 sm:p-3 hover:bg-gray-100 transition-colors">
+                        <div class="flex-1 mb-1 sm:mb-0">
+                            <p class="font-semibold text-gray-900 text-sm sm:text-base">{{ forloop.counter }}. {{ plat.plat__nom }}</p>
+                            <p class="text-xs sm:text-sm text-gray-600">{{ plat.nombre_commandes }} commande(s)</p>
                         </div>
-                        <div class="text-right">
-                            <p class="font-bold text-indigo-600">{{ plat.quantite_totale }} vendus</p>
-                            <p class="text-sm text-gray-600">{{ plat.revenu_total|floatformat:0 }} GNF</p>
+                        <div class="text-left sm:text-right">
+                            <p class="font-bold text-indigo-600 text-sm sm:text-base">{{ plat.quantite_totale }} vendus
+                            </p>
+                            <p class="text-xs sm:text-sm text-gray-600">{{ plat.revenu_total|floatformat:0 }} GNF</p>
                         </div>
                     </div>
                     {% empty %}
-                    <p class="text-gray-500 text-center py-4">Aucune vente enregistrée</p>
+                    <p class="text-gray-500 text-center py-4 text-sm sm:text-base">Aucune vente enregistrée</p>
                     {% endfor %}
                 </div>
             </div>
 
             <!-- Top Tables -->
-            <div class="bg-white rounded-2xl shadow-lg p-6">
-                <h3 class="text-xl font-bold text-gray-900 mb-6">🪑 Top 10 Tables</h3>
-                <div class="space-y-3">
+            <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
+                <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">🪑 Top 10 Tables</h3>
+                <div class="space-y-2 sm:space-y-3">
                     {% for table in top_tables %}
                     <div
-                        class="flex items-center justify-between bg-gray-50 rounded-lg p-3 hover:bg-gray-100 transition-colors">
-                        <div class="flex-1">
-                            <p class="font-semibold text-gray-900">{{ forloop.counter }}. {{ table.table__login }}</p>
-                            <p class="text-sm text-gray-600">{{ table.nombre_commandes }} commande(s)</p>
+                        class="flex flex-col sm:flex-row sm:items-center justify-between bg-gray-50 rounded-lg p-2 sm:p-3 hover:bg-gray-100 transition-colors">
+                        <div class="flex-1 mb-1 sm:mb-0">
+                            <p class="font-semibold text-gray-900 text-sm sm:text-base">{{ forloop.counter }}. {{ table.table__login }}</p>
+                            <p class="text-xs sm:text-sm text-gray-600">{{ table.nombre_commandes }} commande(s)</p>
                         </div>
-                        <div class="text-right">
-                            <p class="font-bold text-green-600">{{ table.montant_total|floatformat:0|default:"0" }} GNF
+                        <div class="text-left sm:text-right">
+                            <p class="font-bold text-green-600 text-sm sm:text-base">{{ table.montant_total|floatformat:0|default:"0" }} GNF
                             </p>
                         </div>
                     </div>
                     {% empty %}
-                    <p class="text-gray-500 text-center py-4">Aucune commande enregistrée</p>
+                    <p class="text-gray-500 text-center py-4 text-sm sm:text-base">Aucune commande enregistrée</p>
                     {% endfor %}
                 </div>
             </div>
         </div>
 
         <!-- Évolution des commandes -->
-        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
-            <h3 class="text-xl font-bold text-gray-900 mb-6">📈 Évolution des Commandes (7 derniers jours)</h3>
-            <div class="space-y-4">
+        <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 mb-6 sm:mb-8">
+            <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">📈 Évolution des Commandes (7 derniers
+                jours)</h3>
+            <div class="space-y-3 sm:space-y-4">
                 {% for jour in evolution_commandes %}
-                <div class="flex items-center gap-4">
-                    <div class="w-24 text-sm font-semibold text-gray-700">{{ jour.date }}</div>
+                <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                    <div class="w-full sm:w-24 text-xs sm:text-sm font-semibold text-gray-700">{{ jour.date }}</div>
                     <div class="flex-1">
-                        <div class="flex items-center gap-3">
-                            <div class="flex-1 bg-gray-200 rounded-full h-8 overflow-hidden">
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                            <div class="flex-1 bg-gray-200 rounded-full h-6 sm:h-8 overflow-hidden">
                                 {% if commandes_stats.total > 0 %}
-                                    {% widthratio jour.commandes commandes_stats.total 100 as commandes_pct %}
+                                {% widthratio jour.commandes commandes_stats.total 100 as commandes_pct %}
                                 {% else %}
-                                    {% with 0 as commandes_pct %}
-                                    {% endwith %}
+                                {% with 0 as commandes_pct %}
+                                {% endwith %}
                                 {% endif %}
-                                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-full flex items-center justify-end px-2"
+                                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-full flex items-center justify-end px-1 sm:px-2"
                                     style="width: {{ commandes_pct|default:0 }}%">
-                                    <span class="text-white text-sm font-bold">{{ jour.commandes }}</span>
+                                    <span class="text-white text-xs sm:text-sm font-bold">{{ jour.commandes }}</span>
                                 </div>
                             </div>
-                            <div class="w-32 text-right">
-                                <p class="text-sm font-semibold text-gray-900">{{ jour.revenus|floatformat:0 }} GNF</p>
+                            <div class="w-full sm:w-32 text-left sm:text-right">
+                                <p class="text-xs sm:text-sm font-semibold text-gray-900">{{ jour.revenus|floatformat:0 }} GNF</p>
                             </div>
                         </div>
                     </div>
@@ -227,26 +240,30 @@
         </div>
 
         <!-- Répartition par catégorie -->
-        <div class="bg-white rounded-2xl shadow-lg p-6">
-            <h3 class="text-xl font-bold text-gray-900 mb-6">🎯 Répartition des Ventes par Catégorie</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
+            <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">🎯 Répartition des Ventes par Catégorie
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {% for cat in categories_stats %}
-                <div class="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-6 border-2 border-purple-200">
-                    <h4 class="font-bold text-gray-900 mb-3">{{ cat.categorie }}</h4>
-                    <div class="space-y-2">
+                <div
+                    class="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-4 sm:p-6 border-2 border-purple-200">
+                    <h4 class="font-bold text-gray-900 mb-2 sm:mb-3 text-sm sm:text-base">{{ cat.categorie }}</h4>
+                    <div class="space-y-1 sm:space-y-2">
                         <div>
-                            <p class="text-sm text-gray-600">Quantité vendue</p>
-                            <p class="text-2xl font-bold text-purple-600">{{ cat.quantite }}</p>
+                            <p class="text-xs sm:text-sm text-gray-600">Quantité vendue</p>
+                            <p class="text-xl sm:text-2xl font-bold text-purple-600">{{ cat.quantite }}</p>
                         </div>
                         <div>
-                            <p class="text-sm text-gray-600">Revenu généré</p>
-                            <p class="text-xl font-bold text-indigo-600">{{ cat.revenu|floatformat:0 }} GNF</p>
+                            <p class="text-xs sm:text-sm text-gray-600">Revenu généré</p>
+                            <p class="text-lg sm:text-xl font-bold text-indigo-600">{{ cat.revenu|floatformat:0 }} GNF
+                            </p>
                         </div>
                     </div>
                 </div>
                 {% empty %}
-                <div class="col-span-3">
-                    <p class="text-gray-500 text-center py-8">Aucune vente enregistrée par catégorie</p>
+                <div class="col-span-1 sm:col-span-2 lg:col-span-3">
+                    <p class="text-gray-500 text-center py-6 sm:py-8 text-sm sm:text-base">Aucune vente enregistrée par
+                        catégorie</p>
                 </div>
                 {% endfor %}
             </div>

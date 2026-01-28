@@ -129,6 +129,19 @@
         <div id="mobile-menu" class="lg:hidden hidden pb-4 pt-20">
             <div class="space-y-2">
 
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <a href="{% url 'dashboard:index' %}" class="flex items-center space-x-3 group">
+                        <span class="text-3xl group-hover:scale-110 transition-transform">🍽️</span>
+                        <div>
+                            <span class="text-xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors">
+                                Restaurant Manager
+                            </span>
+                            <p class="text-xs text-gray-500 hidden sm:block">Système de gestion intégré</p>
+                        </div>
+                    </a>
+                </div>
+
                 <!-- User info mobile -->
                 <div class="bg-gray-50 rounded-lg p-4 mb-4">
                     <p class="text-sm font-semibold text-gray-900">{{ user.login }}</p>
