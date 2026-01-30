@@ -46,8 +46,11 @@ def cart_add(request, plat_id):
     plat = get_object_or_404(Plat, id=plat_id, disponible=True)
     cart = Cart(request)
     
-    quantite = int(request.POST.get('quantite', 1))
-    quantite = max(1, min(10, quantite))  # Entre 1 et 10
+    try:
+        quantite = int(request.POST.get('quantite', 1) or 1)  # Si vide, utiliser 1
+        quantite = max(1, min(10, quantite))  # Entre 1 et 10
+    except (ValueError, TypeError):
+        quantite = 1  # Valeur par défaut en cas d'erreur
     
     cart.add(plat=plat, quantite=quantite)
     
@@ -76,8 +79,14 @@ def cart_update(request, plat_id):
     plat = get_object_or_404(Plat, id=plat_id)
     cart = Cart(request)
     
-    quantite = int(request.POST.get('quantite', 1))
-    quantite = max(1, min(10, quantite))
+    try:
+        quantite = int(request.POST.get('quantite', 1) or 1)
+        quantite = max(1, min(10, quantite))
+    except (ValueError, TypeError):
+        return JsonResponse({
+            'success': False, 
+            'error': 'Quantité invalide'
+        }, status=400)
     
     cart.add(plat=plat, quantite=quantite, update_quantite=True)
     

@@ -106,7 +106,7 @@
                                 Quantité
                             </label>
                             <div class="flex items-center gap-2">
-                                <input type="number" name="quantite" value="1" min="1" max="10"
+                                <input type="number" name="quantite" value="1" min="1" max="10" required
                                     class="flex-1 px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all font-semibold text-center text-sm sm:text-base text-gray-900">
                                 <span class="text-gray-600 text-xs sm:text-sm">Max: 10</span>
                             </div>
@@ -137,4 +137,15 @@
 
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const qtyInput = this.querySelector('input[name="quantite"]');
+            if (!qtyInput.value || qtyInput.value < 1) {
+                qtyInput.value = 1;
+            }
+        });
+    });
+</script>
 {% endblock %}

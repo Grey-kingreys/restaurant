@@ -15,6 +15,7 @@ from io import BytesIO
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from .models import TableToken
+from django.utils import timezone
 
 
 # ==========================================
@@ -410,12 +411,12 @@ def commande_marquer_servie(request, commande_id):
     return redirect('restaurant:commande_detail_serveur', commande_id=commande.id)
 
 
+
 @login_required
 def commande_marquer_payee(request, commande_id):
     """
     Marque une commande comme payée
-    Crée un paiement et met à jour la caisse
-    ✅ SI LE SERVEUR N'ÉTAIT PAS TRACÉ, ON LE TRACE ICI AUSSI
+    ✅ Marque la session de la table pour expiration dans 1 minute
     """
     if not (request.user.is_serveur() or request.user.is_admin()):
         messages.error(request, "Accès refusé")
@@ -430,18 +431,16 @@ def commande_marquer_payee(request, commande_id):
         )
         return redirect('restaurant:commande_detail_serveur', commande_id=commande.id)
     
-    # Vérifier si déjà payée
     if hasattr(commande, 'paiement'):
         messages.warning(request, f"⚠️ La commande #{commande.id} est déjà payée")
         return redirect('restaurant:commande_detail_serveur', commande_id=commande.id)
     
-    # Import ici pour éviter les imports circulaires
     from apps.paiements.models import Paiement, Caisse
+    from apps.restaurant.models import TableSession
     from django.db import transaction
     
     try:
         with transaction.atomic():
-            # ✅ AJOUT : Si le serveur n'a pas été tracé lors du service, on le trace maintenant
             if not commande.serveur_ayant_servi:
                 commande.serveur_ayant_servi = request.user
             
@@ -451,7 +450,6 @@ def commande_marquer_payee(request, commande_id):
                 montant=commande.montant_total
             )
             
-            # Mettre à jour le statut de la commande
             commande.statut = 'payee'
             commande.save()
             
@@ -460,22 +458,31 @@ def commande_marquer_payee(request, commande_id):
             caisse.solde_actuel += commande.montant_total
             caisse.save()
             
+            # ✅ NOUVEAU : Marquer la session de la table pour expiration
+            sessions_actives = TableSession.objects.filter(
+                table=commande.table,
+                est_active=True
+            )
+            
+            for session in sessions_actives:
+                session.marquer_payement(commande)
+            
             messages.success(
                 request, 
-                f"✅ Commande #{commande.id} payée avec succès ! Montant : {commande.montant_total} GNF"
+                f"✅ Commande #{commande.id} payée avec succès ! "
+                f"La table sera déconnectée dans 1 minute. "
+                f"Montant : {commande.montant_total} GNF"
             )
     
     except Exception as e:
         messages.error(request, f"❌ Erreur lors du paiement : {str(e)}")
         return redirect('restaurant:commande_detail_serveur', commande_id=commande.id)
     
-    # Rediriger selon le paramètre 'next'
     next_url = request.GET.get('next')
     if next_url:
         return redirect(next_url)
     
     return redirect('restaurant:commande_detail_serveur', commande_id=commande.id)
-
 
 
 
@@ -569,7 +576,7 @@ def afficher_qr_code(request, table_id):
 def qr_login(request, token):
     """
     Connexion automatique via QR code
-    ✅ Pas besoin d'être connecté pour accéder à cette vue
+    ✅ Crée une nouvelle session à chaque scan
     """
     try:
         token_obj = TableToken.objects.select_related('table').get(token=token)
@@ -577,7 +584,6 @@ def qr_login(request, token):
         messages.error(request, "❌ QR Code invalide ou expiré")
         return redirect('accounts:login')
     
-    # Vérifier si le token est toujours valide (mot de passe non changé)
     if not token_obj.est_valide():
         messages.error(
             request,
@@ -586,10 +592,8 @@ def qr_login(request, token):
         )
         return redirect('accounts:login')
     
-    # Récupérer la table
     table = token_obj.table
     
-    # Vérifier que le compte est actif
     if not table.actif:
         messages.error(request, "❌ Ce compte est désactivé")
         return redirect('accounts:login')
@@ -598,20 +602,27 @@ def qr_login(request, token):
     from django.contrib.auth import login
     login(request, table, backend='django.contrib.auth.backends.ModelBackend')
     
-    # ✅ CONFIGURER LA SESSION POUR 3 HEURES
-    request.session.set_expiry(3 * 60 * 60)  # 3 heures en secondes
+    # ✅ NOUVEAU : Créer une session de table
+    from apps.restaurant.models import TableSession
     
-    # Marquer le token comme utilisé
+    session_table = TableSession.objects.create(
+        table=table,
+        django_session_key=request.session.session_key
+    )
+    
+    # Stocker le token de session dans la session Django
+    request.session['table_session_token'] = session_table.session_token
+    request.session.set_expiry(3 * 60 * 60)  # 3 heures max
+    
     token_obj.marquer_utilise()
     
     messages.success(
         request,
-        f"✅ Bienvenue ! Vous êtes connecté automatiquement en tant que {table.login}. "
-        f"Votre session expirera dans 3 heures."
+        f"✅ Bienvenue ! Vous êtes connecté en tant que {table.login}. "
+        f"Votre session sera active jusqu'au paiement de votre commande."
     )
     
     return redirect('menu:table_list')
-
 
 # ==========================================
 # INVALIDATION AUTO DES TOKENS

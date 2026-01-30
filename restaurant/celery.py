@@ -31,3 +31,10 @@ app.conf.timezone = 'Africa/Conakry'
 def debug_task(self):
     """Tâche de debug pour tester Celery"""
     print(f'Request: {self.request!r}')
+
+app.conf.beat_schedule = {
+    'nettoyer-sessions-expirees': {
+        'task': 'apps.restaurant.tasks.nettoyer_sessions_expirees',
+        'schedule': 30.0,  # Toutes les 30 secondes
+    },
+}

@@ -3,6 +3,9 @@
 from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator
+import uuid
+from django.utils import timezone
+from datetime import timedelta
 
 class TableRestaurant(models.Model):
     """
@@ -145,3 +148,106 @@ class TableToken(models.Model):
         from django.urls import reverse
         path = reverse('restaurant:qr_login', kwargs={'token': self.token})
         return request.build_absolute_uri(path)
+
+
+
+
+class TableSession(models.Model):
+    """
+    Représente une session de connexion pour une table
+    Expire 1 minute après le paiement de la commande
+    """
+    table = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        limit_choices_to={'role': 'Rtable'},
+        related_name='sessions',
+        verbose_name="Table"
+    )
+    
+    session_token = models.CharField(
+        max_length=64,
+        unique=True,
+        default=uuid.uuid4,
+        verbose_name="Token de session"
+    )
+    
+    django_session_key = models.CharField(
+        max_length=40,
+        unique=True,
+        verbose_name="Clé de session Django"
+    )
+    
+    date_creation = models.DateTimeField(auto_now_add=True)
+    date_derniere_activite = models.DateTimeField(auto_now=True)
+    
+    # Marqueur de paiement
+    commande_payee = models.ForeignKey(
+        'commandes.Commande',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='session_associee',
+        verbose_name="Commande payée"
+    )
+    
+    date_paiement = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name="Date du paiement"
+    )
+    
+    est_active = models.BooleanField(
+        default=True,
+        verbose_name="Session active"
+    )
+    
+    class Meta:
+        verbose_name = "Session de table"
+        verbose_name_plural = "Sessions de tables"
+        ordering = ['-date_creation']
+    
+    def __str__(self):
+        return f"Session {self.table.login} - {self.date_creation}"
+    
+    def marquer_payement(self, commande):
+        """
+        Marque qu'une commande a été payée
+        Lance le compte à rebours de 1 minute
+        """
+        self.commande_payee = commande
+        self.date_paiement = timezone.now()
+        self.save()
+    
+    def doit_etre_expiree(self):
+        """
+        Vérifie si la session doit expirer
+        (1 minute après le paiement)
+        """
+        if not self.date_paiement:
+            return False
+        
+        temps_ecoule = timezone.now() - self.date_paiement
+        return temps_ecoule > timedelta(minutes=1)
+    
+    def expirer(self):
+        """
+        Expire la session
+        """
+        self.est_active = False
+        self.save()
+    
+    @classmethod
+    def nettoyer_sessions_expirees(cls):
+        """
+        Nettoie les sessions expirées
+        À appeler périodiquement ou via le middleware
+        """
+        sessions_a_expirer = cls.objects.filter(
+            est_active=True,
+            date_paiement__isnull=False,
+            date_paiement__lt=timezone.now() - timedelta(minutes=1)
+        )
+        
+        count = sessions_a_expirer.update(est_active=False)
+        return count

@@ -39,6 +39,13 @@ class Commande(models.Model):
         related_name='commandes_servies',
         verbose_name='Serveur ayant servi'
     )
+
+    date_paiement = models.DateTimeField(
+        null=True, 
+        blank=True,
+        verbose_name="Date de paiement"
+    )
+
     date_commande = models.DateTimeField(auto_now_add=True)
     date_modification = models.DateTimeField(auto_now=True)
     
